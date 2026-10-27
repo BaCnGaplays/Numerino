@@ -1,0 +1,1420 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Numerino</title>
+<style>
+  :root{
+    --bg:#0c1b14; --panel:#12281e; --panel-edge:#3d7a5c; --ink:#e8f2ec;
+    --accent:#ffd23f; --btn:#1e3a2c; --btn-edge:#5cae85;
+    font-family:"Lucida Console","Courier New",ui-monospace,monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink)}
+  #wrap{max-width:720px;margin:0 auto;padding:14px}
+  header{margin:6px 0 12px}
+  h1{margin:0;color:var(--accent);text-transform:uppercase;letter-spacing:3px;font-size:26px;text-shadow:2px 2px 0 #7a2a1a}
+  header .sub{color:#9ac8ab;font-size:12px;margin-top:4px}
+  #boardWrap{position:relative;max-width:640px;margin:0 auto}
+  canvas{display:block;width:100%;image-rendering:crisp-edges;image-rendering:pixelated;
+    border:4px solid #2a5544;box-shadow:0 0 0 4px #000, 0 6px 0 #000;background:#10281c}
+  #scan{position:absolute;inset:4px;pointer-events:none;z-index:5;
+    background:repeating-linear-gradient(0deg,rgba(0,0,0,.16) 0 1px,transparent 1px 3px)}
+  #statusbar{position:absolute;top:6px;left:6px;right:6px;z-index:6;display:flex;align-items:center;gap:10px;
+    background:rgba(10,26,19,.95);border:2px solid var(--panel-edge);
+    box-shadow:0 3px 0 #000;padding:4px 8px;margin:0;font-size:11px;text-transform:uppercase;letter-spacing:1px;
+    pointer-events:none}
+  .modeChip{border:1px solid #000;background:#0d241a;padding:2px 6px;font-size:10px;color:#ffd23f;letter-spacing:1px}
+  .stTxt{color:#e8f2ec}
+  .stDim{color:#9ac8ab}
+  #stRight{margin-left:auto;color:#9ac8ab}
+  #toolbar{max-width:640px;margin:0 auto 8px;display:flex;gap:8px;flex-wrap:wrap}
+  #toolbar .btn{flex:0 0 auto}
+  #toolbar .spacer{flex:1}
+  #deckBlock{max-width:640px;margin:10px auto 0}
+  #deckCap{font-size:10px;color:#ffd23f;text-transform:uppercase;letter-spacing:2px;margin-bottom:6px}
+  #deckHand{display:flex;flex-wrap:wrap;gap:5px;align-items:center;justify-content:flex-start;
+    background:linear-gradient(180deg,#3a6a42,#28462e);border:2px solid #14261a;border-radius:8px;
+    box-shadow:2px 2px 0 #000,inset 0 0 10px rgba(0,0,0,.55);padding:6px;min-height:52px}
+  .zCard{width:38px;min-height:46px;padding:2px 2px 1px;display:flex;flex-direction:column;align-items:center;
+    background:#fdf6e3;border:2px solid #1b1b2f;border-radius:5px;box-shadow:2px 2px 0 #000;cursor:pointer;font-family:inherit}
+  .zCard.selOpt{border-color:#7fe07f;box-shadow:0 0 6px rgba(127,224,127,0.6)}
+  .zCard.kindW{background:#efe4fb;border-color:#9a4fd8}
+  .zCard.kindJ{background:#f8ead2;border-color:#c07a2d}
+  .zCard canvas{image-rendering:pixelated;width:28px;height:35px;border:0;box-shadow:none;background:transparent;display:block}
+  #deckHint{font-size:10px;color:#9ac8ab;margin-top:6px;letter-spacing:1px;text-transform:uppercase}
+  #bossPanel{position:absolute;left:6px;right:6px;bottom:6px;z-index:6;background:rgba(16,38,28,.93);
+    border:2px solid var(--accent);box-shadow:0 3px 0 #000;padding:6px 8px;margin:0;
+    display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  #bossCv{image-rendering:pixelated;width:40px;height:40px;border:2px solid #000;background:#0d241a;flex:0 0 auto}
+  #bossInfo{flex:1;min-width:140px}
+  #bossName{font-size:12px;color:#ff7a5a;font-weight:bold;text-transform:uppercase;letter-spacing:1px}
+  #bossDesc{font-size:10px;color:#9ac8ab;margin-top:2px}
+  #bossWarn{font-size:10px;color:#ff5b5b;font-weight:bold;margin-top:2px;min-height:12px}
+  #bossProg{display:flex;gap:3px;margin-top:3px}
+  .bpSq{width:9px;height:9px;background:#1e3a2c;border:1px solid #000}
+  .bpSq.on{background:#ff5b5b}
+  #choosePanel{position:absolute;left:6px;right:6px;bottom:64px;z-index:6;background:rgba(16,38,28,.93);
+    border:2px solid #7fe07f;box-shadow:0 3px 0 #000;padding:6px 8px;margin:0;text-align:center}
+  #chooseLbl{font-size:10px;color:#7fe07f;text-transform:uppercase;letter-spacing:1px}
+  #chooseRow{display:flex;align-items:center;justify-content:center;gap:6px;margin:4px 0 0;flex-wrap:wrap}
+  .czBtn{min-width:38px;min-height:34px;display:inline-flex;align-items:center;justify-content:center;
+    font-size:15px;padding:4px 8px}
+  .bubBlock{border-top:1px solid #3d7a5c;margin-top:6px;padding-top:5px;max-width:640px;margin-left:auto;margin-right:auto}
+  .bubBlock h2{margin:0;font-size:10px;color:#9ac8ab;text-transform:uppercase;letter-spacing:1px;cursor:pointer;user-select:none}
+  #logList{margin:0;padding-left:20px;font-size:11px;line-height:1.7;max-height:200px;overflow-y:auto;color:#c8e8d4;list-style:none}
+  #helpBody{font-size:11px;color:#c8e8d4;line-height:1.5}
+  .verTag{display:inline-block;border:1px solid #7a2a1a;color:#ff9a6a;padding:1px 6px;font-size:10px;letter-spacing:1px;background:#12281e}
+  .hidden{display:none!important}
+  .menuOverlay{position:fixed;inset:0;background:rgba(8,26,18,1);display:flex;align-items:center;
+    justify-content:center;padding:16px;z-index:100;overflow:hidden}
+  .menuBox{position:relative;background:var(--panel);border:3px solid var(--accent);box-shadow:0 6px 0 #000;
+    background-image:repeating-linear-gradient(0deg,rgba(0,0,0,.10) 0 1px,transparent 1px 3px);
+    padding:20px;max-width:520px;width:100%;text-align:center;
+    max-height:calc(100vh - 44px);overflow-y:auto}
+  .menuBox h1{margin:0 0 4px;color:var(--accent);text-transform:uppercase;letter-spacing:4px;
+    font-size:30px;text-shadow:3px 3px 0 #7a2a1a}
+  .menuBox .sub{color:#9ac8ab;font-size:11px;margin-bottom:10px;letter-spacing:1px}
+  .menuBox h3{color:#b8e0c8;font-size:11px;margin:12px 0 6px;text-transform:uppercase;letter-spacing:2px}
+  .menuBtn{display:block;width:100%;margin:8px 0;font-size:14px;padding:12px}
+  #diffRow{display:block;background:#102820;border:3px solid var(--btn-edge);box-shadow:0 4px 0 #000;
+    padding:10px;margin:10px 0;text-align:center}
+  #diffCap{font-size:10px;color:#ffd23f;text-transform:uppercase;letter-spacing:2px;margin-bottom:8px}
+  #diffInner{display:flex;gap:8px;flex-wrap:wrap}
+  #diffInner .btn{flex:1}
+  .btnRow{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+  .btn{background-color:var(--btn);color:#fff;border:3px solid var(--btn-edge);
+    background-image:repeating-linear-gradient(0deg,rgba(0,0,0,.12) 0 1px,transparent 1px 3px);
+    box-shadow:0 4px 0 #000, inset 3px 3px 0 rgba(255,255,255,.14), inset -3px -3px 0 rgba(0,0,0,.32);
+    padding:7px 9px;font-family:inherit;font-size:13px;text-transform:uppercase;letter-spacing:1px;cursor:pointer}
+  .btn:hover:not(:disabled){background-color:#2a5a44}
+  .btn:active:not(:disabled){transform:translateY(3px);
+    box-shadow:0 1px 0 #000, inset 3px 3px 0 rgba(255,255,255,.14), inset -3px -3px 0 rgba(0,0,0,.32)}
+  .btn:disabled{opacity:.32;cursor:default}
+  .btn.small{padding:4px 8px;font-size:11px}
+  .btn.selOpt{background-color:#4a3a10;border-color:var(--accent)}
+  .btn.warnOpt{border-color:#ff5b5b}
+  #overOverlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    background:rgba(8,26,18,.82);text-align:center;padding:16px;z-index:10}
+  #overBox{background:var(--panel);border:3px solid var(--accent);box-shadow:0 6px 0 #000;
+    background-image:repeating-linear-gradient(0deg,rgba(0,0,0,.10) 0 1px,transparent 1px 3px);
+    padding:20px;max-width:400px;width:100%}
+  #overTitle{font-size:26px;color:var(--accent);text-transform:uppercase;letter-spacing:3px;
+    text-shadow:3px 3px 0 #7a2a1a;margin:0 0 6px}
+  #overMeta{font-size:12px;color:#ffd23f;margin-bottom:2px}
+  #overReason{font-size:12px;color:#c8e8d4;max-width:420px;margin:0 0 10px;line-height:1.5}
+  .modal{position:fixed;inset:0;background:rgba(8,26,18,.85);display:flex;align-items:center;justify-content:center;padding:16px;z-index:200}
+  .modalBox{background:var(--panel);border:3px solid var(--accent);box-shadow:0 6px 0 #000;max-width:640px;max-height:86vh;
+    background-image:repeating-linear-gradient(0deg,rgba(0,0,0,.10) 0 1px,transparent 1px 3px);
+    overflow-y:auto;padding:16px;font-size:12px;line-height:1.75}
+  .modalBox h2{margin:0 0 10px;color:var(--accent);text-transform:uppercase;letter-spacing:2px;font-size:16px}
+  .modalBox h3{color:#b8e0c8;font-size:12px;margin:12px 0 4px;text-transform:uppercase}
+  .modalBox ul{margin:4px 0;padding-left:18px}
+  .modalBox p{margin:6px 0}
+  .mSub{color:#9ac8ab;font-size:11px}
+  .drShopRow{display:flex;gap:8px}
+  .drShopRow .drCardBox{flex:1 1 0;min-width:0}
+  .drCardBox{position:relative;display:flex;min-width:0}
+  .drCardBox .drCard{flex:1;display:flex;flex-direction:column;align-items:center;min-width:0;
+    width:100%;padding:10px 4px 9px;background:#fdf6e3;border:2px solid #1b1b2f;border-radius:8px;
+    box-shadow:2px 2px 0 #000;text-align:center;position:relative;cursor:pointer;font-family:inherit}
+  .drCard.drCatSpell{background:#efe4fb;border-color:#9a4fd8}
+  .drCard.drCatMove{background:#e7eefb;border-color:#3f6fd8}
+  .drCard.drCatStone{background:#f8ead2;border-color:#c07a2d}
+  .drCard.drCatSlot{background:#e3f6e8;border-color:#2f9e57}
+  .upIco{font-size:20px;font-weight:bold;color:#2b2b3d;margin-bottom:6px}
+  .drCard.drCatSpell .upIco{color:#7a2fb8}
+  .drCard.drCatMove .upIco{color:#2f5fd8}
+  .drCard.drCatStone .upIco{color:#a05a1d}
+  .drCard.drCatSlot .upIco{color:#2a7a45}
+  .upName{font-size:11px;font-weight:bold;line-height:1.3;color:#2b2b3d;padding:0 2px}
+  .upDesc{font-size:9px;line-height:1.4;color:#5a5a72;padding:0 2px;margin-top:3px}
+  .setRow{display:flex;align-items:center;gap:8px;margin:6px 0;flex-wrap:wrap}
+  .setLbl{font-size:11px;color:#b8e0c8;display:inline-block;width:140px;text-align:left}
+  h3.setSecH{cursor:pointer;user-select:none}
+  h3.setSecH::after{content:'\2212';float:right;color:var(--accent);margin-left:8px;font-size:12px}
+  h3.setSecH.closed::after{content:'+'}
+  .slotRow{display:flex;align-items:center;gap:10px;width:100%;margin:6px 0;font-size:12px;padding:6px;
+    text-align:left;border:2px solid #3d7a5c;background:#102820;box-shadow:2px 2px 0 #000;
+    cursor:pointer;font-family:inherit;color:var(--ink)}
+  .slotRow.act{border-color:#3fbf3f}
+  .slotBody{flex:1;display:block;min-width:0}
+  .slotBody b{display:block;letter-spacing:1px;color:#fff}
+  .slotMeta{display:block;font-size:10px;color:#9ac8ab;margin-top:2px;letter-spacing:1px;line-height:1.4}
+  #srcArea{width:100%;height:46vh;background:#0c1b14;color:#b8e0c8;border:2px solid #3d7a5c;
+    font-family:inherit;font-size:10px;padding:8px;white-space:pre;resize:vertical}
+  #setVol{accent-color:#ffd23f;width:180px}
+  .statRow{font-size:11px;color:#c8e8d4;margin:3px 0;text-align:left;letter-spacing:1px}
+  .achRow{display:flex;align-items:flex-start;gap:8px;margin:6px 0;padding:6px;text-align:left;
+    border:2px solid #3fbf3f;background:#102820}
+  .achRow.locked{border-color:#3d7a5c;opacity:.55}
+  .achSig{width:22px;height:22px;flex:0 0 22px;border:2px solid #000;box-shadow:2px 2px 0 #000;
+    background:#3fbf3f;color:#0c1b14;font-size:12px;line-height:18px;text-align:center;font-weight:bold}
+  .achRow.locked .achSig{background:#3d7a5c;color:#9ac8ab}
+  .achBody{flex:1;display:block}
+  .achName{display:block;font-size:11px;color:#ffd23f;letter-spacing:1px;font-weight:bold}
+  .achDesc{display:block;font-size:10px;color:#c8e8d4;margin-top:1px;line-height:1.4}
+  .achDate{display:block;font-size:9px;color:#9ac8ab;margin-top:1px;letter-spacing:1px}
+  #saveNote{color:#ff9a6a;font-size:11px;margin:10px 0 0;letter-spacing:1px}
+  #achToast{position:fixed;bottom:16px;right:16px;z-index:300;pointer-events:none;
+    background:var(--panel);border:3px solid var(--accent);box-shadow:4px 4px 0 #000;
+    background-image:repeating-linear-gradient(0deg,rgba(0,0,0,.10) 0 1px,transparent 1px 3px);
+    padding:10px 12px;min-width:190px;max-width:280px;text-align:left;
+    opacity:0;transform:translateX(120%);
+    transition:transform .5s steps(10,end), opacity .7s steps(8,end)}
+  #achToast.show{opacity:1;transform:translateX(0)}
+  #achToast.hide{opacity:0;transform:translateX(0);transition:opacity .7s steps(8,end)}
+  #achToast .toastRow{display:flex;align-items:center;gap:8px}
+  #achToast .toastSig{display:inline-flex;align-items:center;justify-content:center;
+    width:24px;height:24px;border:2px solid var(--accent);background:#4a3a10;
+    color:#ffd23f;font-size:12px;font-weight:bold;flex:none}
+  #achToast .toastLbl{font-size:9px;color:#3fbf3f;text-transform:uppercase;letter-spacing:2px}
+  #achToast .toastName{font-size:12px;color:#ffd23f;text-transform:uppercase;letter-spacing:1px;margin-top:1px}
+  #euFlag{position:absolute;top:14px;right:14px;width:48px;pointer-events:auto;cursor:pointer}
+  #euFlag canvas{width:100%;height:auto;display:block;border:2px solid #000;box-shadow:2px 2px 0 #000}
+  #euTag{position:absolute;top:10px;right:68px;pointer-events:none;opacity:0}
+  #euTag.pop{animation:euPop 2.6s steps(16,end) 1}
+  #euTag .euBanner{display:inline-block;background:#003399;border:2px solid #ffcc00;
+    padding:5px 7px;box-shadow:3px 3px 0 #000;color:#ffcc00;font-size:11px;font-weight:bold;letter-spacing:2px}
+  @keyframes euPop{
+    0%{opacity:0;transform:translate(14px,-8px)}
+    18%{opacity:1;transform:translate(0,0)}
+    78%{opacity:1;transform:translate(0,0)}
+    100%{opacity:0;transform:translate(14px,-8px)}
+  }
+  #rulesBody details{border:2px solid var(--btn-edge);background:#102820;box-shadow:0 3px 0 #000;margin:10px 0}
+  #rulesBody summary{cursor:pointer;user-select:none;color:var(--accent);text-transform:uppercase;letter-spacing:2px;
+    font-size:12px;padding:8px 10px;list-style:none}
+  #rulesBody summary::-webkit-details-marker{display:none}
+  #rulesBody summary::before{content:'▸ '}
+  #rulesBody details[open] summary::before{content:'▾ '}
+  #rulesBody details ul{margin:4px 0 10px;padding-left:18px;padding-right:10px}
+  *{scrollbar-color:#5cae85 #0d241a}
+  ::-webkit-scrollbar{width:14px;height:14px}
+  ::-webkit-scrollbar-track{background:#0d241a;box-shadow:inset 1px 0 0 #000,inset 0 1px 0 #000}
+  ::-webkit-scrollbar-thumb{background:#1e3a2c;border:3px solid #5cae85;
+    box-shadow:inset 2px 2px 0 rgba(255,255,255,.14),inset -2px -2px 0 rgba(0,0,0,.32)}
+  /* ---------- Light-Modus ----------
+     Heller Anstrich sämtlicher Oberflächen: Die Grundvariablen werden auf
+     pastellige Töne gelegt; gezielte Regeln überschreiben die im Dunkel-Look
+     fest codierten Hintergründe, Ränder, Schatten und Textfarben. Gewählt
+     wird der Modus in den Grafik-Einstellungen; die Wahl wird dauerhaft
+     gespeichert. */
+  html.light{
+    --bg:#e2eee6; --panel:#f0f7f2; --panel-edge:#8ab8a0; --ink:#1c3428;
+    --accent:#8a6500; --btn:#d8ecdf; --btn-edge:#5c9a78;
+  }
+  html.light h1,html.light .menuBox h1,html.light #overTitle{color:#8a6500;text-shadow:3px 3px 0 #d8c8b8}
+  html.light header .sub,html.light .menuBox .sub,html.light #stRight,html.light .stDim,
+  html.light #deckCap,html.light #deckHint,html.light .mSub,html.light #saveNote{color:#5a8a6a}
+  html.light .menuBox h3,html.light .setLbl,html.light .slotMeta{color:#4a7a5c}
+  html.light .statRow,html.light #logList,html.light #helpBody,html.light #overReason,
+  html.light #rulesBody p,html.light .achDesc,html.light .modalBox ul{color:#3a6a4a}
+  html.light .stTxt{color:#1c3428}
+  html.light .achName,html.light #achToast .toastName,html.light .toastLbl{color:#8a6500}
+  html.light .toastLbl{color:#2a7a4a}
+  html.light #achToast .toastSig{color:#8a6500;background:#f2e8c8}
+  html.light #chooseLbl{color:#2a7a4a}
+  html.light #bossName{color:#c05a3a}
+  html.light #bossWarn{color:#d84040}
+  html.light .btn{color:#1c3428}
+  html.light .btn:hover:not(:disabled),html.light .btn:focus-visible{background-color:#c4e4cf}
+  html.light .btn.selOpt{background-color:#4a3a10;color:#ffd23f}
+  html.light #statusbar{background:rgba(238,246,241,.96);box-shadow:0 3px 0 #8ab8a0}
+  html.light #bossPanel,html.light #choosePanel{background:rgba(238,246,241,.96);box-shadow:0 3px 0 #8ab8a0}
+  html.light canvas{border:4px solid #5c9a78;box-shadow:0 0 0 4px #8ab8a0,0 6px 0 #8ab8a0}
+  html.light #scan{background:repeating-linear-gradient(0deg,rgba(20,60,40,.07) 0 1px,transparent 1px 3px)}
+  html.light .modeChip{background:#f0f7f2;color:#8a6500}
+  html.light .verTag{border-color:#a05000;color:#b84a10;background:#f0f7f2}
+  html.light .menuOverlay{background:rgba(214,236,224,1)}
+  html.light #overOverlay{background:rgba(214,236,224,.85)}
+  html.light .modal{background:rgba(214,236,224,.88)}
+  html.light .menuBox,html.light .modalBox,html.light #overBox,html.light #achToast{box-shadow:0 6px 0 #7aa890}
+  html.light #achToast{box-shadow:4px 4px 0 #7aa890}
+  html.light #diffRow,html.light #rulesBody details{background:#e8f4ec;box-shadow:0 4px 0 #8ab8a0}
+  html.light .achRow,html.light .slotRow{background:#e8f4ec;box-shadow:2px 2px 0 #8ab8a0}
+  html.light .achRow.locked,html.light .slotRow{border-color:#90c0a8}
+  html.light .achRow.locked .achSig{background:#c0d8c8;color:#4a6a58}
+  html.light #srcArea{background:#f0f7f2;color:#2a5a3a;border-color:#8ab8a0}
+  html.light .bubBlock{border-top-color:#a0ccb0}
+  html.light *{scrollbar-color:#5c9a78 #e2eee6}
+  html.light ::-webkit-scrollbar-track{background:#e2eee6;box-shadow:inset 1px 0 0 #b0d0bc,inset 0 1px 0 #b0d0bc}
+  html.light ::-webkit-scrollbar-thumb{background:#b0d8c0}
+  html.light ::-webkit-scrollbar-thumb:hover{background:#98c8ac}
+  html.light ::-webkit-scrollbar-corner{background:#e2eee6}
+  @media (max-width:560px){
+    .menuBox{padding:14px 10px}
+    .menuBox h1{font-size:22px}
+    .menuBtn{font-size:11px;padding:10px 6px}
+    #euFlag{width:34px;top:10px;right:10px}
+    #euTag{right:50px;top:8px}
+    #achToast{min-width:0;max-width:70vw;bottom:12px;right:12px}
+    #statusbar{font-size:9px;gap:6px}
+    .czBtn{min-width:32px;min-height:30px;font-size:13px}
+  }
+</style>
+</head>
+<body>
+<script id="saveSlot" type="application/json">{"v":2,"active":0,"settings":{"snd":true,"scan":true,"vol":100,"light":false},"slots":[{"id":1,"name":"Spielstand 1","updated":"","stats":{"runs":0,"wins":0,"bestScore":0,"bestLevel":0,"linesTotal":0},"ach":{}}]}</script>
+<div id="wrap">
+  <header>
+    <h1>Numerino</h1>
+    <div class="sub"><span class="verTag">Alpha 0.2</span> <span id="headMode">Sudoku-Roguelike</span></div>
+  </header>
+  <div id="main">
+    <div id="left">
+      <div id="toolbar">
+        <button id="menuBtn" class="btn small" title="Zum Hauptmenü">Menü</button>
+        <span class="spacer"></span>
+        <button id="swapBtn" class="btn small" title="Alle Karten wegwerfen und sechs neue ziehen (einmal je Level)">Tausch (1×)</button>
+      </div>
+      <div id="boardWrap">
+        <canvas id="board" width="320" height="340"></canvas>
+        <div id="scan"></div>
+        <div id="statusbar">
+          <span class="stTxt" id="stLevel">LEVEL 1</span>
+          <span class="stDim" id="stGoal">ZIEL 0/2</span>
+          <span class="stDim" id="stScore">PUNKTE 0</span>
+          <span class="modeChip" id="stMode">RUN</span>
+          <span id="stRight">KARTEN 12</span>
+        </div>
+        <div id="bossPanel" class="hidden">
+          <canvas id="bossCv" width="16" height="16"></canvas>
+          <div id="bossInfo">
+            <div id="bossName"></div>
+            <div id="bossDesc"></div>
+            <div id="bossProg"></div>
+            <div id="bossWarn"></div>
+          </div>
+        </div>
+        <div id="choosePanel" class="hidden">
+          <div id="chooseLbl">Ziffer wählen – die Karte gilt dann als diese Ziffer</div>
+          <div id="chooseRow"></div>
+        </div>
+        <div id="overOverlay" class="hidden">
+          <div id="overBox">
+            <div id="overTitle"></div>
+            <div id="overMeta"></div>
+            <div id="overReason"></div>
+            <button id="overRetry" class="btn menuBtn">Neuer Run (gleicher Modus)</button>
+            <button id="overMenuBtn" class="btn menuBtn">Hauptmenü</button>
+          </div>
+        </div>
+      </div>
+      <div id="deckBlock">
+        <div id="deckCap">Kartentisch</div>
+        <div id="deckHand"></div>
+        <div id="deckHint">Karte antippen, dann ein freies Feld auf dem Brett wählen</div>
+      </div>
+      <div class="bubBlock">
+        <h2 id="logHead">Protokoll <span id="logTog">−</span></h2>
+        <ul id="logList"></ul>
+      </div>
+      <div class="bubBlock">
+        <h2 id="helpHead">Hilfe <span id="helpTog">+</span></h2>
+        <div id="helpBody" class="hidden">
+          Reihe, Spalte oder 3×3-Block voll = Linie aufgelöst, Karten kommen zurück.
+          Gleiche Ziffer nie zweimal pro Reihe, Spalte oder Block.
+          Wildkarten (6|9, 1|7) gelten als eine der beiden Ziffern, der Joker als jede.
+          Der Tausch-Knopf oben rechts wirft einmal je Level alle Karten weg und zieht sechs neue.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="menuOverlay" class="menuOverlay">
+  <div class="menuBox">
+    <div id="euFlag" title="In der Europäischen Union entwickelt – einmal anklicken!"><canvas id="euCv" width="24" height="16"></canvas></div>
+    <div id="euTag"><span class="euBanner">MADE IN EUROPE</span></div>
+    <h1>Numerino</h1>
+    <div class="sub"><span class="verTag">Alpha 0.2</span></div>
+    <h3>Spielmodus</h3>
+    <button id="runBtn" class="btn menuBtn">Standard-Run (10 Level)</button>
+    <button id="endlessBtn" class="btn menuBtn">Endlos-Modus</button>
+    <div id="diffRow">
+      <div id="diffCap">Schwierigkeit wählen</div>
+      <div id="diffInner">
+        <button class="btn small diffBtn" data-diff="1">Leicht</button>
+        <button class="btn small diffBtn selOpt" data-diff="2">Mittel</button>
+        <button class="btn small diffBtn" data-diff="3">Schwer</button>
+      </div>
+    </div>
+    <h3>Lernen</h3>
+    <button id="mRulesBtn" class="btn menuBtn">Anleitung &amp; Regeln</button>
+    <h3>Sonstiges</h3>
+    <button id="mSaveBtn" class="btn menuBtn">Spielstand, Statistik &amp; Erfolge</button>
+    <button id="mSetBtn" class="btn menuBtn">Einstellungen</button>
+    <button id="mInfoBtn" class="btn menuBtn">Open Source &amp; Urheberschaft</button>
+    <div class="btnRow"><button id="menuBack" class="btn small">Zurück zum Spiel (Esc)</button></div>
+  </div>
+</div>
+
+<div id="levelModal" class="modal hidden">
+  <div class="modalBox">
+    <h2>Level geschafft!</h2>
+    <p class="mSub" id="levelSub">Wähle eine Verzauberung – sie wirkt ab dem nächsten Level.</p>
+    <div class="drShopRow" id="upCards"></div>
+    <p class="mSub" id="levelDone"></p>
+  </div>
+</div>
+
+<div id="rulesModal" class="modal hidden">
+  <div class="modalBox">
+    <div id="rulesBody">
+    <h2>Regeln von Numerino</h2>
+    <p class="mSub">Numerino ist ein Sudoku-Roguelike: Du platzierst Ziffernkarten auf einem 9×9-Brett und löst Linien auf, während Boss-Gegner dir Karten klauen.</p>
+    <details open>
+    <summary>Das Spiel – allgemeine Regeln</summary>
+    <ul>
+      <li>9×9-Brett, einige Felder sind blockiert (dunkel mit X). Blockierte Felder zählen nicht zu den Linien.</li>
+      <li>Dein Kartentisch hält eine begrenzte Zahl von Ziffernkarten (1–9). Karte antippen, dann ein freies Feld antippen.</li>
+      <li>Sudoku-Konfliktregel: Eine Ziffer darf nie doppelt in derselben Reihe, Spalte oder demselben 3×3-Block liegen. Ungültige Felder werden beim Überfahren rot markiert.</li>
+      <li>Ist eine Reihe, eine Spalte oder ein 3×3-Block vollständig gefüllt, löst sich die Linie auf: Die Ziffern kehren zurück, und du erhältst die investierten Karten plus eine Bonuskarte je Linie zurück.</li>
+      <li>Je Level musst du eine vorgegebene Anzahl Linien auflösen (Ziel in der Statusleiste). Danach folgt die Verzauberungswahl.</li>
+      <li>Ist dein Kartentisch leer oder ist keine Karte mehr legal unterzubringen, endet der Run. Einmal je Level lässt sich der Tausch-Knopf nutzen: Alle Karten wegwerfen und sechs neue ziehen.</li>
+      <li>Punkte: 100 je Linie, Bonus für Mehrfach-Lösungen in einem Zug, 250 × Level beim Levelabschluss.</li>
+    </ul>
+    </details>
+    <details>
+    <summary>Bosse – der Zifferndieb</summary>
+    <ul>
+      <li>Im Standard-Run greifen auf Level 3, 6 und 9 Zifferndiebe an; im Endlos-Modus alle drei Level.</li>
+      <li>Ein Zifferndieb klaut nach je fünf (Level 3), vier (Level 6) beziehungsweise drei (Level 9) Platzierungen eine zufällige Karte aus deinem Kartentisch – auch Wildkarten und Joker. Die Fortschrittskästchen unter seinem Namen zeigen, wann er zuschlägt.</li>
+      <li>Im Endlos-Modus werden die Diebe mit höheren Leveln schneller; mindestens alle zwei Platzierungen schlägt einer zu.</li>
+      <li>Ein Boss-Level endet wie jedes andere, sobald das Linienziel erreicht ist.</li>
+    </ul>
+    </details>
+    <details>
+    <summary>Verzauberungen</summary>
+    <ul>
+      <li>Wildkarte 6|9: gilt wahlweise als 6 oder als 9 (Ziffer beim Platzieren wählen).</li>
+      <li>Wildkarte 1|7: gilt wahlweise als 1 oder als 7.</li>
+      <li>Joker: gilt einmal als jede beliebige Ziffer 1–9.</li>
+      <li>Nachschub: drei weitere Ziffernkarten sofort.</li>
+      <li>Klon: eine zufällige Karte deines Tisches wird verdoppelt – auch Wildkarten.</li>
+      <li>Meißel: entfernt bis zu drei blockierte Felder vom Brett des nächsten Levels.</li>
+    </ul>
+    </details>
+    <details>
+    <summary>Spielmodi und Schwierigkeit</summary>
+    <ul>
+      <li>Standard-Run: zehn Level, Sieg nach Level 10. Endlos-Modus: das Spiel läuft ohne Ende weiter, die Level werden zunehmend blockierter; gezählt wird der Punktestand.</li>
+      <li>Leicht: mehr Startkarten, weniger Blockaden, langsamere Bosse. Mittel: Standard. Schwer: weniger Karten, mehr Blockaden, schnellere Bosse.</li>
+    </ul>
+    </details>
+    <details>
+    <summary>Spielstand, Statistik und Erfolge</summary>
+    <ul>
+      <li>Statistik und Erfolge werden automatisch im Browser (localStorage) gespeichert; neun Erfolge decken erste Linie, Wildkarten, Joker, Bosse, Sieg und Punkterekorde ab.</li>
+    </ul>
+    </details>
+    </div>
+    <div class="btnRow"><button id="rulesClose" class="btn">Schließen</button></div>
+  </div>
+</div>
+
+<div id="setModal" class="modal hidden">
+  <div class="modalBox">
+    <h2>Einstellungen</h2>
+    <h3 id="setHGrafik" class="setSecH" data-sec="secGrafik">Grafik</h3>
+    <div id="secGrafik">
+      <div class="setRow"><span class="setLbl">Vollbild</span><button id="setFs" class="btn small">Vollbildmodus: aus</button></div>
+      <div class="setRow"><span class="setLbl">Scanlinien</span><button id="setScan" class="btn small">Scanlinien: an</button></div>
+      <div class="setRow"><span class="setLbl">Farbschema</span><button id="setLight" class="btn small">Light-Modus: aus</button></div>
+    </div>
+    <h3 id="setHSound" class="setSecH" data-sec="secSound">Ton</h3>
+    <div id="secSound">
+      <div class="setRow"><span class="setLbl">Sound</span><button id="setMute" class="btn small">Ton: an</button></div>
+      <div class="setRow"><span class="setLbl">Effekte</span><input type="range" id="setVol" min="0" max="100" value="100"></div>
+    </div>
+    <div class="btnRow"><button id="setClose" class="btn">Schließen</button></div>
+  </div>
+</div>
+
+<div id="infoModal" class="modal hidden">
+  <div class="modalBox">
+    <h2>Open Source und Urheberschaft</h2>
+    <h3>Urheberschaft</h3>
+    <ul>
+      <li>Diese Anwendung (Numerino) wurde von Vibe (KI-Assistent von Mistral AI, basierend auf dem Modell GLM) gemeinsam mit Oliver Schlicht im Jahr 2026 entwickelt.</li>
+      <li>Die Europaflagge oben rechts im Hauptmenü (Pixelgrafik) kennzeichnet Numerino als ein in der Europäischen Union entwickeltes Spiel; das Flaggen-Emblem der EU dient hier ausschließlich dieser Herkunftsangabe.</li>
+      <li>Der Quellcode liegt vollständig und offen in dieser HTML-Datei vor und kann frei eingesehen und angepasst werden.</li>
+    </ul>
+    <h3>Verwendete Software Dritter</h3>
+    <ul>
+      <li>Es wurden keine externen Bibliotheken, Pakete oder Fremdcode eingebunden. Alle Funktionen sind in gewöhnlichem HTML, CSS und JavaScript ohne Abhängigkeiten geschrieben.</li>
+      <li>Die Klänge werden ausschließlich mit der im Browser integrierten Web-Audio-Schnittstelle erzeugt. Es gibt keine Netzwerkzugriffe; der Spielstand bleibt lokal im Browser.</li>
+    </ul>
+    <h3>Grafiken</h3>
+    <ul>
+      <li>Alle Grafiken (Ziffern, Boss-Sprites, EU-Flagge) sind als eingebettete Pixelgrafiken direkt in der Datei enthalten und eigens für diese Anwendung gezeichnet.</li>
+    </ul>
+    <h3>Datenschutz</h3>
+    <ul>
+      <li>Spielstände, Statistik und Erfolge bleiben ausschließlich lokal im Browser (localStorage); es erfolgen keine Netzwerkzugriffe. Beim Export wird der gesamte Spielstand in eine HTML-Datei eingebettet – das Öffnen einer solchen Datei legt den Spielstand als neuen Eintrag an.</li>
+    </ul>
+    <h3>Version</h3>
+    <ul><li>Alpha 0.2</li></ul>
+    <div class="btnRow"><button id="infoSrc" class="btn small">Quellcode anzeigen</button></div>
+    <div class="btnRow"><button id="infoClose" class="btn">Schließen</button></div>
+  </div>
+</div>
+
+<div id="srcModal" class="modal hidden">
+  <div class="modalBox" style="max-width:860px">
+    <h2>Quellcode <span class="verTag">Alpha 0.2</span></h2>
+    <p class="mSub">Vollständiger Quellcode dieser Datei. Nach dem Markieren kann er mit Strg+C (bzw. Cmd+C) kopiert werden.</p>
+    <textarea id="srcArea" readonly spellcheck="false"></textarea>
+    <div class="btnRow">
+      <button id="srcSelAll" class="btn small">Alles markieren</button>
+      <button id="srcClose" class="btn small">Schließen</button>
+    </div>
+  </div>
+</div>
+
+<div id="saveOverlay" class="menuOverlay hidden">
+  <div class="menuBox">
+    <h1>Spielstand</h1>
+    <div class="sub">Mehrere Spielstände mit eigener Statistik und Erfolgen – im Browser gespeichert, als HTML-Datei exportierbar</div>
+    <h3>Spielstände</h3>
+    <div id="slotList"></div>
+    <div class="btnRow">
+      <button id="slotNew" class="btn small">Neuer Spielstand</button>
+      <button id="slotExport" class="btn small">Als HTML-Datei exportieren</button>
+      <button id="slotResetAll" class="btn small">Alle zurücksetzen</button>
+    </div>
+    <h3>Statistik (aktiver Spielstand)</h3>
+    <div id="statList"></div>
+    <h3 id="hAch" class="setSecH closed" data-sec="achList">Erfolge (aktiver Spielstand)</h3>
+    <div id="achList" class="hidden"></div>
+    <div id="saveNote">Der Fortschritt wird automatisch im Browser gespeichert.</div>
+    <div class="btnRow"><button id="saveBack" class="btn small">Zurück</button></div>
+  </div>
+</div>
+
+<div id="achToast"></div>
+
+<script>
+'use strict';
+/* ================= Pixel-Schrift 3x5 ================= */
+var FONT={
+'0':'111101101101111','1':'010110010010111','2':'111001111100111','3':'111001111001111',
+'4':'101101111001001','5':'111100111001111','6':'111100111101111','7':'111001001010010',
+'8':'111101111101111','9':'111101111001111',
+'A':'010101111101101','B':'110101110101110','C':'011100100100011','D':'110101101101110',
+'E':'111100110100111','F':'111100110100100','G':'011100101101011','H':'101101111101101',
+'I':'111010010010111','J':'001001001101010','K':'101101110101101','L':'100100100100111',
+'M':'101111101101101','N':'110101101101101','O':'111101101101111','P':'111101111100100',
+'Q':'111101101111001','R':'110101110101101','S':'111100111001111','T':'111010010010010',
+'U':'101101101101111','V':'101101101101010','W':'101101101111101','X':'101101010101101',
+'Y':'101101010010010','Z':'111001010100111',
+' ':'000000000000000','.':'000000000000010','!':'010010010000010','+':'000010111010000',
+'-':'000000111000000','|':'010010010010010','*':'010111111111010'
+};
+function drawTxt(g,s,x,y,col,sc){
+  sc=sc||1;
+  for(var i=0;i<s.length;i++){
+    var gl=FONT[s.charAt(i)]||FONT['?'];
+    for(var r=0;r<5;r++){
+      var row=gl.substr(r*3,3);
+      for(var c=0;c<3;c++){
+        if(row.charAt(c)==='1'){g.fillStyle=col;g.fillRect(x+i*4*sc+c*sc,y+r*sc,sc,sc);}
+      }
+    }
+  }
+}
+/* ================= Boss-Sprites ================= */
+var BOSSROWS=[
+'...H........H...',
+'...HH......HH...',
+'....HPPPPPPH....',
+'...HPPPPPPPPH...',
+'...HPWWPPWWPH...',
+'...HPWKPPWKPH...',
+'...HPPPPPPPPH...',
+'....PPRPPRPP....',
+'....PPPPPPPP....',
+'...GPPPPPPPPG...',
+'..GG.PPPPPP.GG..',
+'.....PPPPPP.....',
+'....DDD..DDD....',
+'...DDD....DDD...',
+'................',
+'................'
+];
+var BOSSPAL=[
+{H:'#e8d8b0',P:'#a04fd0',D:'#5a2a80',W:'#ffffff',K:'#101018',R:'#e04040',G:'#40c060'},
+{H:'#e8d8b0',P:'#d04040',D:'#802020',W:'#ffffff',K:'#101018',R:'#f0a020',G:'#40c060'},
+{H:'#e8d8b0',P:'#3050d0',D:'#1a2a70',W:'#ffffff',K:'#101018',R:'#40e0f0',G:'#40c060'}
+];
+function drawSprite(g,rows,pal,x,y,sc){
+  for(var r=0;r<rows.length;r++){
+    var row=rows[r];
+    for(var c=0;c<row.length;c++){
+      var ch=row.charAt(c);
+      if(ch!=='.'){g.fillStyle=pal[ch];g.fillRect(x+c*sc,y+r*sc,sc,sc);}
+    }
+  }
+}
+/* ================= Ton ================= */
+var AC=null;
+function sfx(f,d,type,v,slide){
+  try{
+    if(!SAVE.settings.snd)return;
+    if(!AC){AC=new (window.AudioContext||window.webkitAudioContext)();}
+    var o=AC.createOscillator(),g=AC.createGain();
+    o.type=type||'square';o.frequency.value=f;
+    if(slide){o.frequency.linearRampToValueAtTime(Math.max(30,f+slide),AC.currentTime+d);}
+    var vol=(v||0.12)*(SAVE.settings.vol/100);
+    if(vol<=0)return;
+    g.gain.value=vol;
+    g.gain.exponentialRampToValueAtTime(0.001,AC.currentTime+d);
+    o.connect(g);g.connect(AC.destination);
+    o.start();o.stop(AC.currentTime+d);
+  }catch(e){}
+}
+/* ================= Spielstand ================= */
+/* Version: Alpha 0.2 – mit jeder Änderung hochzählen (Alpha 0.3, 0.4 …) */
+function loadSave(){
+  var fallback=null;
+  try{fallback=JSON.parse(document.getElementById('saveSlot').textContent);}catch(e){}
+  var s=null;
+  try{var raw=localStorage.getItem('ziffernzauber_save_v1');if(raw)s=JSON.parse(raw);}catch(e){}
+  if(!s)s=fallback;
+  if(!s||!s.slots){s=makeDefaultSave();}
+  /* Migration: alter Ein-Slot-Speicherstand wird zur Slot-Liste */
+  if(s.slot&&!s.slots){
+    var old=s.slot;
+    s={v:2,active:0,settings:s.settings,slots:[old]};
+  }
+  if(!s.slots||!s.slots.length)s=makeDefaultSave();
+  if(!s.settings)s.settings={snd:true,scan:true,vol:100,light:false};
+  if(typeof s.active!=='number')s.active=0;
+  s.active=Math.max(0,Math.min(s.slots.length-1,s.active));
+  for(var i=0;i<s.slots.length;i++)normalizeSlot(s.slots[i]);
+  return s;
+}
+function normalizeSlot(sl){
+  if(!sl.stats)sl.stats={runs:0,wins:0,bestScore:0,bestLevel:0,linesTotal:0};
+  if(!sl.ach)sl.ach={};
+  if(!sl.id)sl.id=1;
+  if(!sl.name)sl.name='Spielstand '+sl.id;
+  return sl;
+}
+function makeDefaultSave(){
+  var sl=normalizeSlot({id:1,name:'Spielstand 1',updated:''});
+  return{v:2,active:0,settings:{snd:true,scan:true,vol:100,light:false},slots:[sl]};
+}
+function slot(){return SAVE.slots[SAVE.active];}
+function persistSave(){
+  try{
+    slot().updated=new Date().toISOString();
+    localStorage.setItem('ziffernzauber_save_v1',JSON.stringify(SAVE));
+  }catch(e){}
+}
+var SAVE=loadSave();
+var ACHS={
+  line:{sig:'E',name:'Erste Linie',desc:'Löse deine erste Linie auf.'},
+  zauber:{sig:'Z',name:'Zauberlehrling',desc:'Wähle deine erste Verzauberung.'},
+  wild:{sig:'W',name:'Wildcard',desc:'Platziere eine Wildkarte (6|9 oder 1|7).'},
+  joker:{sig:'J',name:'Joker',desc:'Platziere den Joker als beliebige Ziffer.'},
+  boss:{sig:'B',name:'Bossbezwinger',desc:'Beende dein erstes Boss-Level.'},
+  jaeger:{sig:'D',name:'Diebjäger',desc:'Beende alle drei Zifferndiebe in einem Run.'},
+  meister:{sig:'M',name:'Ziffernmeister',desc:'Gewinne den Standard-Run (Level 10).'},
+  hoch:{sig:'H',name:'Hochstapler',desc:'Erreiche 5000 Punkte in einem Run.'},
+  marathon:{sig:'R',name:'Marathon',desc:'Erreiche Level 15 im Endlos-Modus.'}
+};
+var toastQ=[],toastBusy=false;
+function showToast(sig,lbl,name){
+  toastQ.push([sig,lbl,name]);
+  if(!toastBusy)nextToast();
+}
+function nextToast(){
+  if(!toastQ.length){toastBusy=false;return;}
+  toastBusy=true;
+  var t=toastQ.shift(),el=document.getElementById('achToast');
+  el.innerHTML='<div class="toastRow"><span class="toastSig">'+t[0]+'</span>'+
+    '<span><span class="toastLbl">'+t[1]+'</span><br><span class="toastName">'+t[2]+'</span></span></div>';
+  el.className='';el.classList.add('show');
+  setTimeout(function(){el.classList.add('hide');},4600);
+  setTimeout(function(){el.className='';nextToast();},5600);
+}
+function unlock(id){
+  var sl=slot();
+  if(sl.ach[id])return;
+  sl.ach[id]={d:new Date().toISOString().slice(0,10)};
+  persistSave();
+  showToast(ACHS[id].sig,'Erfolg freigeschaltet',ACHS[id].name);
+  sfx(880,0.12);setTimeout(function(){sfx(1170,0.18);},120);
+}
+/* ================= Zustand ================= */
+var W=320,H=340,GX=73,GY=40,CELL=18,GSZ=173;
+var C={gridbg:'#142818',cell:'#20362a',cellAlt:'#244030',line:'#3a5c48',sep:'#5a9070',
+  bright:'#8ac2a0',digit:'#e8f2ec',magic:'#6ee7c8',gold:'#ffd23f',red:'#ff5555',
+  dim:'#6a8c78',white:'#ffffff',block:'#4a3040',blockbg:'#1a1424'};
+var DIFF={
+  1:{deck:14,block:-2,boss:2},
+  2:{deck:12,block:0,boss:0},
+  3:{deck:10,block:2,boss:-1}
+};
+var UP={
+  w69:{icon:'6|9',cls:'drCatSpell',name:'WILDKARTE 6|9',desc:['Gilt als 6 oder als 9']},
+  w17:{icon:'1|7',cls:'drCatSpell',name:'WILDKARTE 1|7',desc:['Gilt als 1 oder als 7']},
+  joker:{icon:'*',cls:'drCatSpell',name:'JOKER',desc:['Einmal jede Ziffer']},
+  schub:{icon:'+',cls:'drCatSlot',name:'NACHSCHUB',desc:['Drei Karten sofort']},
+  klon:{icon:'K',cls:'drCatMove',name:'KLON',desc:['Zufällige Karte','wird verdoppelt']},
+  meissel:{icon:'M',cls:'drCatStone',name:'MEISSEL',desc:['Bis zu drei Blockaden','entfernen']}
+};
+var S={running:false,mode:'run',diff:2,level:1,goal:2,lines:0,totLines:0,score:0,
+  grid:[],inv:[],sel:-1,wildChoice:null,boss:null,bossCount:0,swapUsed:false,
+  done:false,doneTimer:0,over:false,
+  floats:[],parts:[],clearFx:[],shake:0,mx:-1,my:-1,time:0,log:[]};
+function $(){return document.getElementById(arguments[0]);}
+function rnd(n){return Math.floor(Math.random()*n);}
+function cellRect(r,c){return{x:GX+1+c*(CELL+1),y:GY+1+r*(CELL+1),w:CELL,h:CELL};}
+function rowCells(r){var a=[];for(var c=0;c<9;c++)a.push(r*9+c);return a;}
+function colCells(c){var a=[];for(var r=0;r<9;r++)a.push(r*9+c);return a;}
+function boxIdx(b){var R=Math.floor(b/3)*3,C0=(b%3)*3,a=[];
+  for(var dr=0;dr<3;dr++)for(var dc=0;dc<3;dc++)a.push((R+dr)*9+C0+dc);return a;}
+function openCount(cells){var n=0;for(var i=0;i<cells.length;i++){if(!S.grid[cells[i]].b)n++;}return n;}
+function cardDigits(card){
+  if(card.kind==='n')return[card.d];
+  if(card.kind==='w')return[card.a,card.b];
+  return[1,2,3,4,5,6,7,8,9];
+}
+function addCards(n){
+  for(var i=0;i<n;i++){
+    if(S.inv.length>=32){S.score+=50;}
+    else{S.inv.push({kind:'n',d:1+rnd(9)});}
+  }
+}
+function addLog(t,col){
+  S.log.push({t:t,col:col||'#9ac8ab'});
+  if(S.log.length>18)S.log.shift();
+  var ul=$('logList'),li=document.createElement('li');
+  li.textContent=t;li.style.color=S.log[S.log.length-1].col;
+  ul.appendChild(li);
+  ul.scrollTop=ul.scrollHeight;
+}
+/* ================= Gitter ================= */
+function genGrid(l){
+  S.grid=[];
+  for(var i=0;i<81;i++)S.grid.push({b:false,d:0,m:false});
+  var d=DIFF[S.diff],target=Math.min(6+l*2+d.block,30),placed=0,guard=0;
+  while(placed<target&&guard<800){
+    guard++;
+    var idx=rnd(81),r=Math.floor(idx/9),c=idx%9;
+    if(S.grid[idx].b)continue;
+    var b=Math.floor(r/3)*3+Math.floor(c/3);
+    if(openCount(rowCells(r))<5)continue;
+    if(openCount(colCells(c))<5)continue;
+    if(openCount(boxIdx(b))<5)continue;
+    S.grid[idx].b=true;placed++;
+  }
+}
+function conflicts(r,c,d){
+  for(var i=0;i<9;i++){
+    if(S.grid[r*9+i].d===d)return true;
+    if(S.grid[i*9+c].d===d)return true;
+  }
+  var R=Math.floor(r/3)*3,C0=Math.floor(c/3)*3;
+  for(var dr=0;dr<3;dr++)for(var dc=0;dc<3;dc++){
+    if(S.grid[(R+dr)*9+C0+dc].d===d)return true;
+  }
+  return false;
+}
+function lineDone(cells){
+  var open=0;
+  for(var i=0;i<cells.length;i++){
+    var g=S.grid[cells[i]];
+    if(g.b)continue;
+    open++;
+    if(!g.d)return{ok:false,open:0};
+  }
+  return{ok:true,open:open};
+}
+/* ================= Aktionen ================= */
+function doClears(r,c){
+  var lines=[],b=Math.floor(r/3)*3+Math.floor(c/3);
+  var row=lineDone(rowCells(r));if(row.ok)lines.push(rowCells(r));
+  var col=lineDone(colCells(c));if(col.ok)lines.push(colCells(c));
+  var bx=lineDone(boxIdx(b));if(bx.ok)lines.push(boxIdx(b));
+  if(!lines.length)return;
+  var refund=0,pts=0;
+  for(var li=0;li<lines.length;li++){
+    pts+=100+li*100;
+    var cells=lines[li],open=0;
+    for(var i=0;i<cells.length;i++){if(!S.grid[cells[i]].b)open++;}
+    refund+=open;
+    for(i=0;i<cells.length;i++){
+      var g=S.grid[cells[i]];
+      if(!g.b){
+        g.d=0;g.m=false;
+        var rc=cellRect(Math.floor(cells[i]/9),cells[i]%9);
+        S.clearFx.push({x:rc.x,y:rc.y,t:0.25});
+        for(var p=0;p<4;p++)S.parts.push({x:rc.x+9,y:rc.y+9,
+          vx:(Math.random()-0.5)*50,vy:-Math.random()*50-15,life:0.4+Math.random()*0.4,col:'#ffffff'});
+      }
+    }
+  }
+  refund+=lines.length;
+  addCards(refund);
+  S.lines+=lines.length;S.totLines+=lines.length;S.score+=pts;
+  unlock('line');
+  if(S.score>=5000)unlock('hoch');
+  var cr=cellRect(r,c);
+  S.floats.push({t:'+'+pts,x:cr.x,y:cr.y-10,col:'#ffd23f',life:1});
+  addLog(lines.length+' Linie(n) aufgeloest! +'+refund+' Karten','#3fbf3f');
+  sfx(660,0.12);setTimeout(function(){sfx(880,0.15);},90);
+  renderDeck();renderStatus();
+}
+function bossSteal(){
+  S.boss.timer=0;
+  if(!S.inv.length)return;
+  var i=rnd(S.inv.length);
+  S.inv.splice(i,1);
+  if(S.sel===i)S.sel=-1;else if(S.sel>i)S.sel--;
+  S.wildChoice=null;
+  S.shake=6;
+  sfx(220,0.25,'square',0.2,-160);
+  S.floats.push({t:'-1 KARTE!',x:180,y:250,col:'#ff5555',life:1});
+  addLog('Der Zifferndieb klaut eine Karte!','#ff5555');
+  renderDeck();renderStatus();renderBoss();renderChoose();
+}
+function tryPlace(r,c){
+  var card=S.inv[S.sel];
+  var d=(card.kind==='n')?card.d:S.wildChoice;
+  if(!d){flashChoose();return;}
+  var i=r*9+c,g=S.grid[i],rc=cellRect(r,c);
+  if(g.b){sfx(120,0.1,'sawtooth');S.shake=3;return;}
+  if(g.d){sfx(120,0.1,'sawtooth');return;}
+  if(conflicts(r,c,d)){
+    sfx(110,0.18,'sawtooth');S.shake=5;
+    S.floats.push({t:'KONFLIKT!',x:rc.x,y:rc.y-10,col:'#ff5555',life:1});
+    return;
+  }
+  g.d=d;g.m=(card.kind!=='n');
+  if(card.kind==='w')unlock('wild');
+  if(card.kind==='j')unlock('joker');
+  S.inv.splice(S.sel,1);S.sel=-1;S.wildChoice=null;
+  sfx(500,0.07);
+  doClears(r,c);
+  var doneNow=(S.lines>=S.goal);
+  if(!doneNow&&S.boss){
+    S.boss.timer++;
+    if(S.boss.timer>=S.boss.every)bossSteal();
+  }
+  renderDeck();renderStatus();renderBoss();renderChoose();
+  if(doneNow){levelDone();return;}
+  checkDeadlock();
+}
+function canPlaceAny(){
+  if(!S.inv.length)return false;
+  for(var ci=0;ci<S.inv.length;ci++){
+    var ds=cardDigits(S.inv[ci]);
+    for(var i=0;i<81;i++){
+      var g=S.grid[i];
+      if(g.b||g.d)continue;
+      var r=Math.floor(i/9),c=i%9;
+      for(var di=0;di<ds.length;di++){
+        if(!conflicts(r,c,ds[di]))return true;
+      }
+    }
+  }
+  return false;
+}
+function checkDeadlock(){
+  if(canPlaceAny())return;
+  if(!S.inv.length){gameOver('KEINE KARTEN MEHR');}
+  else if(!S.swapUsed){
+    addLog('Festgefahren – nur noch der Tausch rettet!','#ff5555');
+    sfx(200,0.2,'sawtooth');
+  }else{gameOver('FESTGEFAHREN');}
+}
+function swap(){
+  if(!S.running||S.over||S.swapUsed||!S.inv.length)return;
+  S.swapUsed=true;S.inv=[];S.sel=-1;S.wildChoice=null;
+  addCards(6);
+  addLog('Karten getauscht: sechs neue gezogen','#3fbf3f');
+  sfx(300,0.1);setTimeout(function(){sfx(450,0.1);},100);
+  renderDeck();renderStatus();renderChoose();
+  checkDeadlock();
+}
+/* ================= Level ================= */
+function isBossLevel(l){return S.mode==='endless'?(l%3===0):(l===3||l===6||l===9);}
+function bossEvery(l){
+  var m=DIFF[S.diff].boss;
+  if(S.mode==='run'){return Math.max(2,(l===3?5:l===6?4:3)+m);}
+  return Math.max(2,6-Math.floor(l/3)+m);
+}
+function startLevel(l){
+  S.log=[];
+  $('logList').innerHTML='';
+  S.level=l;
+  S.goal=Math.min(2+Math.floor((l-1)/2),7);
+  S.lines=0;S.swapUsed=false;S.done=false;S.boss=null;
+  genGrid(l);
+  if(isBossLevel(l)){
+    var palIdx=Math.max(0,Math.min(2,Math.floor(l/3)-1));
+    S.boss={every:bossEvery(l),timer:0,pal:palIdx,
+      name:'ZIFFERNDIEB'+(l>=9?' III':l>=6?' II':'')};
+    sfx(180,0.3,'sawtooth',0.2,-60);
+    addLog('Level '+l+' – Ziel: '+S.goal+' Linien','#ffd23f');
+    addLog('Boss aktiv: '+S.boss.name+' klaut jede '+S.boss.every+'. Karte','#ff9a6a');
+  }else{
+    addLog('Level '+l+' – Ziel: '+S.goal+' Linien','#ffd23f');
+  }
+  var top=DIFF[S.diff].deck;
+  while(S.inv.length<top)addCards(1);
+  renderDeck();renderStatus();renderBoss();renderChoose();
+}
+function pick3(){
+  var keys=Object.keys(UP),out=[];
+  while(out.length<3&&keys.length){
+    var i=rnd(keys.length);
+    out.push(keys.splice(i,1)[0]);
+  }
+  return out;
+}
+function levelDone(){
+  S.done=true;S.doneTimer=0.9;
+  S.score+=250*S.level;
+  sfx(700,0.2);setTimeout(function(){sfx(1000,0.25);},180);
+  addLog('Level '+S.level+' geschafft! +'+(250*S.level)+' Punkte','#ffd23f');
+  renderStatus();
+}
+function openLevelModal(){
+  var opts=pick3(),box=$('upCards');
+  box.innerHTML='';
+  $('levelDone').textContent='Level '+S.level+' geschafft – Punkte: '+S.score;
+  unlock('zauber');
+  for(var i=0;i<opts.length;i++){
+    (function(key){
+      var u=UP[key],el=document.createElement('button');
+      el.className='drCardBox';
+      el.innerHTML='<span class="drCard '+u.cls+'"><span class="upIco">'+u.icon+'</span>'+
+        '<span class="upName">'+u.name+'</span><span class="upDesc">'+u.desc.join('<br>')+'</span></span>';
+      el.addEventListener('click',function(){applyUpgrade(key);});
+      box.appendChild(el);
+    })(opts[i]);
+  }
+  $('levelModal').classList.remove('hidden');
+}
+function applyUpgrade(key){
+  $('levelModal').classList.add('hidden');
+  var l=S.level;
+  var wasBoss=S.boss!==null;
+  if(wasBoss){
+    S.bossCount++;
+    unlock('boss');
+    if(S.bossCount>=3)unlock('jaeger');
+  }
+  if(S.mode==='run'&&l>=10){victory();return;}
+  if(S.mode==='endless'&&l>=15)unlock('marathon');
+  startLevel(l+1);
+  if(key==='w69')S.inv.push({kind:'w',a:6,b:9});
+  if(key==='w17')S.inv.push({kind:'w',a:1,b:7});
+  if(key==='joker')S.inv.push({kind:'j'});
+  if(key==='schub')addCards(3);
+  if(key==='klon'){
+    if(S.inv.length){var src=S.inv[rnd(S.inv.length)];
+      S.inv.push({kind:src.kind,d:src.d,a:src.a,b:src.b});}
+    else addCards(1);
+  }
+  if(key==='meissel'){
+    var n=0,guard=0;
+    while(n<3&&guard<300){guard++;var i=rnd(81);if(S.grid[i].b){S.grid[i].b=false;n++;}}
+    if(n)addLog('Meissel entfernt '+n+' Blockade(n)','#3fbf3f');
+  }
+  sfx(900,0.15);
+  renderDeck();renderStatus();
+}
+function initRun(mode,diff){
+  S.mode=mode;S.diff=diff;
+  S.score=0;S.inv=[];S.totLines=0;S.sel=-1;S.wildChoice=null;
+  S.bossCount=0;S.over=false;S.running=true;
+  S.floats=[];S.parts=[];S.clearFx=[];S.shake=0;
+  $('overOverlay').classList.add('hidden');
+  $('levelModal').classList.add('hidden');
+  $('menuOverlay').classList.add('hidden');
+  $('logList').innerHTML='';
+  startLevel(1);
+}
+function runEndStats(win){
+  var st=slot().stats;
+  st.runs++;
+  if(win)st.wins++;
+  if(S.score>st.bestScore)st.bestScore=S.score;
+  if(S.level>st.bestLevel)st.bestLevel=S.level;
+  st.linesTotal+=S.totLines;
+  persistSave();
+}
+function gameOver(reason){
+  S.over=true;S.running=false;
+  runEndStats(false);
+  sfx(300,0.4,'sawtooth',0.25,-200);
+  $('overTitle').textContent='GAME OVER';
+  $('overTitle').style.color='#ff5555';
+  $('overMeta').textContent='Punkte: '+S.score+' · Level: '+S.level+' · Linien: '+S.totLines;
+  $('overReason').textContent=reason+' – der Run endet hier.';
+  $('overOverlay').classList.remove('hidden');
+  addLog('Run beendet: '+reason,'#ff5555');
+}
+function victory(){
+  S.over=true;S.running=false;
+  runEndStats(true);
+  unlock('meister');
+  sfx(600,0.2);setTimeout(function(){sfx(800,0.2);},200);
+  setTimeout(function(){sfx(1000,0.3);},400);setTimeout(function(){sfx(1200,0.4);},600);
+  $('overTitle').textContent='SIEG!';
+  $('overTitle').style.color='#ffd23f';
+  $('overMeta').textContent='Punkte: '+S.score+' · Linien: '+S.totLines;
+  $('overReason').textContent='Alle zehn Level geschafft – die Ziffern sind entzaubert!';
+  $('overOverlay').classList.remove('hidden');
+}
+/* ================= DOM-Rendering ================= */
+function renderStatus(){
+  $('stLevel').textContent='LEVEL '+S.level;
+  $('stGoal').textContent='ZIEL '+S.lines+'/'+S.goal;
+  $('stScore').textContent='PUNKTE '+S.score;
+  $('stMode').textContent=S.mode==='run'?'RUN':'ENDLOS';
+  $('stRight').textContent='KARTEN '+S.inv.length;
+  var sb=$('swapBtn');
+  if(!S.running){sb.disabled=true;}
+  else{sb.disabled=S.swapUsed||!S.inv.length;
+    if(S.swapUsed){sb.classList.remove('warnOpt');sb.classList.add('selOpt');sb.textContent='Tausch: benutzt';}
+    else{sb.classList.remove('selOpt');sb.classList.add('warnOpt');sb.textContent='Tausch (1×)';}
+  }
+}
+function drawCardCv(cvs,card){
+  var g=cvs.getContext('2d');
+  g.clearRect(0,0,28,35);
+  if(card.kind==='n'){drawTxt(g,String(card.d),10,10,'#2b2b3d',2);}
+  else if(card.kind==='w'){drawTxt(g,card.a+'|'+b2s(card.b),3,15,'#7a2fb8',2);}
+  else{drawTxt(g,'*',10,10,'#a05a1d',2);}
+}
+function b2s(x){return String(x);}
+function renderDeck(){
+  var hand=$('deckHand');
+  hand.innerHTML='';
+  for(var i=0;i<S.inv.length;i++){
+    (function(idx){
+      var card=S.inv[idx];
+      var b=document.createElement('button');
+      b.className='zCard'+(card.kind==='w'?' kindW':card.kind==='j'?' kindJ':'')+
+        (S.sel===idx?' selOpt':'');
+      b.title=card.kind==='n'?('Ziffer '+card.d):(card.kind==='w'?('Wildkarte '+card.a+'|'+card.b):'Joker – jede Ziffer');
+      var cvs=document.createElement('canvas');cvs.width=28;cvs.height=35;
+      drawCardCv(cvs,card);
+      b.appendChild(cvs);
+      b.addEventListener('click',function(){selectCard(idx);});
+      hand.appendChild(b);
+    })(i);
+  }
+  $('stRight').textContent='KARTEN '+S.inv.length;
+}
+function selectCard(i){
+  if(S.sel===i){S.sel=-1;S.wildChoice=null;}
+  else{S.sel=i;S.wildChoice=null;sfx(600,0.04);}
+  renderDeck();renderChoose();
+}
+function flashChoose(){
+  sfx(150,0.1,'sawtooth');
+  $('choosePanel').style.borderColor='#ff5b5b';
+  setTimeout(function(){$('choosePanel').style.borderColor='#7fe07f';},220);
+}
+function renderChoose(){
+  var panel=$('choosePanel'),row=$('chooseRow');
+  if(S.sel<0||!S.running||S.over){panel.classList.add('hidden');return;}
+  var card=S.inv[S.sel];
+  if(card.kind==='n'){panel.classList.add('hidden');return;}
+  panel.classList.remove('hidden');
+  row.innerHTML='';
+  var ds=cardDigits(card);
+  for(var i=0;i<ds.length;i++){
+    (function(d){
+      var b=document.createElement('button');
+      b.className='btn small czBtn'+(S.wildChoice===d?' selOpt':'');
+      b.textContent=d;
+      b.addEventListener('click',function(){
+        S.wildChoice=d;sfx(700,0.05);renderChoose();
+      });
+      row.appendChild(b);
+    })(ds[i]);
+  }
+}
+function renderBoss(){
+  var p=$('bossPanel');
+  if(!S.boss||!S.running){p.classList.add('hidden');return;}
+  p.classList.remove('hidden');
+  drawSprite($('bossCv').getContext('2d'),BOSSROWS,BOSSPAL[S.boss.pal],0,0,1);
+  $('bossName').textContent=S.boss.name;
+  $('bossDesc').textContent='Klaut nach je '+S.boss.every+' Platzierungen eine Karte';
+  var prog=$('bossProg');prog.innerHTML='';
+  for(var i=0;i<S.boss.every;i++){
+    var sq=document.createElement('span');
+    sq.className='bpSq'+(i<S.boss.timer?' on':'');
+    prog.appendChild(sq);
+  }
+  $('bossWarn').textContent=(S.boss.timer===S.boss.every-1)?'ACHTUNG: NÄCHSTE PLATZIERUNG KLAUT!':'';
+}
+function renderSaveMenu(){
+  var i,k;
+  /* Slot-Liste */
+  var sl2=$('slotList');
+  sl2.innerHTML='';
+  for(i=0;i<SAVE.slots.length;i++){
+    (function(idx){
+      var sl=SAVE.slots[idx],st=sl.stats;
+      var row=document.createElement('button');
+      row.className='slotRow'+(idx===SAVE.active?' act':'');
+      var meta='Punkte: '+st.bestScore+' · Level: '+st.bestLevel+
+        ' · Linien: '+st.linesTotal+' · Erfolge: '+Object.keys(sl.ach).length;
+      if(sl.updated)meta+=' · Stand: '+sl.updated.slice(0,10);
+      row.innerHTML='<span class="slotBody"><b>'+sl.name+'</b><span class="slotMeta">'+meta+'</span></span>';
+      row.addEventListener('click',function(){
+        if(SAVE.active===idx)return;
+        SAVE.active=idx;persistSave();sfx(600,0.05);renderSaveMenu();
+      });
+      sl2.appendChild(row);
+    })(i);
+  }
+  /* Statistik des aktiven Slots */
+  var st=slot().stats,slst=$('statList');
+  slst.innerHTML='';
+  var rows=[
+    ['Runs gespielt',st.runs],
+    ['Gewonnene Standard-Runs',st.wins],
+    ['Bester Punktestand',st.bestScore],
+    ['Höchstes Level',st.bestLevel],
+    ['Linien aufgelöst (gesamt)',st.linesTotal]
+  ];
+  for(i=0;i<rows.length;i++){
+    var d=document.createElement('div');
+    d.className='statRow';
+    d.textContent=rows[i][0]+': '+rows[i][1];
+    slst.appendChild(d);
+  }
+  /* Erfolge des aktiven Slots */
+  var al=$('achList');al.innerHTML='';
+  var keys=Object.keys(ACHS);
+  for(k=0;k<keys.length;k++){
+    var key=keys[k],a=ACHS[key],got=slot().ach[key];
+    var r2=document.createElement('div');
+    r2.className='achRow'+(got?'':' locked');
+    r2.innerHTML='<span class="achSig">'+a.sig+'</span><span class="achBody">'+
+      '<span class="achName">'+a.name+'</span><span class="achDesc">'+a.desc+'</span>'+
+      '<span class="achDate">'+(got?('Freigeschaltet: '+got.d):'Noch nicht freigeschaltet')+'</span></span>';
+    al.appendChild(r2);
+  }
+}
+function slotNew(){
+  if(SAVE.slots.length>=8){noteSave('Maximal acht Spielstände möglich.');return;}
+  var maxId=1;
+  for(var i=0;i<SAVE.slots.length;i++){if(SAVE.slots[i].id>maxId)maxId=SAVE.slots[i].id;}
+  SAVE.slots.push(normalizeSlot({id:maxId+1,name:'Spielstand '+(SAVE.slots.length+1),updated:''}));
+  SAVE.active=SAVE.slots.length-1;
+  persistSave();renderSaveMenu();sfx(700,0.06);
+}
+var resetArmed=0;
+function slotResetAll(){
+  var b=$('slotResetAll');
+  if(!resetArmed){
+    resetArmed=1;
+    b.textContent='Wirklich alle zurücksetzen?';
+    setTimeout(function(){resetArmed=0;if(b)b.textContent='Alle zurücksetzen';},4000);
+    return;
+  }
+  resetArmed=0;b.textContent='Alle zurücksetzen';
+  SAVE=makeDefaultSave();
+  persistSave();renderSaveMenu();sfx(200,0.2,'sawtooth');
+  noteSave('Alle Spielstände wurden zurückgesetzt.');
+}
+function slotExport(){
+  try{
+    var html='<!doctype html>\n'+document.documentElement.outerHTML;
+    var json=JSON.stringify(SAVE);
+    html=html.replace(/(<script id="saveSlot" type="application\/json">)[\s\S]*?(<\/script>)/,
+      function(m,a,b){return a+json+b;});
+    var blob=new Blob([html],{type:'text/html'});
+    var a=document.createElement('a');
+    a.href=URL.createObjectURL(blob);
+    a.download='numerino-spielstand.html';
+    document.body.appendChild(a);a.click();
+    setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},2000);
+    noteSave('Spielstand als HTML-Datei exportiert.');
+  }catch(e){
+    noteSave('Export blockiert: Lade die Spieldatei herunter und öffne sie direkt im Browser.');
+  }
+}
+function noteSave(t){
+  var n=$('saveNote');n.textContent=t;
+  n.style.color='#ff9a6a';
+}
+/* ================= Canvas-Rendering ================= */
+var cv=$('board'),ctx=cv.getContext('2d');
+function drawGrid(){
+  ctx.fillStyle=C.gridbg;ctx.fillRect(0,0,W,H);
+  ctx.fillStyle='#10241a';ctx.fillRect(GX-2,GY-2,GSZ+4,GSZ+4);
+  for(var r=0;r<9;r++)for(var c=0;c<9;c++){
+    var g=S.grid[r*9+c],rc=cellRect(r,c);
+    if(!S.grid.length)break;
+    if(g.b){
+      ctx.fillStyle=C.blockbg;ctx.fillRect(rc.x,rc.y,CELL,CELL);
+      ctx.fillStyle=C.block;
+      for(var k=0;k<CELL;k+=2){ctx.fillRect(rc.x+k,rc.y+k,2,2);ctx.fillRect(rc.x+CELL-2-k,rc.y+k,2,2);}
+    }else{
+      ctx.fillStyle=((Math.floor(r/3)+Math.floor(c/3))%2===0)?C.cell:C.cellAlt;
+      ctx.fillRect(rc.x,rc.y,CELL,CELL);
+      if(g.d)drawTxt(ctx,String(g.d),rc.x+6,rc.y+4,g.m?C.magic:C.digit,2);
+    }
+  }
+  for(var k2=1;k2<3;k2++){
+    var vx=GX+1+k2*3*(CELL+1)-1;
+    ctx.fillStyle=C.sep;ctx.fillRect(vx,GY+1,1,GSZ-2);
+    var vy=GY+1+k2*3*(CELL+1)-1;
+    ctx.fillRect(GX+1,vy,GSZ-2,1);
+  }
+  ctx.fillStyle=C.bright;
+  ctx.fillRect(GX-2,GY-2,GSZ+4,2);ctx.fillRect(GX-2,GY+GSZ,GSZ+4,2);
+  ctx.fillRect(GX-2,GY-2,2,GSZ+4);ctx.fillRect(GX+GSZ,GY-2,2,GSZ+4);
+  for(var f=0;f<S.clearFx.length;f++){
+    var fx=S.clearFx[f];
+    ctx.globalAlpha=Math.min(0.6,fx.t*2.4);
+    ctx.fillStyle='#ffffff';ctx.fillRect(fx.x,fx.y,CELL,CELL);
+    ctx.globalAlpha=1;
+  }
+}
+function markRed(i){
+  var rc=cellRect(Math.floor(i/9),i%9);
+  ctx.globalAlpha=0.35;ctx.fillStyle=C.red;ctx.fillRect(rc.x,rc.y,CELL,CELL);ctx.globalAlpha=1;
+}
+function drawHover(){
+  if(!S.running||S.over||S.done||S.sel<0)return;
+  var x=S.mx,y=S.my;
+  var c=Math.floor((x-GX-1)/(CELL+1)),r=Math.floor((y-GY-1)/(CELL+1));
+  if(r<0||r>8||c<0||c>8)return;
+  var g=S.grid[r*9+c],rc=cellRect(r,c);
+  ctx.fillStyle=C.white;
+  ctx.fillRect(rc.x-1,rc.y-1,CELL+2,1);ctx.fillRect(rc.x-1,rc.y+CELL,CELL+2,1);
+  ctx.fillRect(rc.x-1,rc.y,1,CELL);ctx.fillRect(rc.x+CELL,rc.y,1,CELL);
+  if(g.b||g.d)return;
+  var card=S.inv[S.sel];
+  var d=(card.kind==='n')?card.d:S.wildChoice;
+  if(!d)return;
+  if(conflicts(r,c,d)){
+    ctx.globalAlpha=0.45;ctx.fillStyle=C.red;ctx.fillRect(rc.x,rc.y,CELL,CELL);ctx.globalAlpha=1;
+    for(var i=0;i<9;i++){
+      if(S.grid[r*9+i].d===d)markRed(r*9+i);
+      if(S.grid[i*9+c].d===d)markRed(i*9+c);
+    }
+    var R=Math.floor(r/3)*3,C0=Math.floor(c/3)*3;
+    for(var dr=0;dr<3;dr++)for(var dc=0;dc<3;dc++){
+      if(S.grid[(R+dr)*9+C0+dc].d===d)markRed((R+dr)*9+C0+dc);
+    }
+  }else{
+    ctx.globalAlpha=0.55;
+    drawTxt(ctx,String(d),rc.x+6,rc.y+4,card.kind==='n'?C.digit:C.magic,2);
+    ctx.globalAlpha=1;
+  }
+}
+function drawFx(){
+  for(var i=0;i<S.floats.length;i++){
+    var f=S.floats[i];
+    ctx.globalAlpha=Math.max(0,Math.min(1,f.life*1.5));
+    drawTxt(ctx,f.t,f.x,f.y,f.col,1);
+    ctx.globalAlpha=1;
+  }
+  for(var p=0;p<S.parts.length;p++){
+    var pt=S.parts[p];
+    ctx.globalAlpha=Math.max(0,Math.min(1,pt.life*2));
+    ctx.fillStyle=pt.col;ctx.fillRect(pt.x,pt.y,2,2);
+    ctx.globalAlpha=1;
+  }
+  if(!S.running){
+    ctx.globalAlpha=0.9;
+    drawTxt(ctx,'NUMERINO',100,300,C.dim,1);
+    ctx.globalAlpha=1;
+  }
+}
+function render(){
+  ctx.save();
+  if(S.shake>0)ctx.translate(Math.round((Math.random()-0.5)*S.shake),Math.round((Math.random()-0.5)*S.shake));
+  drawGrid();
+  drawHover();
+  drawFx();
+  ctx.restore();
+}
+/* ================= Update & Loop ================= */
+function update(dt){
+  if(S.shake>0)S.shake=Math.max(0,S.shake-dt*18);
+  S.floats=S.floats.filter(function(f){f.life-=dt*0.8;f.y-=dt*14;return f.life>0;});
+  S.parts=S.parts.filter(function(p){p.life-=dt;p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=140*dt;return p.life>0;});
+  S.clearFx=S.clearFx.filter(function(fx){fx.t-=dt;return fx.t>0;});
+  if(S.done&&S.running){
+    S.doneTimer-=dt;
+    if(S.doneTimer<=0){
+      S.done=false;
+      if(S.mode==='run'&&S.level>=10){victory();}
+      else if(S.mode==='endless'&&S.level>=15){unlock('marathon');openLevelModal();}
+      else{openLevelModal();}
+    }
+  }
+}
+var last=0;
+function loop(t){
+  S.time=t;
+  var dt=Math.min(0.05,(t-last)/1000);
+  last=t;
+  update(dt);
+  render();
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+/* ================= Eingabe ================= */
+cv.addEventListener('pointerdown',function(e){
+  e.preventDefault();
+  if(!S.running||S.over||S.done||S.sel<0)return;
+  var rct=cv.getBoundingClientRect();
+  var x=(e.clientX-rct.left)*W/rct.width,y=(e.clientY-rct.top)*H/rct.height;
+  var c=Math.floor((x-GX-1)/(CELL+1)),r=Math.floor((y-GY-1)/(CELL+1));
+  if(r>=0&&r<9&&c>=0&&c<9)tryPlace(r,c);
+});
+cv.addEventListener('pointermove',function(e){
+  var rct=cv.getBoundingClientRect();
+  S.mx=(e.clientX-rct.left)*W/rct.width;
+  S.my=(e.clientY-rct.top)*H/rct.height;
+});
+cv.addEventListener('pointerleave',function(){S.mx=-1;S.my=-1;});
+/* ================= Menüs & Buttons ================= */
+function openMenu(){$('menuOverlay').classList.remove('hidden');}
+function closeMenu(){$('menuOverlay').classList.add('hidden');}
+$('menuBtn').addEventListener('click',openMenu);
+$('menuBack').addEventListener('click',closeMenu);
+$('runBtn').addEventListener('click',function(){initRun('run',S.diff);});
+$('endlessBtn').addEventListener('click',function(){initRun('endless',S.diff);});
+Array.prototype.forEach.call(document.querySelectorAll('.diffBtn'),function(b){
+  b.addEventListener('click',function(){
+    Array.prototype.forEach.call(document.querySelectorAll('.diffBtn'),function(x){x.classList.remove('selOpt');});
+    b.classList.add('selOpt');
+    S.diff=parseInt(b.getAttribute('data-diff'),10);
+    sfx(700,0.04);
+  });
+});
+$('mRulesBtn').addEventListener('click',function(){$('rulesModal').classList.remove('hidden');});
+$('rulesClose').addEventListener('click',function(){$('rulesModal').classList.add('hidden');});
+$('mSaveBtn').addEventListener('click',function(){renderSaveMenu();$('saveOverlay').classList.remove('hidden');});
+$('saveBack').addEventListener('click',function(){$('saveOverlay').classList.add('hidden');});
+$('slotNew').addEventListener('click',slotNew);
+$('slotExport').addEventListener('click',slotExport);
+$('slotResetAll').addEventListener('click',slotResetAll);
+$('mSetBtn').addEventListener('click',function(){renderSettings();$('setModal').classList.remove('hidden');});
+$('setClose').addEventListener('click',function(){$('setModal').classList.add('hidden');});
+$('mInfoBtn').addEventListener('click',function(){$('infoModal').classList.remove('hidden');});
+$('infoClose').addEventListener('click',function(){$('infoModal').classList.add('hidden');});
+$('swapBtn').addEventListener('click',swap);
+$('overRetry').addEventListener('click',function(){initRun(S.mode,S.diff);});
+$('overMenuBtn').addEventListener('click',function(){
+  $('overOverlay').classList.add('hidden');S.running=false;openMenu();
+});
+$('logHead').addEventListener('click',function(){
+  var ul=$('logList');ul.classList.toggle('hidden');
+  $('logTog').textContent=ul.classList.contains('hidden')?'+':'−';
+});
+$('helpHead').addEventListener('click',function(){
+  var b=$('helpBody');b.classList.toggle('hidden');
+  $('helpTog').textContent=b.classList.contains('hidden')?'+':'−';
+});
+document.addEventListener('keydown',function(e){
+  if(e.key!=='Escape')return;
+  var order=['srcModal','infoModal','setModal','rulesModal','levelModal','saveOverlay'];
+  for(var i=0;i<order.length;i++){
+    var el=$(order[i]);
+    if(!el.classList.contains('hidden')){el.classList.add('hidden');return;}
+  }
+  if(!$('menuOverlay').classList.contains('hidden')){closeMenu();return;}
+  if(S.running)openMenu();
+});
+/* ================= Einstellungen ================= */
+function renderSettings(){
+  $('setScan').textContent='Scanlinien: '+(SAVE.settings.scan?'an':'aus');
+  $('setMute').textContent='Ton: '+(SAVE.settings.snd?'an':'aus');
+  $('setLight').textContent='Light-Modus: '+(SAVE.settings.light?'an':'aus');
+  $('setFs').textContent='Vollbildmodus: '+(document.fullscreenElement?'an':'aus');
+  $('setVol').value=SAVE.settings.vol;
+}
+function applyLight(){
+  document.documentElement.classList.toggle('light',!!SAVE.settings.light);
+}
+$('setScan').addEventListener('click',function(){
+  SAVE.settings.scan=!SAVE.settings.scan;persistSave();renderSettings();
+  $('scan').style.display=SAVE.settings.scan?'block':'none';
+});
+$('setMute').addEventListener('click',function(){
+  SAVE.settings.snd=!SAVE.settings.snd;persistSave();renderSettings();
+  if(SAVE.settings.snd)sfx(700,0.06);
+});
+$('setLight').addEventListener('click',function(){
+  SAVE.settings.light=!SAVE.settings.light;applyLight();persistSave();renderSettings();
+  sfx(520,0.06);
+});
+$('setVol').addEventListener('input',function(){
+  SAVE.settings.vol=parseInt(this.value,10);persistSave();
+});
+$('setFs').addEventListener('click',function(){
+  try{
+    if(document.fullscreenElement){document.exitFullscreen();}
+    else{document.documentElement.requestFullscreen();}
+    setTimeout(renderSettings,300);
+  }catch(e){}
+});
+if(!SAVE.settings.scan){$('scan').style.display='none';}
+applyLight();
+/* Einklappbare Überschriften (Einstellungen, Erfolge) */
+Array.prototype.forEach.call(document.querySelectorAll('.setSecH'),function(h){
+  h.addEventListener('click',function(e){
+    e.stopPropagation();
+    h.classList.toggle('closed');
+    var sec=document.getElementById(h.getAttribute('data-sec'));
+    if(sec)sec.classList.toggle('hidden');
+    sfx(400,0.03,'square',0.05);
+  });
+});
+/* Quellcode-Ansicht */
+$('infoSrc').addEventListener('click',function(){
+  $('srcArea').value='<!doctype html>\n'+document.documentElement.outerHTML;
+  $('srcModal').classList.remove('hidden');
+});
+$('srcSelAll').addEventListener('click',function(){
+  var t=$('srcArea');t.focus();t.select();
+});
+$('srcClose').addEventListener('click',function(){$('srcModal').classList.add('hidden');});
+/* ================= EU-Flagge ================= */
+(function(){
+  var g=$('euCv').getContext('2d');
+  g.fillStyle='#003399';g.fillRect(0,0,24,16);
+  g.fillStyle='#ffcc00';
+  var cx=12,cy=8,rad=5,pts=[];
+  for(var i=0;i<12;i++){
+    var a=i/12*Math.PI*2;
+    pts.push([Math.round(cx+Math.cos(a)*rad),Math.round(cy+Math.sin(a)*rad*0.8)]);
+  }
+  for(i=0;i<pts.length;i++){
+    var x=pts[i][0],y=pts[i][1];
+    g.fillRect(x-1,y,3,1);g.fillRect(x,y-1,1,3);
+  }
+})();
+$('euFlag').addEventListener('click',function(){
+  var tag=$('euTag');
+  tag.classList.remove('pop');
+  void tag.offsetWidth;
+  tag.classList.add('pop');
+  sfx(520,0.06);setTimeout(function(){sfx(660,0.08);},80);
+});
+/* ================= Start ================= */
+renderStatus();
+</script>
+</body>
+</html>
