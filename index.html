@@ -171,6 +171,30 @@
     color:#ffd23f;font-size:12px;font-weight:bold;flex:none}
   #achToast .toastLbl{font-size:9px;color:#3fbf3f;text-transform:uppercase;letter-spacing:2px}
   #achToast .toastName{font-size:12px;color:#ffd23f;text-transform:uppercase;letter-spacing:1px;margin-top:1px}
+  /* Tetromino-Banner im Hauptmenü: Retro-Werbefläche für das Schwesterspiel
+     der Reihe, spiegelbildlich zum Numerino-Banner in Tetromino – außerhalb
+     der Menübox über ihr. Farbwelt nach dem Tetromino-Titelbild (dunkelblaue
+     Fläche, gelber Pixel-Schriftzug); das ✕-Knöpfchen blendet den Banner aus,
+     bis ein neues Spiel startet (initRun meldet ihn zurück). */
+  #menuOverlay{flex-direction:column}
+  #promoBanner{position:relative;width:100%;max-width:520px;margin:0 0 12px}
+  #promoLink{display:flex;align-items:center;justify-content:center;gap:10px;
+    background:#0d0d20;border:3px solid #ffcc00;box-shadow:0 5px 0 #000;
+    background-image:repeating-linear-gradient(0deg,rgba(0,0,0,.14) 0 1px,transparent 1px 3px);
+    padding:12px 10px;text-decoration:none;cursor:pointer}
+  #promoLink:hover{filter:brightness(1.18)}
+  #promoCv{image-rendering:pixelated;width:28px;height:20px;border:0;box-shadow:none;
+    background:transparent;flex:0 0 auto;display:block}
+  .promoTxt{flex:0 0 auto;display:block;text-align:left}
+  #promoTtl{display:block;color:#ffcc00;font-size:15px;font-weight:bold;letter-spacing:2px;
+    text-transform:uppercase;text-shadow:2px 2px 0 #000}
+  .promoSub{display:block;font-size:9px;color:#c8c8e8;letter-spacing:1px;text-transform:uppercase;margin-top:1px}
+  #promoArrow{flex:0 0 auto;font-size:15px;line-height:1;color:#ffcc00;text-shadow:2px 2px 0 #000;
+    animation:promoBlink 1s steps(2,end) infinite}
+  @keyframes promoBlink{0%,49%{opacity:1}50%,100%{opacity:0}}
+  #promoClose{position:absolute;top:-11px;right:-11px;min-width:26px;min-height:26px;
+    padding:2px 5px;font-size:11px;z-index:2}
+  html.light #promoLink{box-shadow:0 5px 0 #7a7aa0}
   #euFlag{position:absolute;top:14px;right:14px;width:48px;pointer-events:auto;cursor:pointer}
   #euFlag canvas{width:100%;height:auto;display:block;border:2px solid #000;box-shadow:2px 2px 0 #000}
   #euTag{position:absolute;top:10px;right:68px;pointer-events:none;opacity:0}
@@ -260,7 +284,7 @@
 <div id="wrap">
   <header>
     <h1>Numerino</h1>
-    <div class="sub"><span class="verTag">Alpha 0.2</span> <span id="headMode">Sudoku-Roguelike</span></div>
+    <div class="sub"><span class="verTag">Alpha 0.4</span> <span id="headMode">Sudoku-Roguelike</span></div>
   </header>
   <div id="main">
     <div id="left">
@@ -325,11 +349,22 @@
 </div>
 
 <div id="menuOverlay" class="menuOverlay">
+  <div id="promoBanner">
+    <a id="promoLink" href="https://bacngaplays.github.io/Tetromino/" target="_blank" rel="noopener noreferrer" title="Tetromino im Browser öffnen">
+      <canvas id="promoCv" width="14" height="10"></canvas>
+      <span class="promoTxt">
+        <span id="promoTtl">Tetromino</span>
+        <span class="promoSub">Räumliches Brettspiel der Reihe</span>
+      </span>
+      <span id="promoArrow">&#9654;</span>
+    </a>
+    <button id="promoClose" class="btn small" title="Banner ausblenden – erscheint beim nächsten Spielstart wieder">✕</button>
+  </div>
   <div class="menuBox">
     <div id="euFlag" title="In der Europäischen Union entwickelt – einmal anklicken!"><canvas id="euCv" width="24" height="16"></canvas></div>
     <div id="euTag"><span class="euBanner">MADE IN EUROPE</span></div>
     <h1>Numerino</h1>
-    <div class="sub"><span class="verTag">Alpha 0.2</span></div>
+    <div class="sub"><span class="verTag">Alpha 0.4</span></div>
     <h3>Spielmodus</h3>
     <button id="runBtn" class="btn menuBtn">Standard-Run (10 Level)</button>
     <button id="endlessBtn" class="btn menuBtn">Endlos-Modus</button>
@@ -438,7 +473,7 @@
     <h2>Open Source und Urheberschaft</h2>
     <h3>Urheberschaft</h3>
     <ul>
-      <li>Diese Anwendung (Numerino) wurde von Vibe (KI-Assistent von Mistral AI, basierend auf dem Modell GLM) gemeinsam mit BaCnGaplays im Jahr 2026 entwickelt.</li>
+      <li>Diese Anwendung (Numerino) wurde von Vibe (KI-Assistent von Mistral AI, basierend auf dem Modell GLM) gemeinsam mit Oliver Schlicht im Jahr 2026 entwickelt.</li>
       <li>Die Europaflagge oben rechts im Hauptmenü (Pixelgrafik) kennzeichnet Numerino als ein in der Europäischen Union entwickeltes Spiel; das Flaggen-Emblem der EU dient hier ausschließlich dieser Herkunftsangabe.</li>
       <li>Der Quellcode liegt vollständig und offen in dieser HTML-Datei vor und kann frei eingesehen und angepasst werden.</li>
     </ul>
@@ -456,7 +491,7 @@
       <li>Spielstände, Statistik und Erfolge bleiben ausschließlich lokal im Browser (localStorage); es erfolgen keine Netzwerkzugriffe. Beim Export wird der gesamte Spielstand in eine HTML-Datei eingebettet – das Öffnen einer solchen Datei legt den Spielstand als neuen Eintrag an.</li>
     </ul>
     <h3>Version</h3>
-    <ul><li>Alpha 0.2</li></ul>
+    <ul><li>Alpha 0.4</li></ul>
     <div class="btnRow"><button id="infoSrc" class="btn small">Quellcode anzeigen</button></div>
     <div class="btnRow"><button id="infoClose" class="btn">Schließen</button></div>
   </div>
@@ -464,7 +499,7 @@
 
 <div id="srcModal" class="modal hidden">
   <div class="modalBox" style="max-width:860px">
-    <h2>Quellcode <span class="verTag">Alpha 0.2</span></h2>
+    <h2>Quellcode <span class="verTag">Alpha 0.4</span></h2>
     <p class="mSub">Vollständiger Quellcode dieser Datei. Nach dem Markieren kann er mit Strg+C (bzw. Cmd+C) kopiert werden.</p>
     <textarea id="srcArea" readonly spellcheck="false"></textarea>
     <div class="btnRow">
@@ -576,7 +611,7 @@ function sfx(f,d,type,v,slide){
   }catch(e){}
 }
 /* ================= Spielstand ================= */
-/* Version: Alpha 0.2 – mit jeder Änderung hochzählen (Alpha 0.3, 0.4 …) */
+/* Version: Alpha 0.4 – mit jeder Änderung hochzählen (Alpha 0.5, 0.6 …) */
 function loadSave(){
   var fallback=null;
   try{fallback=JSON.parse(document.getElementById('saveSlot').textContent);}catch(e){}
@@ -938,6 +973,7 @@ function initRun(mode,diff){
   S.floats=[];S.parts=[];S.clearFx=[];S.shake=0;
   $('overOverlay').classList.add('hidden');
   $('levelModal').classList.add('hidden');
+  $('promoBanner').classList.remove('hidden');
   $('menuOverlay').classList.add('hidden');
   $('logList').innerHTML='';
   startLevel(1);
@@ -1412,6 +1448,22 @@ $('euFlag').addEventListener('click',function(){
   void tag.offsetWidth;
   tag.classList.add('pop');
   sfx(520,0.06);setTimeout(function(){sfx(660,0.08);},80);
+});
+/* Werbebanner: Tetromino (T-Stueck als Pixelgrafik, Tetromino-Farbwelt) */
+(function(){
+  var g=$('promoCv').getContext('2d');
+  var cells=[[0,0],[1,0],[2,0],[1,1]];
+  for(var i=0;i<cells.length;i++){
+    var x=1+cells[i][0]*4,y=1+cells[i][1]*4;
+    g.fillStyle='#2f5fd8';g.fillRect(x,y,4,4);
+    g.fillStyle='#6a9af0';g.fillRect(x,y,4,1);g.fillRect(x,y,1,4);
+    g.fillStyle='#1a3a8a';g.fillRect(x+3,y+1,1,3);g.fillRect(x+1,y+3,3,1);
+  }
+})();
+/* Banner-Ausblendung: nur im Speicher, kehrt bei jedem Spielstart zurueck */
+$('promoClose').addEventListener('click',function(){
+  $('promoBanner').classList.add('hidden');
+  sfx(300,0.06);
 });
 /* ================= Start ================= */
 renderStatus();
