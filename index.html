@@ -132,19 +132,33 @@
   .upDesc{font-size:9px;line-height:1.4;color:#5a5a72;padding:0 2px;margin-top:3px}
   .setRow{display:flex;align-items:center;gap:8px;margin:6px 0;flex-wrap:wrap}
   .setLbl{font-size:11px;color:#b8e0c8;display:inline-block;width:140px;text-align:left}
+  /* Sprachknöpfe: Pixel-Flagge neben der Sprachbezeichnung; die Knopfgruppe
+     liegt wie in Tetromino in einem Raster mit gleich breiten Spalten,
+     damit alle Knöpfe sauber untereinander ausgerichtet sind */
+  .setLang{display:inline-flex;align-items:center;justify-content:center;gap:6px}
+  .flag{width:18px;height:12px;flex:0 0 18px;shape-rendering:crispEdges;
+    background:#fff;border:1px solid rgba(10,10,26,.55);box-sizing:content-box}
+  .setOpts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;
+    flex:1 1 150px;min-width:0}
+  .setOpts.full{flex-basis:100%;flex-grow:1;margin-top:2px}
+  .setOpts .btn{min-width:0;white-space:nowrap;overflow:hidden}
+  /* Welten: Knopf mit Mini-Vorschau und Themenname wie in Tetromino */
+  .setTheme{display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 4px}
+  .thmPrev{width:40px;height:40px;image-rendering:pixelated;border:1px solid #000;background:#000}
+  .thmName{font-size:9px;letter-spacing:1px}
   h3.setSecH{cursor:pointer;user-select:none}
   h3.setSecH::after{content:'\2212';float:right;color:var(--accent);margin-left:8px;font-size:12px}
   h3.setSecH.closed::after{content:'+'}
   .slotRow{display:flex;align-items:center;gap:10px;width:100%;margin:6px 0;font-size:12px;padding:6px;
-    text-align:left;border:2px solid #3d7a5c;background:#102820;box-shadow:2px 2px 0 #000;
-    cursor:pointer;font-family:inherit;color:var(--ink)}
+    text-align:left;border:2px solid #3d7a5c;background:#102820;box-shadow:2px 2px 0 #000}
   .slotRow.act{border-color:#3fbf3f}
+  .slotActs{display:flex;flex-direction:column;gap:4px}
   .slotBody{flex:1;display:block;min-width:0}
   .slotBody b{display:block;letter-spacing:1px;color:#fff}
   .slotMeta{display:block;font-size:10px;color:#9ac8ab;margin-top:2px;letter-spacing:1px;line-height:1.4}
   #srcArea{width:100%;height:46vh;background:#0c1b14;color:#b8e0c8;border:2px solid #3d7a5c;
     font-family:inherit;font-size:10px;padding:8px;white-space:pre;resize:vertical}
-  #setVol{accent-color:#ffd23f;width:180px}
+  #setVol,#setMusVol{accent-color:#ffd23f;width:180px}
   .statRow{font-size:11px;color:#c8e8d4;margin:3px 0;text-align:left;letter-spacing:1px}
   .achRow{display:flex;align-items:flex-start;gap:8px;margin:6px 0;padding:6px;text-align:left;
     border:2px solid #3fbf3f;background:#102820}
@@ -280,11 +294,11 @@
 </style>
 </head>
 <body>
-<script id="saveSlot" type="application/json">{"v":2,"active":0,"settings":{"snd":true,"scan":true,"vol":100,"light":false},"slots":[{"id":1,"name":"Spielstand 1","updated":"","stats":{"runs":0,"wins":0,"bestScore":0,"bestLevel":0,"linesTotal":0},"ach":{}}]}</script>
+<script id="saveSlot" type="application/json">{"v":2,"active":0,"settings":{"snd":true,"scan":true,"vol":100,"light":false,"musVol":100,"theme":"orig"},"slots":[{"id":1,"name":"Spielstand 1","updated":"","stats":{"runs":0,"wins":0,"bestScore":0,"bestLevel":0,"linesTotal":0,"boards":0},"ach":{}}]}</script>
 <div id="wrap">
   <header>
     <h1>Numerino</h1>
-    <div class="sub"><span class="verTag">Alpha 0.4</span> <span id="headMode">Sudoku-Roguelike</span></div>
+    <div class="sub"><span class="verTag">Alpha 0.10</span> <span id="headMode">Sudoku-Roguelike</span></div>
   </header>
   <div id="main">
     <div id="left">
@@ -300,7 +314,7 @@
           <span class="stTxt" id="stLevel">LEVEL 1</span>
           <span class="stDim" id="stGoal">ZIEL 0/2</span>
           <span class="stDim" id="stScore">PUNKTE 0</span>
-          <span class="modeChip" id="stMode">RUN</span>
+          <span class="modeChip" id="stMode">DEATH RUN</span>
           <span id="stRight">KARTEN 12</span>
         </div>
         <div id="bossPanel" class="hidden">
@@ -321,7 +335,7 @@
             <div id="overTitle"></div>
             <div id="overMeta"></div>
             <div id="overReason"></div>
-            <button id="overRetry" class="btn menuBtn">Neuer Run (gleicher Modus)</button>
+            <button id="overRetry" class="btn menuBtn">Neuer Death Run</button>
             <button id="overMenuBtn" class="btn menuBtn">Hauptmenü</button>
           </div>
         </div>
@@ -338,7 +352,9 @@
       <div class="bubBlock">
         <h2 id="helpHead">Hilfe <span id="helpTog">+</span></h2>
         <div id="helpBody" class="hidden">
-          Reihe, Spalte oder 3×3-Block voll = Linie aufgelöst, Karten kommen zurück.
+          Karte antippen, dann ein freies Feld wählen. Joker-Felder (mit ?) zählen als jede Ziffer und erfüllen Linien mit – sie müssen nie gefüllt werden.
+          Platzierte Ziffern bleiben liegen; jede Aufgabe baut auf dem bisherigen Brett auf.
+          Nach jeder Platzierung ziehst du eine Karte nach; jede erstmals volle Reihe, Spalte oder Quadrat gibt zwei Bonuskarten.
           Gleiche Ziffer nie zweimal pro Reihe, Spalte oder Block.
           Wildkarten (6|9, 1|7) gelten als eine der beiden Ziffern, der Joker als jede.
           Der Tausch-Knopf oben rechts wirft einmal je Level alle Karten weg und zieht sechs neue.
@@ -364,22 +380,22 @@
     <div id="euFlag" title="In der Europäischen Union entwickelt – einmal anklicken!"><canvas id="euCv" width="24" height="16"></canvas></div>
     <div id="euTag"><span class="euBanner">MADE IN EUROPE</span></div>
     <h1>Numerino</h1>
-    <div class="sub"><span class="verTag">Alpha 0.4</span></div>
-    <h3>Spielmodus</h3>
-    <button id="runBtn" class="btn menuBtn">Standard-Run (10 Level)</button>
-    <button id="endlessBtn" class="btn menuBtn">Endlos-Modus</button>
-    <div id="diffRow">
+    <div class="sub"><span class="verTag">Alpha 0.10</span></div>
+    <h3 id="modeH">Spielmodus</h3>
+    <button id="stdBtn" class="btn menuBtn">Standard</button>
+    <div id="diffRow" class="hidden">
       <div id="diffCap">Schwierigkeit wählen</div>
       <div id="diffInner">
         <button class="btn small diffBtn" data-diff="1">Leicht</button>
-        <button class="btn small diffBtn selOpt" data-diff="2">Mittel</button>
+        <button class="btn small diffBtn" data-diff="2">Mittel</button>
         <button class="btn small diffBtn" data-diff="3">Schwer</button>
       </div>
     </div>
-    <h3>Lernen</h3>
+    <h3 id="learnH">Lernen</h3>
     <button id="mRulesBtn" class="btn menuBtn">Anleitung &amp; Regeln</button>
-    <h3>Sonstiges</h3>
+    <h3 id="miscH">Sonstiges</h3>
     <button id="mSaveBtn" class="btn menuBtn">Spielstand, Statistik &amp; Erfolge</button>
+    <button id="mWorldBtn" class="btn menuBtn">Welten</button>
     <button id="mSetBtn" class="btn menuBtn">Einstellungen</button>
     <button id="mInfoBtn" class="btn menuBtn">Open Source &amp; Urheberschaft</button>
     <div class="btnRow"><button id="menuBack" class="btn small">Zurück zum Spiel (Esc)</button></div>
@@ -388,7 +404,7 @@
 
 <div id="levelModal" class="modal hidden">
   <div class="modalBox">
-    <h2>Level geschafft!</h2>
+    <h2 id="levelH">Aufgabe geschafft!</h2>
     <p class="mSub" id="levelSub">Wähle eine Verzauberung – sie wirkt ab dem nächsten Level.</p>
     <div class="drShopRow" id="upCards"></div>
     <p class="mSub" id="levelDone"></p>
@@ -399,26 +415,31 @@
   <div class="modalBox">
     <div id="rulesBody">
     <h2>Regeln von Numerino</h2>
-    <p class="mSub">Numerino ist ein Sudoku-Roguelike: Du platzierst Ziffernkarten auf einem 9×9-Brett und löst Linien auf, während Boss-Gegner dir Karten klauen.</p>
+    <p class="mSub">Numerino ist ein Sudoku-Roguelike: Du platzierst Ziffernkarten auf einem 9×9-Brett, erfüllst Aufgaben auf einem Brett, das niemals gelöscht wird, und wehrst im Death Run drei Boss-Arten ab.</p>
     <details open>
     <summary>Das Spiel – allgemeine Regeln</summary>
     <ul>
-      <li>9×9-Brett, einige Felder sind blockiert (dunkel mit X). Blockierte Felder zählen nicht zu den Linien.</li>
+      <li>9×9-Brett. Dunkle Felder mit ? sind Joker-Felder: Sie zählen als jede Ziffer, erfüllen Reihen, Spalten und Quadrate mit und müssen nie selbst gefüllt werden.</li>
       <li>Dein Kartentisch hält eine begrenzte Zahl von Ziffernkarten (1–9). Karte antippen, dann ein freies Feld antippen.</li>
       <li>Sudoku-Konfliktregel: Eine Ziffer darf nie doppelt in derselben Reihe, Spalte oder demselben 3×3-Block liegen. Ungültige Felder werden beim Überfahren rot markiert.</li>
-      <li>Ist eine Reihe, eine Spalte oder ein 3×3-Block vollständig gefüllt, löst sich die Linie auf: Die Ziffern kehren zurück, und du erhältst die investierten Karten plus eine Bonuskarte je Linie zurück.</li>
-      <li>Je Level musst du eine vorgegebene Anzahl Linien auflösen (Ziel in der Statusleiste). Danach folgt die Verzauberungswahl.</li>
-      <li>Ist dein Kartentisch leer oder ist keine Karte mehr legal unterzubringen, endet der Run. Einmal je Level lässt sich der Tausch-Knopf nutzen: Alle Karten wegwerfen und sechs neue ziehen.</li>
-      <li>Punkte: 100 je Linie, Bonus für Mehrfach-Lösungen in einem Zug, 250 × Level beim Levelabschluss.</li>
+      <li>Platzierte Ziffern bleiben liegen – nichts wird gelöscht. Jede Aufgabe baut auf dem bereits gefüllten Brett auf.</li>
+      <li>Jede Aufgabe verlangt eine Anzahl voller Linien, etwa zwei Reihen oder zwei Quadrate (Ziel in der Statusleiste).</li>
+      <li>Nach jeder Aufgabe folgt die Verzauberungswahl; der Nachschub an neuen Karten wird dir dabei bereits angezeigt.</li>
+      <li>Nachziehstapel: Nach jeder Platzierung ziehst du automatisch eine neue Karte nach.</li>
+      <li>Linien-Bonus: Jede erstmals vollständig gefüllte Reihe, Spalte oder jedes Quadrat schüttet sofort zwei Bonuskarten aus – je Linie und Brett nur einmal.</li>
+      <li>Ist das gesamte Brett gefüllt (Joker-Felder zählen als erfüllt), gibt es 1000 Punkte und ein neues, stärker verblocktes Brett.</li>
+      <li>Ist dein Kartentisch leer oder ist keine Karte mehr legal unterzubringen, endet der Run. Der Tausch-Knopf wirft je Level alle Karten weg und zieht sechs neue (einmal, durch Tausch+ öfter).</li>
+      <li>Punkte: 10 je Platzierung, 100 je Aufgaben-Linie und 250 × Level beim Aufgabenabschluss.</li>
     </ul>
     </details>
     <details>
-    <summary>Bosse – der Zifferndieb</summary>
+    <summary>Bosse – der Death Run</summary>
     <ul>
-      <li>Im Standard-Run greifen auf Level 3, 6 und 9 Zifferndiebe an; im Endlos-Modus alle drei Level.</li>
-      <li>Ein Zifferndieb klaut nach je fünf (Level 3), vier (Level 6) beziehungsweise drei (Level 9) Platzierungen eine zufällige Karte aus deinem Kartentisch – auch Wildkarten und Joker. Die Fortschrittskästchen unter seinem Namen zeigen, wann er zuschlägt.</li>
-      <li>Im Endlos-Modus werden die Diebe mit höheren Leveln schneller; mindestens alle zwei Platzierungen schlägt einer zu.</li>
-      <li>Ein Boss-Level endet wie jedes andere, sobald das Linienziel erreicht ist.</li>
+      <li>Im Death Run greift jeder dritte Level ein Boss an; die drei Arten rotieren und schlagen mit höheren Leveln immer schneller zu.</li>
+      <li>Zifferndieb: klaut eine zufällige Karte aus deinem Kartentisch – auch Wildkarten und Joker.</li>
+      <li>Lückenreißer: reißt eine bereits platzierte Ziffer aus dem Brett und schlägt so Lücken in dein Sudoku.</li>
+      <li>Kartenwirbler: verwandelt zwei Karten deines Tisches in andere Ziffern.</li>
+      <li>Die Fortschrittskästchen unter dem Boss-Namen zeigen, wann er zuschlägt. Ein Boss-Level endet wie jedes andere, sobald die Aufgabe erfüllt ist.</li>
     </ul>
     </details>
     <details>
@@ -429,20 +450,20 @@
       <li>Joker: gilt einmal als jede beliebige Ziffer 1–9.</li>
       <li>Nachschub: drei weitere Ziffernkarten sofort.</li>
       <li>Klon: eine zufällige Karte deines Tisches wird verdoppelt – auch Wildkarten.</li>
-      <li>Meißel: entfernt bis zu drei blockierte Felder vom Brett des nächsten Levels.</li>
+      <li>Tausch+: ab sofort ein zweiter Tausch je Level.</li>
     </ul>
     </details>
     <details>
-    <summary>Spielmodi und Schwierigkeit</summary>
+    <summary>Spielmodus und Schwierigkeit</summary>
     <ul>
-      <li>Standard-Run: zehn Level, Sieg nach Level 10. Endlos-Modus: das Spiel läuft ohne Ende weiter, die Level werden zunehmend blockierter; gezählt wird der Punktestand.</li>
-      <li>Leicht: mehr Startkarten, weniger Blockaden, langsamere Bosse. Mittel: Standard. Schwer: weniger Karten, mehr Blockaden, schnellere Bosse.</li>
+      <li>Death Run: das Spiel läuft ohne Ende weiter; gezählt werden der Punktestand und wie weit du kommst.</li>
+      <li>Leicht: mehr Startkarten, mehr Joker-Felder, langsamere Bosse. Mittel: Standard. Schwer: weniger Karten, weniger Joker-Felder, schnellere Bosse.</li>
     </ul>
     </details>
     <details>
     <summary>Spielstand, Statistik und Erfolge</summary>
     <ul>
-      <li>Statistik und Erfolge werden automatisch im Browser (localStorage) gespeichert; neun Erfolge decken erste Linie, Wildkarten, Joker, Bosse, Sieg und Punkterekorde ab.</li>
+      <li>Statistik und Erfolge werden automatisch im Browser (localStorage) gespeichert; neun Erfolge decken erste Aufgabe, Wildkarten, Joker, Bosse, Sudoku-Lösung und Punkterekorde ab.</li>
     </ul>
     </details>
     </div>
@@ -452,17 +473,27 @@
 
 <div id="setModal" class="modal hidden">
   <div class="modalBox">
-    <h2>Einstellungen</h2>
+    <h2 id="setH2">Einstellungen</h2>
+    <div class="setRow"><span class="setLbl" id="setLblLang">Sprache</span>
+      <div class="setOpts full">
+        <button class="btn small setLang" data-lang="de"><svg class="flag" viewBox="0 0 18 12" aria-hidden="true"><rect width="18" height="12" fill="#000"/><rect y="4" width="18" height="4" fill="#DD0000"/><rect y="8" width="18" height="4" fill="#FFCC00"/></svg>Deutsch</button>
+        <button class="btn small setLang" data-lang="en"><svg class="flag" viewBox="0 0 18 12" aria-hidden="true"><rect width="18" height="12" fill="#012169"/><path d="M0 0 18 12M18 0 0 12" stroke="#fff" stroke-width="3" fill="none"/><path d="M0 0 18 12M18 0 0 12" stroke="#C8102E" stroke-width="1" fill="none"/><rect x="7" width="4" height="12" fill="#fff"/><rect y="4" width="18" height="4" fill="#fff"/><rect x="8" width="2" height="12" fill="#C8102E"/><rect y="5" width="18" height="2" fill="#C8102E"/></svg>English</button>
+        <button class="btn small setLang" data-lang="fr"><svg class="flag" viewBox="0 0 18 12" aria-hidden="true"><rect width="6" height="12" fill="#0055A4"/><rect x="6" width="6" height="12" fill="#fff"/><rect x="12" width="6" height="12" fill="#EF4135"/></svg>Fran&ccedil;ais</button>
+        <button class="btn small setLang" data-lang="cs"><svg class="flag" viewBox="0 0 18 12" aria-hidden="true"><rect width="18" height="12" fill="#fff"/><rect y="6" width="18" height="6" fill="#D7141A"/><polygon points="0,0 9,6 0,12" fill="#11457E"/></svg>Čeština</button>
+        <button class="btn small setLang" data-lang="pl"><svg class="flag" viewBox="0 0 18 12" aria-hidden="true"><rect width="18" height="12" fill="#fff"/><rect y="6" width="18" height="6" fill="#DC143C"/></svg>Polski</button>
+        <button class="btn small setLang" data-lang="es"><svg class="flag" viewBox="0 0 18 12" aria-hidden="true"><rect width="18" height="12" fill="#AA151B"/><rect y="3" width="18" height="6" fill="#F1BF00"/></svg>Español</button>
+      </div></div>
     <h3 id="setHGrafik" class="setSecH" data-sec="secGrafik">Grafik</h3>
     <div id="secGrafik">
-      <div class="setRow"><span class="setLbl">Vollbild</span><button id="setFs" class="btn small">Vollbildmodus: aus</button></div>
-      <div class="setRow"><span class="setLbl">Scanlinien</span><button id="setScan" class="btn small">Scanlinien: an</button></div>
-      <div class="setRow"><span class="setLbl">Farbschema</span><button id="setLight" class="btn small">Light-Modus: aus</button></div>
+      <div class="setRow"><span class="setLbl" id="setLblFs">Vollbild</span><button id="setFs" class="btn small">Vollbildmodus: aus</button></div>
+      <div class="setRow"><span class="setLbl" id="setLblLight">Farbschema</span><button id="setLight" class="btn small">Light-Modus: aus</button></div>
     </div>
     <h3 id="setHSound" class="setSecH" data-sec="secSound">Ton</h3>
     <div id="secSound">
-      <div class="setRow"><span class="setLbl">Sound</span><button id="setMute" class="btn small">Ton: an</button></div>
-      <div class="setRow"><span class="setLbl">Effekte</span><input type="range" id="setVol" min="0" max="100" value="100"></div>
+      <div class="setRow"><span class="setLbl" id="setLblSound">Sound</span><button id="setMute" class="btn small">Ton: an</button></div>
+      <div class="setRow"><span class="setLbl" id="setLblVol">Effekte</span><input type="range" id="setVol" min="0" max="100" value="100"></div>
+      <div class="setRow"><span class="setLbl" id="setLblMus">Musik</span><button id="setMus" class="btn small">Musik: aus</button></div>
+      <div class="setRow"><span class="setLbl" id="setLblMusVol">Musik-Lautstärke</span><input type="range" id="setMusVol" min="0" max="100" value="100"></div>
     </div>
     <div class="btnRow"><button id="setClose" class="btn">Schließen</button></div>
   </div>
@@ -470,10 +501,11 @@
 
 <div id="infoModal" class="modal hidden">
   <div class="modalBox">
+    <div id="infoBody">
     <h2>Open Source und Urheberschaft</h2>
     <h3>Urheberschaft</h3>
     <ul>
-      <li>Diese Anwendung (Numerino) wurde von Vibe (KI-Assistent von Mistral AI, basierend auf dem Modell GLM) gemeinsam mit Oliver Schlicht im Jahr 2026 entwickelt.</li>
+      <li>Diese Anwendung (Numerino) wurde von Vibe (KI-Assistent von Mistral AI, basierend auf dem Modell GLM) gemeinsam mit BaCnGaplays im Jahr 2026 entwickelt.</li>
       <li>Die Europaflagge oben rechts im Hauptmenü (Pixelgrafik) kennzeichnet Numerino als ein in der Europäischen Union entwickeltes Spiel; das Flaggen-Emblem der EU dient hier ausschließlich dieser Herkunftsangabe.</li>
       <li>Der Quellcode liegt vollständig und offen in dieser HTML-Datei vor und kann frei eingesehen und angepasst werden.</li>
     </ul>
@@ -484,14 +516,15 @@
     </ul>
     <h3>Grafiken</h3>
     <ul>
-      <li>Alle Grafiken (Ziffern, Boss-Sprites, EU-Flagge) sind als eingebettete Pixelgrafiken direkt in der Datei enthalten und eigens für diese Anwendung gezeichnet.</li>
+      <li>Alle Grafiken (Ziffern, Joker-Felder, Boss-Sprites, EU-Flagge) sind als eingebettete Pixelgrafiken direkt in der Datei enthalten und eigens für diese Anwendung gezeichnet.</li>
     </ul>
-    <h3>Datenschutz</h3>
+    <h3>Quellcode</h3>
     <ul>
-      <li>Spielstände, Statistik und Erfolge bleiben ausschließlich lokal im Browser (localStorage); es erfolgen keine Netzwerkzugriffe. Beim Export wird der gesamte Spielstand in eine HTML-Datei eingebettet – das Öffnen einer solchen Datei legt den Spielstand als neuen Eintrag an.</li>
+      <li>Sie können den vollständigen Quellcode dieser Anwendung über die Quellcode-Ansicht einsehen, vollständig markieren und kopieren.</li>
     </ul>
-    <h3>Version</h3>
-    <ul><li>Alpha 0.4</li></ul>
+    </div>
+    <h3 id="verH">Version</h3>
+    <ul><li>Alpha 0.10</li></ul>
     <div class="btnRow"><button id="infoSrc" class="btn small">Quellcode anzeigen</button></div>
     <div class="btnRow"><button id="infoClose" class="btn">Schließen</button></div>
   </div>
@@ -499,8 +532,8 @@
 
 <div id="srcModal" class="modal hidden">
   <div class="modalBox" style="max-width:860px">
-    <h2>Quellcode <span class="verTag">Alpha 0.4</span></h2>
-    <p class="mSub">Vollständiger Quellcode dieser Datei. Nach dem Markieren kann er mit Strg+C (bzw. Cmd+C) kopiert werden.</p>
+    <h2><span id="srcH2t">Quellcode</span> <span class="verTag">Alpha 0.10</span></h2>
+    <p class="mSub" id="srcHint">Vollständiger Quellcode dieser Datei. Nach dem Markieren kann er mit Strg+C (bzw. Cmd+C) kopiert werden.</p>
     <textarea id="srcArea" readonly spellcheck="false"></textarea>
     <div class="btnRow">
       <button id="srcSelAll" class="btn small">Alles markieren</button>
@@ -511,21 +544,40 @@
 
 <div id="saveOverlay" class="menuOverlay hidden">
   <div class="menuBox">
-    <h1>Spielstand</h1>
-    <div class="sub">Mehrere Spielstände mit eigener Statistik und Erfolgen – im Browser gespeichert, als HTML-Datei exportierbar</div>
-    <h3>Spielstände</h3>
+    <h1 id="saveH1">Spielstand</h1>
+    <div class="sub" id="saveSub">Fortschritt, Statistik und Erfolge – im Browser gespeichert, als HTML-Datei exportierbar</div>
+    <h3 id="hSlots">Spielstände</h3>
     <div id="slotList"></div>
     <div class="btnRow">
       <button id="slotNew" class="btn small">Neuer Spielstand</button>
-      <button id="slotExport" class="btn small">Als HTML-Datei exportieren</button>
       <button id="slotResetAll" class="btn small">Alle zurücksetzen</button>
     </div>
-    <h3>Statistik (aktiver Spielstand)</h3>
+    <h3 id="hStats">Statistik (aktiver Spielstand)</h3>
     <div id="statList"></div>
     <h3 id="hAch" class="setSecH closed" data-sec="achList">Erfolge (aktiver Spielstand)</h3>
     <div id="achList" class="hidden"></div>
-    <div id="saveNote">Der Fortschritt wird automatisch im Browser gespeichert.</div>
+    <div id="saveNote" class="hidden"></div>
     <div class="btnRow"><button id="saveBack" class="btn small">Zurück</button></div>
+  </div>
+</div>
+
+<div id="themeOverlay" class="menuOverlay hidden">
+  <div class="menuBox">
+    <h1 id="worldH1">Welten</h1>
+    <div class="sub" id="worldSub">Brettthemen – die Farbgebung des Sudoku-Bretts</div>
+    <h3 id="worldH3">Brettthemen</h3>
+    <div id="themeOpts" class="setOpts full">
+      <button class="btn small setTheme" data-theme="orig"><canvas class="thmPrev" width="10" height="10"></canvas><span class="thmName">Original</span></button>
+      <button class="btn small setTheme" data-theme="mono"><canvas class="thmPrev" width="10" height="10"></canvas><span class="thmName">Monochrom</span></button>
+      <button class="btn small setTheme" data-theme="papier"><canvas class="thmPrev" width="10" height="10"></canvas><span class="thmName">Papier</span></button>
+      <button class="btn small setTheme" data-theme="edel"><canvas class="thmPrev" width="10" height="10"></canvas><span class="thmName">Edel</span></button>
+      <button class="btn small setTheme" data-theme="winter"><canvas class="thmPrev" width="10" height="10"></canvas><span class="thmName">Winter</span></button>
+      <button class="btn small setTheme" data-theme="himmel"><canvas class="thmPrev" width="10" height="10"></canvas><span class="thmName">Himmel</span></button>
+      <button class="btn small setTheme" data-theme="herbst"><canvas class="thmPrev" width="10" height="10"></canvas><span class="thmName">Herbst</span></button>
+      <button class="btn small setTheme" data-theme="kirsch"><canvas class="thmPrev" width="10" height="10"></canvas><span class="thmName">Kirschbl&uuml;te</span></button>
+      <button class="btn small setTheme" data-theme="weltraum"><canvas class="thmPrev" width="10" height="10"></canvas><span class="thmName">Weltraum</span></button>
+    </div>
+    <div class="btnRow"><button id="worldBack" class="btn small">Zurück</button></div>
   </div>
 </div>
 
@@ -546,7 +598,8 @@ var FONT={
 'U':'101101101101111','V':'101101101101010','W':'101101101111101','X':'101101010101101',
 'Y':'101101010010010','Z':'111001010100111',
 ' ':'000000000000000','.':'000000000000010','!':'010010010000010','+':'000010111010000',
-'-':'000000111000000','|':'010010010010010','*':'010111111111010'
+'-':'000000111000000','|':'010010010010010','*':'010111111111010',
+'?':'011100010000010'
 };
 function drawTxt(g,s,x,y,col,sc){
   sc=sc||1;
@@ -595,23 +648,977 @@ function drawSprite(g,rows,pal,x,y,sc){
 }
 /* ================= Ton ================= */
 var AC=null;
-function sfx(f,d,type,v,slide){
+function sfx(f,d,type,v,slide,when){
   try{
     if(!SAVE.settings.snd)return;
     if(!AC){AC=new (window.AudioContext||window.webkitAudioContext)();}
+    if(AC.state==='suspended')AC.resume();
+    var t0=AC.currentTime+(when||0);
     var o=AC.createOscillator(),g=AC.createGain();
-    o.type=type||'square';o.frequency.value=f;
-    if(slide){o.frequency.linearRampToValueAtTime(Math.max(30,f+slide),AC.currentTime+d);}
+    o.type=type||'square';o.frequency.setValueAtTime(f,t0);
+    if(slide){o.frequency.linearRampToValueAtTime(Math.max(30,f+slide),t0+d);}
     var vol=(v||0.12)*(SAVE.settings.vol/100);
     if(vol<=0)return;
-    g.gain.value=vol;
-    g.gain.exponentialRampToValueAtTime(0.001,AC.currentTime+d);
+    g.gain.setValueAtTime(vol,t0);
+    g.gain.exponentialRampToValueAtTime(0.001,t0+d);
     o.connect(g);g.connect(AC.destination);
-    o.start();o.stop(AC.currentTime+d);
+    o.start(t0);o.stop(t0+d+0.02);
   }catch(e){}
 }
+/* ================= Musik (8-Bit-Schleife, zur Laufzeit erzeugt) =================
+   Eine einzige, eigens für Numerino komponierte Chiptune-Schleife im
+   Gameboy-Klang: „Ziffern-Gedanken“. Das klangliche Alleinstellungsmerkmal
+   ist die Schwebung: Wie im Spiel Ziffern dicht beieinanderliegen, erklingen
+   hier Töne mit minimal benachbarten Frequenzen – zwei Oszillotronen im
+   Abstand von wenigen Hertz erzeugen eine hörbare Pulsation, deren Rate
+   (3 bis 7 Hz) bewusst im Bereich der Ziffernabstände liegt. Noten mit
+   Schwebung gleiten bei Übergängen zur Zielnote, während der zweite
+   Oszillator seinen Abstand behält; die Schwebung trägt so durch den
+   gesamten Übergang. Notenformat: [Frequenz, Achtel, Gleitziel, Schwebung
+   in Hz]; 0 oder fehlend = ohne. Die Musik bleibt über MUS_GAIN dezent
+   hinter den Effekten und besitzt einen eigenen Regler. */
+var musOn=false,musTimer=null,musStep=0;
+var MUS_GAIN=0.5;
+var MUS={stepMs:240,bassEvery:4,bassDur:3.5,leadVol:0.040,bassVol:0.030,
+  lead:[ // acht Takte à acht Achtel: Am – F – C – G – Am – Dm – F – E
+    [659,2,0,4],[523,1],[440,1],[523,1],[587,1],[659,2,587],
+    [587,1],[523,1],[440,1],[523,1],[440,1],[349,1],[440,1],[523,1],
+    [392,2,0,5],[659,2],[587,1],[523,1],[392,2],
+    [587,2,0,6],[494,2],[392,1],[440,1],[494,1],[587,1],
+    [880,2,0,4],[784,1],[659,1],[784,1],[659,1],[523,1],[440,1],
+    [587,2,0,5],[659,1],[587,1],[523,1],[587,1],[494,2,523],
+    [523,1],[440,1],[523,1],[587,1],[659,1],[587,1],[698,2,659],
+    [659,1],[587,1],[494,1],[587,1],[494,1],[440,1],[523,2,440,7]
+  ],
+  bass:[ // Grundton und Quinte je Takt, teils leicht schwebend
+    [110,4,3],[165,4],[87,4],[131,4],
+    [131,4],[196,4],[98,4],[147,4],
+    [110,4],[165,4,3],[147,4],[220,4],
+    [87,4],[131,4],[82,4,3],[123,4]
+  ]
+};
+function musVolNow(){
+  /* Gekrümmte Skala (Exponent 1,6): „leise“ löst tatsächlich in
+     Hintergrundlautstärke auf, statt wie volle Effekt-Lautstärke zu klingen. */
+  return Math.pow((SAVE.settings.musVol||0)/100,1.6);
+}
+function musTone(f,d,vol,when,slide,beat){
+  try{
+    if(!SAVE.settings.snd)return;
+    if(!AC){AC=new (window.AudioContext||window.webkitAudioContext)();}
+    if(AC.state==='suspended')AC.resume();
+    var t0=AC.currentTime+(when||0);
+    var g=AC.createGain();
+    /* Schwebung: zwei Oszillatoren gleichzeitig – die Summe ist etwas
+       lauter, daher wird die Einzelamplitude abgesenkt. */
+    g.gain.setValueAtTime(Math.max(0.0001,vol*(beat?0.8:1)*MUS_GAIN*musVolNow()),t0);
+    g.gain.exponentialRampToValueAtTime(0.001,t0+d);
+    g.connect(AC.destination);
+    var parts=beat?[f,f+beat]:[f];
+    for(var i=0;i<parts.length;i++){
+      var o=AC.createOscillator();
+      o.type='square';
+      o.frequency.setValueAtTime(parts[i],t0);
+      /* Übergang: der Ton gleitet zur Zielnote; der zweite Oszillator
+         behält dabei seinen Abstand – die Schwebung pulsiert durch den
+         gesamten Übergang hindurch. */
+      if(slide){
+        o.frequency.linearRampToValueAtTime(Math.max(30,slide+(i>0?beat:0)),t0+d);
+      }
+      o.connect(g);
+      o.start(t0);o.stop(t0+d+0.02);
+    }
+  }catch(e){}
+}
+function musTick(){
+  if(!musOn)return;
+  var lead=MUS.lead[musStep%MUS.lead.length];
+  if(lead[0])musTone(lead[0],lead[1]*MUS.stepMs/1000*0.9,MUS.leadVol,0,lead[2]||null,lead[3]||null);
+  if(musStep%MUS.bassEvery===0){
+    var bass=MUS.bass[Math.floor(musStep/MUS.bassEvery)%MUS.bass.length];
+    if(bass[0])musTone(bass[0],MUS.stepMs/1000*MUS.bassDur,MUS.bassVol,0,null,bass[2]||null);
+  }
+  musStep++;
+  musTimer=setTimeout(musTick,lead[1]*MUS.stepMs);
+}
+function toggleMusic(){
+  musOn=!musOn;
+  if(musOn){musStep=0;musTick();}
+  else if(musTimer){clearTimeout(musTimer);musTimer=null;}
+  renderSettings();
+}
+/* ================= Sprache: Deutsch, Englisch, Französisch, Tschechisch, Polnisch, Spanisch ================= */
+/* Wie in Tetromino sechs Oberflächensprachen mit Pixel-Flaggen in den
+   Einstellungen. Die deutschen Texte liegen als Rückfall direkt im HTML und
+   in TXT.de vor; tr(key) liefert die Zeichenkette der gewählten Sprache und
+   fällt auf den Schlüssel selbst zurück, trf(key,args) setzt {Platzhalter}
+   ein. Die gewählte Sprache wird im localStorage-Schlüssel ziffLang
+   dauerhaft gespeichert. applyLang() übersetzt die statische Oberfläche und
+   läuft beim Start sowie nach jedem Sprachwechsel; bereits geschriebene
+   Protokollzeilen behalten wie in Tetromino ihre ursprüngliche Sprache.
+   Regeln, Info und Hilfe sind kompakte HTML-Blöcke je Sprache; die deutsche
+   Fassung wird beim ersten Aufruf aus dem HTML gepuffert und beim
+   Rückwechsel wiederhergestellt. Die Anredeform folgt Tetromino: Französisch
+   in der Sie-Form, Tschechisch, Polnisch und Spanisch in der Du-Form. */
+var LANG_KEY='ziffLang';
+var lang='de';
+(function(){
+  try{
+    var p=window.localStorage.getItem(LANG_KEY);
+    if(p==='en'||p==='fr'||p==='cs'||p==='pl'||p==='es')lang=p;
+  }catch(e){}
+})();
+function tr(k){
+  var d=TXT[lang];
+  if(d&&Object.prototype.hasOwnProperty.call(d,k))return d[k];
+  return k;
+}
+function trf(k,args){
+  var s=String(tr(k));
+  args=args||{};
+  return s.replace(/\{(\w+)\}/g,function(m,n){
+    return Object.prototype.hasOwnProperty.call(args,n)?String(args[n]):m;
+  });
+}
+function qsa(s){return Array.prototype.slice.call(document.querySelectorAll(s));}
+var TXT={
+de:{
+  menuBtnTxt:'Menü',menuBtnTt:'Zum Hauptmenü',swapTt:'Alle Karten wegwerfen und sechs neue ziehen (einmal je Level)',
+  headMode:'Sudoku-Roguelike',chooseLbl:'Ziffer wählen – die Karte gilt dann als diese Ziffer',
+  overRetry:'Neuer Death Run',overMenu:'Hauptmenü',
+  deckCap:'Kartentisch',deckHint:'Karte antippen, dann ein freies Feld auf dem Brett wählen',
+  logHeadLbl:'Protokoll',helpHeadLbl:'Hilfe',
+  promoSub:'Räumliches Brettspiel der Reihe',promoTt:'Tetromino im Browser öffnen',
+  promoHideTt:'Banner ausblenden – erscheint beim nächsten Spielstart wieder',
+  euFlagTt:'In der Europäischen Union entwickelt – einmal anklicken!',
+  modeH:'Spielmodus',learnH:'Lernen',miscH:'Sonstiges',stdBtn:'Standard',
+  diffCap:'Schwierigkeit wählen',diff1:'Leicht',diff2:'Mittel',diff3:'Schwer',
+  mRulesBtn:'Anleitung & Regeln',mSaveBtn:'Spielstand, Statistik & Erfolge',
+  mSetBtn:'Einstellungen',mInfoBtn:'Open Source & Urheberschaft',menuBack:'Zurück zum Spiel (Esc)',
+  levelH:'Aufgabe geschafft!',levelChoose:'Wähle eine Verzauberung – sie wirkt ab dem nächsten Level.',
+  levelDoneTxt:'Level {n} geschafft – Punkte: {p}',nextTaskTxt:'Nächste Aufgabe: {t} füllen',
+  supplyTxt:'Nachschub',noSupply:'kein Nachschub nötig',
+  closeLbl:'Schließen',setH2:'Einstellungen',setHGrafik:'Grafik',setHSound:'Ton',
+  lblFs:'Vollbild',fsOn:'Vollbildmodus: an',fsOff:'Vollbildmodus: aus',
+  lblLight:'Farbschema',lightOn:'Light-Modus: an',lightOff:'Light-Modus: aus',
+  lblSound:'Sound',muteOn:'Ton: an',muteOff:'Ton: aus',
+  lblVol:'Effekte',lblMus:'Musik',musOnLbl:'Musik: an',musOffLbl:'Musik: aus',
+  lblMusVol:'Musik-Lautstärke',lblLang:'Sprache',
+  srcTitle:'Quellcode',
+  srcHint:'Vollständiger Quellcode dieser Datei. Nach dem Markieren kann er mit Strg+C (bzw. Cmd+C) kopiert werden.',
+  srcSelAllLbl:'Alles markieren',
+  saveH1:'Spielstand',
+  saveSubTxt:'Fortschritt, Statistik und Erfolge – im Browser gespeichert, als HTML-Datei exportierbar',
+  hSlots:'Spielstände',slotNewLbl:'Neuer Spielstand',slotResetAllLbl:'Alle zurücksetzen',
+  hStats:'Statistik (aktiver Spielstand)',hAch:'Erfolge (aktiver Spielstand)',saveBackLbl:'Zurück',
+  infoSrcLbl:'Quellcode anzeigen',verH:'Version',toastAch:'Erfolg freigeschaltet',
+  taskRows:'REIHEN',taskCols:'SPALTEN',taskBoxes:'QUADRATE',
+  taskRowsN:'Reihen',taskColsN:'Spalten',taskBoxesN:'Quadrate',
+  stLevel:'LEVEL {n}',stGoal:'ZIEL {a}/{b} {t}',stGoal0:'ZIEL 0/0',
+  stScore:'PUNKTE {n}',stMode:'DEATH RUN',stRight:'KARTEN {n}',
+  swapUsed:'Tausch: benutzt',swapLeft:'Tausch ({n}×)',
+  achLineN:'Erste Linie',achLineD:'Erfülle deine erste Aufgabe.',
+  achZauberN:'Zauberlehrling',achZauberD:'Wähle deine erste Verzauberung.',
+  achWildN:'Wildcard',achWildD:'Platziere eine Wildkarte (6|9 oder 1|7).',
+  achJokerN:'Joker',achJokerD:'Platziere den Joker als beliebige Ziffer.',
+  achBossN:'Bossbezwinger',achBossD:'Beende dein erstes Boss-Level.',
+  achJaegerN:'Bossjäger',achJaegerD:'Beende alle drei Boss-Arten in einem Run.',
+  achSudokuN:'Sudoku-Löser',achSudokuD:'Fülle ein komplettes Sudoku-Brett.',
+  achHochN:'Hochstapler',achHochD:'Erreiche 5000 Punkte in einem Run.',
+  achMarathonN:'Marathon',achMarathonD:'Erreiche Level 15 im Death Run.',
+  upW69n:'WILDKARTE 6|9',upW69d:'Gilt als 6 oder als 9',
+  upW17n:'WILDKARTE 1|7',upW17d:'Gilt als 1 oder als 7',
+  upJokern:'JOKER',upJokerd:'Einmal jede Ziffer',
+  upSchubn:'NACHSCHUB',upSchubd:'Drei Karten sofort',
+  upKlonn:'KLON',upKlond1:'Zufällige Karte',upKlond2:'wird verdoppelt',
+  upTauschn:'TAUSCH+',upTauschd1:'Zweiter Tausch',upTauschd2:'in jedem Level',
+  bossDieb:'ZIFFERNDIEB',bossRiss:'LÜCKENREISSER',bossWirbler:'KARTENWIRBLER',
+  bossDiebD:'Klaut nach je {n} Platzierungen eine Karte',
+  bossRissD:'Reißt nach je {n} Platzierungen eine Ziffer heraus',
+  bossWirblerD:'Verwandelt nach je {n} Platzierungen zwei Karten',
+  bossWarn:'ACHTUNG: BEI DER NÄCHSTEN PLATZIERUNG!',
+  flCard:'-1 KARTE!',flGap:'LUECKE!',flConfuse:'VERWIRRT!',flConflict:'KONFLIKT!',flCards:'+{n} KARTEN',
+  logDieb:'Der Zifferndieb klaut eine Karte!',logRiss:'Der Lückenreißer reißt eine Ziffer heraus!',
+  logWirbler:'Der Kartenwirbler verwandelt zwei Karten!',
+  logLine1:'Linie voll! +{n} Bonuskarten',logLineN:'{k} Linien voll! +{n} Bonuskarten',
+  logSudoku:'SUDOKU GELOEST! +1000 Punkte – neues Brett',
+  logDeadlock:'Festgefahren – nur noch der Tausch rettet!',
+  logSwap:'Karten getauscht: sechs neue gezogen',
+  logBoss:'Boss aktiv: {b} – {d}',logLevel:'Level {n} – Aufgabe: {t} füllen',
+  logDone:'Aufgabe geschafft! +{p} Punkte',logOver:'Run beendet: {r}',
+  overTitle:'GAME OVER',overMeta:'Punkte: {p} · Level: {l} · Linien: {t}',
+  overReason:'{r} – der Run endet hier.',reasonNoCards:'KEINE KARTEN MEHR',reasonStuck:'FESTGEFAHREN',
+  ttDigit:'Ziffer {d}',ttWild:'Wildkarte {a}|{b}',ttJoker:'Joker – jede Ziffer',
+  slotActive:' (aktiv)',btnAct:'Aktivieren',btnHtml:'HTML',btnDel:'Löschen',
+  slotRuns:'{n} Runs',slotAch:'{a}/{t} Erfolge',
+  statRuns:'Runs gespielt',statBoards:'Gelöste Sudokus',statBest:'Bester Punktestand',
+  statLevel:'Höchstes Level',statLines:'Linien aufgelöst (gesamt)',
+  achDate:'Freigeschaltet: {d}',achLocked:'Noch nicht freigeschaltet',
+  noteMax:'Maximal acht Spielstände möglich.',slotName:'Spielstand {n}',
+  noteDeleted:'Spielstand gelöscht.',noteExported:'Spielstand als HTML-Datei exportiert.',
+  noteExportBlocked:'Export blockiert: Lade die Spieldatei herunter und öffne sie direkt im Browser.',
+  resetArmedLbl:'Wirklich alle zurücksetzen?',noteReset:'Alle Spielstände wurden zurückgesetzt.',
+  mWorldBtn:'Welten',worldH:'Welten',worldSub:'Brettthemen – die Farbgebung des Sudoku-Bretts',
+  worldH3:'Brettthemen',themeOrig:'Original',themeMono:'Monochrom',themePapier:'Papier',
+  themeEdel:'Edel',themeWinter:'Winter',themeHimmel:'Himmel',themeHerbst:'Herbst',
+  themeKirsch:'Kirschblüte',themeWeltraum:'Weltraum'
+},
+en:{
+  menuBtnTxt:'Menu',menuBtnTt:'Open the main menu',swapTt:'Discard all cards and draw six new ones (once per level)',
+  headMode:'Sudoku roguelike',chooseLbl:'Choose a digit – the card then counts as that digit',
+  overRetry:'New Death Run',overMenu:'Main menu',
+  deckCap:'Card table',deckHint:'Tap a card, then choose an empty cell on the board',
+  logHeadLbl:'Log',helpHeadLbl:'Help',
+  promoSub:'Spatial board game of the series',promoTt:'Open Tetromino in the browser',
+  promoHideTt:'Hide the banner – it returns at the next game start',
+  euFlagTt:'Developed in the European Union – click once!',
+  modeH:'Game mode',learnH:'Learn',miscH:'Miscellaneous',stdBtn:'Standard',
+  diffCap:'Choose a difficulty',diff1:'Easy',diff2:'Medium',diff3:'Hard',
+  mRulesBtn:'Instructions & rules',mSaveBtn:'Save game, statistics & achievements',
+  mSetBtn:'Settings',mInfoBtn:'Open source & authorship',menuBack:'Back to the game (Esc)',
+  levelH:'Task completed!',levelChoose:'Choose an enchantment – it takes effect from the next level.',
+  levelDoneTxt:'Level {n} completed – score: {p}',nextTaskTxt:'Next task: fill {t}',
+  supplyTxt:'Supply',noSupply:'no supply needed',
+  closeLbl:'Close',setH2:'Settings',setHGrafik:'Graphics',setHSound:'Sound',
+  lblFs:'Fullscreen',fsOn:'Fullscreen mode: on',fsOff:'Fullscreen mode: off',
+  lblLight:'Colour scheme',lightOn:'Light mode: on',lightOff:'Light mode: off',
+  lblSound:'Sound',muteOn:'Sound: on',muteOff:'Sound: off',
+  lblVol:'Effects',lblMus:'Music',musOnLbl:'Music: on',musOffLbl:'Music: off',
+  lblMusVol:'Music volume',lblLang:'Language',
+  srcTitle:'Source code',
+  srcHint:'The complete source code of this file. After selecting it, you can copy it with Ctrl+C (or Cmd+C).',
+  srcSelAllLbl:'Select all',
+  saveH1:'Save game',
+  saveSubTxt:'Progress, statistics and achievements – stored in the browser, exportable as an HTML file',
+  hSlots:'Save slots',slotNewLbl:'New save slot',slotResetAllLbl:'Reset all',
+  hStats:'Statistics (active save)',hAch:'Achievements (active save)',saveBackLbl:'Back',
+  infoSrcLbl:'Show source code',verH:'Version',toastAch:'Achievement unlocked',
+  taskRows:'ROWS',taskCols:'COLUMNS',taskBoxes:'BOXES',
+  taskRowsN:'rows',taskColsN:'columns',taskBoxesN:'boxes',
+  stLevel:'LEVEL {n}',stGoal:'GOAL {a}/{b} {t}',stGoal0:'GOAL 0/0',
+  stScore:'POINTS {n}',stMode:'DEATH RUN',stRight:'CARDS {n}',
+  swapUsed:'Swap: used',swapLeft:'Swap ({n}×)',
+  achLineN:'First line',achLineD:'Complete your first task.',
+  achZauberN:'Apprentice enchanter',achZauberD:'Choose your first enchantment.',
+  achWildN:'Wildcard',achWildD:'Place a wildcard (6|9 or 1|7).',
+  achJokerN:'Joker',achJokerD:'Place the joker as any digit.',
+  achBossN:'Boss conqueror',achBossD:'Finish your first boss level.',
+  achJaegerN:'Boss hunter',achJaegerD:'Finish all three boss types in one run.',
+  achSudokuN:'Sudoku solver',achSudokuD:'Fill a complete Sudoku board.',
+  achHochN:'High roller',achHochD:'Reach 5000 points in one run.',
+  achMarathonN:'Marathon',achMarathonD:'Reach level 15 in a Death Run.',
+  upW69n:'WILDCARD 6|9',upW69d:'Counts as 6 or as 9',
+  upW17n:'WILDCARD 1|7',upW17d:'Counts as 1 or as 7',
+  upJokern:'JOKER',upJokerd:'Any digit, once',
+  upSchubn:'SUPPLY',upSchubd:'Three cards instantly',
+  upKlonn:'CLONE',upKlond1:'A random card',upKlond2:'gets doubled',
+  upTauschn:'SWAP+',upTauschd1:'A second swap',upTauschd2:'every level',
+  bossDieb:'DIGIT THIEF',bossRiss:'GAP RIPPER',bossWirbler:'CARD SWIRLER',
+  bossDiebD:'Steals one card after every {n} placements',
+  bossRissD:'Rips out a digit after every {n} placements',
+  bossWirblerD:'Transforms two cards after every {n} placements',
+  bossWarn:'WARNING: ON THE NEXT PLACEMENT!',
+  flCard:'-1 CARD!',flGap:'GAP!',flConfuse:'SHUFFLED!',flConflict:'CONFLICT!',flCards:'+{n} CARDS',
+  logDieb:'The digit thief steals a card!',logRiss:'The gap ripper tears out a digit!',
+  logWirbler:'The card swirler transforms two cards!',
+  logLine1:'Line full! +{n} bonus cards',logLineN:'{k} lines full! +{n} bonus cards',
+  logSudoku:'SUDOKU SOLVED! +1000 points – new board',
+  logDeadlock:'Deadlocked – only a swap can save you!',
+  logSwap:'Cards swapped: six new ones drawn',
+  logBoss:'Boss active: {b} – {d}',logLevel:'Level {n} – task: fill {t}',
+  logDone:'Task completed! +{p} points',logOver:'Run ended: {r}',
+  overTitle:'GAME OVER',overMeta:'Score: {p} · Level: {l} · Lines: {t}',
+  overReason:'{r} – the run ends here.',reasonNoCards:'NO CARDS LEFT',reasonStuck:'DEADLOCKED',
+  ttDigit:'Digit {d}',ttWild:'Wildcard {a}|{b}',ttJoker:'Joker – any digit',
+  slotActive:' (active)',btnAct:'Activate',btnHtml:'HTML',btnDel:'Delete',
+  slotRuns:'{n} runs',slotAch:'{a}/{t} achievements',
+  statRuns:'Runs played',statBoards:'Sudokus solved',statBest:'Best score',
+  statLevel:'Highest level',statLines:'Lines completed (total)',
+  achDate:'Unlocked: {d}',achLocked:'Not yet unlocked',
+  noteMax:'A maximum of eight save slots is possible.',slotName:'Save {n}',
+  noteDeleted:'Save slot deleted.',noteExported:'Save exported as an HTML file.',
+  noteExportBlocked:'Export blocked: download the game file and open it directly in your browser.',
+  resetArmedLbl:'Really reset everything?',noteReset:'All save slots have been reset.',
+  mWorldBtn:'Worlds',worldH:'Worlds',worldSub:'Board themes – the colour scheme of the Sudoku board',
+  worldH3:'Board themes',themeOrig:'Original',themeMono:'Monochrome',themePapier:'Paper',
+  themeEdel:'Noble',themeWinter:'Winter',themeHimmel:'Sky',themeHerbst:'Autumn',
+  themeKirsch:'Cherry blossom',themeWeltraum:'Space',
+  helpHtml:'Tap a card, then choose an empty cell. Joker cells (marked ?) count as any digit and help complete lines – they never need to be filled.<br>'+
+    'Placed digits stay in place; every task builds on the current board.<br>'+
+    'After each placement you draw one new card; every row, column or box completed for the first time gives two bonus cards.<br>'+
+    'Never place the same digit twice in a row, column or box.<br>'+
+    'Wildcards (6|9, 1|7) count as either of their two digits; the joker counts as any digit.<br>'+
+    'The swap button at the top right discards all your cards once per level and draws six new ones.',
+  rulesHtml:'<h2>Rules of Numerino</h2>'+
+    '<p class="mSub">Numerino is a Sudoku roguelike: you place digit cards on a 9×9 board, complete tasks on a board that is never cleared, and fend off three boss types in the Death Run.</p>'+
+    '<details open><summary>The game – general rules</summary><ul>'+
+    '<li>9×9 board. Dark cells with a ? are joker cells: they count as any digit, help complete rows, columns and boxes, and never need to be filled themselves.</li>'+
+    '<li>Your card table holds a limited number of digit cards (1–9). Tap a card, then tap an empty cell.</li>'+
+    '<li>Sudoku conflict rule: a digit must never appear twice in the same row, column or 3×3 box. Invalid cells are marked red when you hover over them.</li>'+
+    '<li>Placed digits stay in place – nothing is ever removed. Every task builds on the already filled board.</li>'+
+    '<li>Each task asks for a number of completed lines, for example two rows or two boxes (the goal is shown in the status bar).</li>'+
+    '<li>After each task follows the enchantment choice; the supply of new cards is already shown there.</li>'+
+    '<li>Draw pile: after every placement you automatically draw one new card.</li>'+
+    '<li>Line bonus: every row, column or box completed for the first time immediately yields two bonus cards – once per line and board.</li>'+
+    '<li>When the entire board is filled (joker cells count as completed), you earn 1000 points and a new, more heavily blocked board.</li>'+
+    '<li>If your card table is empty or no card can legally be placed, the run ends. The swap button discards all cards once per level and draws six new ones (once; more often with Swap+).</li>'+
+    '<li>Points: 10 per placement, 100 per task line and 250 × level on task completion.</li>'+
+    '</ul></details>'+
+    '<details><summary>Bosses – the Death Run</summary><ul>'+
+    '<li>In the Death Run, every third level a boss attacks; the three types rotate and strike faster and faster at higher levels.</li>'+
+    '<li>Digit Thief: steals a random card from your card table – including wildcards and jokers.</li>'+
+    '<li>Gap Ripper: tears an already placed digit out of the board, punching gaps into your Sudoku.</li>'+
+    '<li>Card Swirler: transforms two cards on your table into other digits.</li>'+
+    '<li>The progress boxes under the boss name show when it will strike. A boss level ends like any other as soon as the task is complete.</li>'+
+    '</ul></details>'+
+    '<details><summary>Enchantments</summary><ul>'+
+    '<li>Wildcard 6|9: counts as either 6 or 9 (choose the digit when placing).</li>'+
+    '<li>Wildcard 1|7: counts as either 1 or 7.</li>'+
+    '<li>Joker: counts once as any digit 1–9.</li>'+
+    '<li>Supply: three more digit cards immediately.</li>'+
+    '<li>Clone: a random card on your table is doubled – wildcards included.</li>'+
+    '<li>Swap+: a second swap every level from now on.</li>'+
+    '</ul></details>'+
+    '<details><summary>Game mode and difficulty</summary><ul>'+
+    '<li>Death Run: the game continues without end; your score and how far you get are counted.</li>'+
+    '<li>Easy: more starting cards, more joker cells, slower bosses. Medium: the standard. Hard: fewer cards, fewer joker cells, faster bosses.</li>'+
+    '</ul></details>'+
+    '<details><summary>Save game, statistics and achievements</summary><ul>'+
+    '<li>Statistics and achievements are stored automatically in the browser (localStorage); nine achievements cover the first task, wildcards, jokers, bosses, solving a Sudoku and high scores.</li>'+
+    '</ul></details>',
+  infoHtml:'<h2>Open source and authorship</h2>'+
+    '<h3>Authorship</h3><ul>'+
+    '<li>This application (Numerino) was developed by Vibe (AI assistant from Mistral AI, based on the GLM model) together with BaCnGaplays in 2026.</li>'+
+    '<li>The European flag at the top right of the main menu (pixel art) marks Numerino as a game developed in the European Union; the EU flag emblem serves solely as this indication of origin.</li>'+
+    '<li>The source code is fully and openly contained in this HTML file and can be freely viewed and adapted.</li>'+
+    '</ul><h3>Third-party software used</h3><ul>'+
+    '<li>No external libraries, packages or third-party code have been included. All functions are written in ordinary HTML, CSS and JavaScript without dependencies.</li>'+
+    '<li>The sounds are generated exclusively with the browser’s built-in Web Audio interface. There are no network accesses; your progress stays local in the browser.</li>'+
+    '</ul><h3>Graphics</h3><ul>'+
+    '<li>All graphics (digits, joker cells, boss sprites, EU flag) are embedded pixel art contained directly in the file and drawn specifically for this application.</li>'+
+    '</ul><h3>Source code</h3><ul>'+
+    '<li>You can view the complete source code of this application via the source code view, select it in full and copy it.</li>'+
+    '</ul>'
+},
+fr:{
+  menuBtnTxt:'Menu',menuBtnTt:'Ouvrir le menu principal',swapTt:'Jeter toutes les cartes et en tirer six nouvelles (une fois par niveau)',
+  headMode:'Sudoku-roguelike',chooseLbl:'Choisissez un chiffre – la carte compte alors comme ce chiffre',
+  overRetry:'Nouveau Death Run',overMenu:'Menu principal',
+  deckCap:'Table de cartes',deckHint:'Touchez une carte, puis choisissez une case libre du plateau',
+  logHeadLbl:'Journal',helpHeadLbl:'Aide',
+  promoSub:'Jeu de plateau spatial de la série',promoTt:'Ouvrir Tetromino dans le navigateur',
+  promoHideTt:'Masquer la bannière – elle revient au prochain démarrage du jeu',
+  euFlagTt:'Développé dans l’Union européenne – cliquez une fois !',
+  modeH:'Mode de jeu',learnH:'Apprendre',miscH:'Divers',stdBtn:'Standard',
+  diffCap:'Choisissez une difficulté',diff1:'Facile',diff2:'Moyen',diff3:'Difficile',
+  mRulesBtn:'Instructions et règles',mSaveBtn:'Sauvegarde, statistiques et succès',
+  mSetBtn:'Paramètres',mInfoBtn:'Open source et paternité',menuBack:'Retour au jeu (Échap)',
+  levelH:'Mission accomplie !',levelChoose:'Choisissez un enchantement – il agit dès le niveau suivant.',
+  levelDoneTxt:'Niveau {n} terminé – score : {p}',nextTaskTxt:'Prochaine mission : remplir {t}',
+  supplyTxt:'Réserve',noSupply:'aucune réserve nécessaire',
+  closeLbl:'Fermer',setH2:'Paramètres',setHGrafik:'Graphismes',setHSound:'Son',
+  lblFs:'Plein écran',fsOn:'Mode plein écran : activé',fsOff:'Mode plein écran : désactivé',
+  lblLight:'Schéma de couleurs',lightOn:'Mode clair : activé',lightOff:'Mode clair : désactivé',
+  lblSound:'Son',muteOn:'Son : activé',muteOff:'Son : désactivé',
+  lblVol:'Effets',lblMus:'Musique',musOnLbl:'Musique : activée',musOffLbl:'Musique : désactivée',
+  lblMusVol:'Volume de la musique',lblLang:'Langue',
+  srcTitle:'Code source',
+  srcHint:'Code source complet de ce fichier. Après l’avoir sélectionné, vous pouvez le copier avec Ctrl+C (ou Cmd+C).',
+  srcSelAllLbl:'Tout sélectionner',
+  saveH1:'Sauvegarde',
+  saveSubTxt:'Progression, statistiques et succès – enregistrés dans le navigateur, exportables en fichier HTML',
+  hSlots:'Emplacements de sauvegarde',slotNewLbl:'Nouvelle sauvegarde',slotResetAllLbl:'Tout réinitialiser',
+  hStats:'Statistiques (sauvegarde active)',hAch:'Succès (sauvegarde active)',saveBackLbl:'Retour',
+  infoSrcLbl:'Afficher le code source',verH:'Version',toastAch:'Succès débloqué',
+  taskRows:'RANGÉES',taskCols:'COLONNES',taskBoxes:'CARRÉS',
+  taskRowsN:'rangées',taskColsN:'colonnes',taskBoxesN:'carrés',
+  stLevel:'NIVEAU {n}',stGoal:'OBJECTIF {a}/{b} {t}',stGoal0:'OBJECTIF 0/0',
+  stScore:'POINTS {n}',stMode:'DEATH RUN',stRight:'CARTES {n}',
+  swapUsed:'Échange : utilisé',swapLeft:'Échange ({n}×)',
+  achLineN:'Première ligne',achLineD:'Accomplissez votre première mission.',
+  achZauberN:'Apprenti enchanteur',achZauberD:'Choisissez votre premier enchantement.',
+  achWildN:'Carte magique',achWildD:'Posez une carte magique (6|9 ou 1|7).',
+  achJokerN:'Joker',achJokerD:'Posez le joker comme n’importe quel chiffre.',
+  achBossN:'Vainqueur de boss',achBossD:'Terminez votre premier niveau de boss.',
+  achJaegerN:'Chasseur de boss',achJaegerD:'Terminez les trois types de boss en une seule partie.',
+  achSudokuN:'Résolveur de sudoku',achSudokuD:'Remplissez une grille de Sudoku complète.',
+  achHochN:'Roi des points',achHochD:'Atteignez 5000 points en une partie.',
+  achMarathonN:'Marathon',achMarathonD:'Atteignez le niveau 15 dans un Death Run.',
+  upW69n:'CARTE MAGIQUE 6|9',upW69d:'Vaut comme un 6 ou un 9',
+  upW17n:'CARTE MAGIQUE 1|7',upW17d:'Vaut comme un 1 ou un 7',
+  upJokern:'JOKER',upJokerd:'N’importe quel chiffre, une fois',
+  upSchubn:'APPROVISIONNEMENT',upSchubd:'Trois cartes immédiatement',
+  upKlonn:'CLONE',upKlond1:'Une carte aléatoire',upKlond2:'est doublée',
+  upTauschn:'ÉCHANGE+',upTauschd1:'Un second échange',upTauschd2:'à chaque niveau',
+  bossDieb:'VOLEUR DE CHIFFRES',bossRiss:'ARRACHE-CHIFFRES',bossWirbler:'TOURBILLON DE CARTES',
+  bossDiebD:'Vole une carte toutes les {n} poses',
+  bossRissD:'Arrache un chiffre toutes les {n} poses',
+  bossWirblerD:'Transforme deux cartes toutes les {n} poses',
+  bossWarn:'ATTENTION : À LA PROCHAINE POSE !',
+  flCard:'-1 CARTE !',flGap:'TROU !',flConfuse:'MÉLANGÉ !',flConflict:'CONFLIT !',flCards:'+{n} CARTES',
+  logDieb:'Le voleur de chiffres vole une carte !',logRiss:'L’arrache-chiffres arrache un chiffre !',
+  logWirbler:'Le tourbillon de cartes transforme deux cartes !',
+  logLine1:'Ligne complète ! +{n} cartes bonus',logLineN:'{k} lignes complètes ! +{n} cartes bonus',
+  logSudoku:'SUDOKU RÉSOLU ! +1000 points – nouvelle grille',
+  logDeadlock:'Bloqué – seul l’échange peut vous sauver !',
+  logSwap:'Cartes échangées : six nouvelles tirées',
+  logBoss:'Boss actif : {b} – {d}',logLevel:'Niveau {n} – mission : remplir {t}',
+  logDone:'Mission accomplie ! +{p} points',logOver:'Partie terminée : {r}',
+  overTitle:'GAME OVER',overMeta:'Points : {p} · Niveau : {l} · Lignes : {t}',
+  overReason:'{r} – la partie s’arrête ici.',reasonNoCards:'PLUS DE CARTES',reasonStuck:'BLOQUÉ',
+  ttDigit:'Chiffre {d}',ttWild:'Carte magique {a}|{b}',ttJoker:'Joker – n’importe quel chiffre',
+  slotActive:' (active)',btnAct:'Activer',btnHtml:'HTML',btnDel:'Supprimer',
+  slotRuns:'{n} parties',slotAch:'{a}/{t} succès',
+  statRuns:'Parties jouées',statBoards:'Sudokus résolus',statBest:'Meilleur score',
+  statLevel:'Niveau le plus élevé',statLines:'Lignes complétées (total)',
+  achDate:'Débloqué : {d}',achLocked:'Pas encore débloqué',
+  noteMax:'Huit emplacements de sauvegarde au maximum.',slotName:'Sauvegarde {n}',
+  noteDeleted:'Sauvegarde supprimée.',noteExported:'Sauvegarde exportée en fichier HTML.',
+  noteExportBlocked:'Exportation bloquée : téléchargez le fichier du jeu et ouvrez-le directement dans le navigateur.',
+  resetArmedLbl:'Tout réinitialiser, vraiment ?',noteReset:'Tous les emplacements ont été réinitialisés.',
+  mWorldBtn:'Mondes',worldH:'Mondes',worldSub:'Thèmes de plateau – la palette de couleurs de la grille de Sudoku',
+  worldH3:'Thèmes de plateau',themeOrig:'Original',themeMono:'Monochrome',themePapier:'Papier',
+  themeEdel:'Noble',themeWinter:'Hiver',themeHimmel:'Ciel',themeHerbst:'Automne',
+  themeKirsch:'Fleur de cerisier',themeWeltraum:'Espace',
+  helpHtml:'Touchez une carte, puis choisissez une case libre. Les cases joker (marquées ?) comptent comme n’importe quel chiffre et aident à compléter des lignes – elles n’ont jamais besoin d’être remplies.<br>'+
+    'Les chiffres posés restent en place ; chaque mission s’appuie sur le plateau actuel.<br>'+
+    'Après chaque pose, vous piochez une carte ; chaque rangée, colonne ou carré complété pour la première fois rapporte deux cartes bonus.<br>'+
+    'Jamais deux fois le même chiffre dans une rangée, une colonne ou un bloc.<br>'+
+    'Les cartes magiques (6|9, 1|7) comptent comme l’un de leurs deux chiffres ; le joker compte comme n’importe quel chiffre.<br>'+
+    'Le bouton d’échange en haut à droite jette toutes vos cartes une fois par niveau et en tire six nouvelles.',
+  rulesHtml:'<h2>Règles de Numerino</h2>'+
+    '<p class="mSub">Numerino est un Sudoku-roguelike : vous placez des cartes de chiffres sur une grille 9×9, vous accomplissez des missions sur une grille jamais effacée et vous repoussez trois types de boss dans le Death Run.</p>'+
+    '<details open><summary>Le jeu – règles générales</summary><ul>'+
+    '<li>Grille 9×9. Les cases sombres avec un ? sont des cases joker : elles comptent comme n’importe quel chiffre, aident à compléter rangées, colonnes et carrés, et n’ont jamais besoin d’être remplies.</li>'+
+    '<li>Votre table de cartes contient un nombre limité de cartes de chiffres (1–9). Touchez une carte, puis touchez une case libre.</li>'+
+    '<li>Règle de conflit du Sudoku : un chiffre ne doit jamais apparaître deux fois dans la même rangée, colonne ou le même bloc 3×3. Les cases invalides se marquent en rouge au survol.</li>'+
+    '<li>Les chiffres posés restent en place – rien n’est jamais effacé. Chaque mission s’appuie sur la grille déjà remplie.</li>'+
+    '<li>Chaque mission demande un certain nombre de lignes complètes, par exemple deux rangées ou deux carrés (l’objectif figure dans la barre d’état).</li>'+
+    '<li>Après chaque mission vient le choix d’un enchantement ; la réserve de nouvelles cartes y est déjà affichée.</li>'+
+    '<li>Pioche : après chaque pose, vous piochez automatiquement une nouvelle carte.</li>'+
+    '<li>Bonus de ligne : chaque rangée, colonne ou carré complété pour la première fois rapporte immédiatement deux cartes bonus – une seule fois par ligne et par grille.</li>'+
+    '<li>Lorsque toute la grille est remplie (les cases joker comptent comme complètes), vous gagnez 1000 points et une nouvelle grille plus fortement bloquée.</li>'+
+    '<li>Si votre table est vide ou qu’aucune carte ne peut être posée légalement, la partie s’arrête. Le bouton d’échange jette toutes les cartes une fois par niveau et en tire six nouvelles (une fois ; plus souvent avec Échange+).</li>'+
+    '<li>Points : 10 par pose, 100 par ligne de mission et 250 × niveau à l’accomplissement d’une mission.</li>'+
+    '</ul></details>'+
+    '<details><summary>Boss – le Death Run</summary><ul>'+
+    '<li>Dans le Death Run, un boss attaque tous les trois niveaux ; les trois types tournent et frappent de plus en plus vite aux niveaux élevés.</li>'+
+    '<li>Voleur de chiffres : vole une carte au hasard de votre table – cartes magiques et jokers compris.</li>'+
+    '<li>Arrache-chiffres : arrache un chiffre déjà posé de la grille et ouvre ainsi des trous dans votre Sudoku.</li>'+
+    '<li>Tourbillon de cartes : transforme deux cartes de votre table en d’autres chiffres.</li>'+
+    '<li>Les cases de progression sous le nom du boss indiquent quand il frappera. Un niveau de boss se termine comme les autres dès que la mission est accomplie.</li>'+
+    '</ul></details>'+
+    '<details><summary>Enchantements</summary><ul>'+
+    '<li>Carte magique 6|9 : vaut comme un 6 ou comme un 9 (choisissez le chiffre à la pose).</li>'+
+    '<li>Carte magique 1|7 : vaut comme un 1 ou comme un 7.</li>'+
+    '<li>Joker : vaut une fois comme n’importe quel chiffre 1–9.</li>'+
+    '<li>Approvisionnement : trois cartes de chiffres supplémentaires immédiatement.</li>'+
+    '<li>Clone : une carte au hasard de votre table est doublée – cartes magiques comprises.</li>'+
+    '<li>Échange+ : un second échange à chaque niveau à partir de maintenant.</li>'+
+    '</ul></details>'+
+    '<details><summary>Mode de jeu et difficulté</summary><ul>'+
+    '<li>Death Run : la partie continue sans fin ; sont comptabilisés votre score et la distance parcourue.</li>'+
+    '<li>Facile : plus de cartes de départ, plus de cases joker, des boss plus lents. Moyen : la norme. Difficile : moins de cartes, moins de cases joker, des boss plus rapides.</li>'+
+    '</ul></details>'+
+    '<details><summary>Sauvegarde, statistiques et succès</summary><ul>'+
+    '<li>Statistiques et succès sont enregistrés automatiquement dans le navigateur (localStorage) ; neuf succès couvrent la première mission, les cartes magiques, les jokers, les boss, la résolution d’un Sudoku et les records de points.</li>'+
+    '</ul></details>',
+  infoHtml:'<h2>Open source et paternité</h2>'+
+    '<h3>Paternité</h3><ul>'+
+    '<li>Cette application (Numerino) a été développée par Vibe (assistant IA de Mistral AI, fondé sur le modèle GLM) conjointement avec BaCnGaplays en 2026.</li>'+
+    '<li>Le drapeau européen en haut à droite du menu principal (graphisme en pixels) désigne Numerino comme un jeu développé dans l’Union européenne ; l’emblème du drapeau de l’UE sert exclusivement à cette indication d’origine.</li>'+
+    '<li>Le code source est intégralement et ouvertement contenu dans ce fichier HTML et peut être librement consulté et adapté.</li>'+
+    '</ul><h3>Logiciels tiers utilisés</h3><ul>'+
+    '<li>Aucune bibliothèque externe, aucun paquet ni code tiers n’a été intégré. Toutes les fonctions sont écrites en HTML, CSS et JavaScript ordinaires, sans dépendance.</li>'+
+    '<li>Les sons sont générés exclusivement avec l’interface Web Audio intégrée au navigateur. Il n’y a aucun accès réseau ; la sauvegarde reste locale dans le navigateur.</li>'+
+    '</ul><h3>Graphismes</h3><ul>'+
+    '<li>Tous les graphismes (chiffres, cases joker, sprites de boss, drapeau de l’UE) sont des images en pixels intégrées directement dans le fichier et dessinées spécialement pour cette application.</li>'+
+    '</ul><h3>Code source</h3><ul>'+
+    '<li>Vous pouvez consulter le code source complet de cette application dans la vue du code source, le sélectionner intégralement et le copier.</li>'+
+    '</ul>'
+},
+cs:{
+  menuBtnTxt:'Menu',menuBtnTt:'Otevřít hlavní nabídku',swapTt:'Zahodit všechny karty a líznout šest nových (jednou za úroveň)',
+  headMode:'Sudoku roguelike',chooseLbl:'Vyber číslici – karta pak platí jako tato číslice',
+  overRetry:'Nový Death Run',overMenu:'Hlavní nabídka',
+  deckCap:'Karetní stůl',deckHint:'Klepni na kartu a pak vyber volné pole na desce',
+  logHeadLbl:'Protokol',helpHeadLbl:'Nápověda',
+  promoSub:'Prostorová desková hra ze série',promoTt:'Otevřít Tetromino v prohlížeči',
+  promoHideTt:'Skrýt banner – vrátí se při příštím spuštění hry',
+  euFlagTt:'Vyvinuto v Evropské unii – klikni jednou!',
+  modeH:'Herní režim',learnH:'Učení',miscH:'Ostatní',stdBtn:'Standard',
+  diffCap:'Vyber obtížnost',diff1:'Lehká',diff2:'Střední',diff3:'Těžká',
+  mRulesBtn:'Návod a pravidla',mSaveBtn:'Uložení, statistiky a úspěchy',
+  mSetBtn:'Nastavení',mInfoBtn:'Open source a autorství',menuBack:'Zpět do hry (Esc)',
+  levelH:'Úkol splněn!',levelChoose:'Vyber očarování – začne působit od příští úrovně.',
+  levelDoneTxt:'Úroveň {n} splněna – body: {p}',nextTaskTxt:'Další úkol: vyplnit {t}',
+  supplyTxt:'Zásobení',noSupply:'zásobení není potřeba',
+  closeLbl:'Zavřít',setH2:'Nastavení',setHGrafik:'Grafika',setHSound:'Zvuk',
+  lblFs:'Celá obrazovka',fsOn:'Režim celé obrazovky: zapnuto',fsOff:'Režim celé obrazovky: vypnuto',
+  lblLight:'Barevné schéma',lightOn:'Světlý režim: zapnuto',lightOff:'Světlý režim: vypnuto',
+  lblSound:'Zvuk',muteOn:'Zvuk: zapnuto',muteOff:'Zvuk: vypnuto',
+  lblVol:'Efekty',lblMus:'Hudba',musOnLbl:'Hudba: zapnuto',musOffLbl:'Hudba: vypnuto',
+  lblMusVol:'Hlasitost hudby',lblLang:'Jazyk',
+  srcTitle:'Zdrojový kód',
+  srcHint:'Úplný zdrojový kód tohoto souboru. Po označení ho zkopíruješ pomocí Ctrl+C (nebo Cmd+C).',
+  srcSelAllLbl:'Vybrat vše',
+  saveH1:'Uložená hra',
+  saveSubTxt:'Postup, statistiky a úspěchy – uloženo v prohlížeči, exportovatelné jako soubor HTML',
+  hSlots:'Uložené pozice',slotNewLbl:'Nové uložení',slotResetAllLbl:'Resetovat vše',
+  hStats:'Statistiky (aktivní uložení)',hAch:'Úspěchy (aktivní uložení)',saveBackLbl:'Zpět',
+  infoSrcLbl:'Zobrazit zdrojový kód',verH:'Verze',toastAch:'Úspěch odemčen',
+  taskRows:'ŘADY',taskCols:'SLOUPCE',taskBoxes:'ČTVERCE',
+  taskRowsN:'řady',taskColsN:'sloupce',taskBoxesN:'čtverce',
+  stLevel:'ÚROVEŇ {n}',stGoal:'CÍL {a}/{b} {t}',stGoal0:'CÍL 0/0',
+  stScore:'BODY {n}',stMode:'DEATH RUN',stRight:'KARTY {n}',
+  swapUsed:'Výměna: použita',swapLeft:'Výměna ({n}×)',
+  achLineN:'První linie',achLineD:'Splň svůj první úkol.',
+  achZauberN:'Kouzelnický učeň',achZauberD:'Vyber své první očarování.',
+  achWildN:'Divoká karta',achWildD:'Umísti divokou kartu (6|9 nebo 1|7).',
+  achJokerN:'Žolík',achJokerD:'Umísti žolíka jako libovolnou číslici.',
+  achBossN:'Přemožitel bossů',achBossD:'Dokonči svou první úroveň s bossem.',
+  achJaegerN:'Lovec bossů',achJaegerD:'Dokonči všechny tři druhy bossů v jednom běhu.',
+  achSudokuN:'Řešitel sudoku',achSudokuD:'Vyplň úplnou desku Sudoku.',
+  achHochN:'Výškař',achHochD:'Dosáhni 5000 bodů v jednom běhu.',
+  achMarathonN:'Maraton',achMarathonD:'Dosáhni 15. úrovně v Death Runu.',
+  upW69n:'DIVOKÁ KARTA 6|9',upW69d:'Platí jako 6 nebo 9',
+  upW17n:'DIVOKÁ KARTA 1|7',upW17d:'Platí jako 1 nebo 7',
+  upJokern:'ŽOLÍK',upJokerd:'Jednou libovolná číslice',
+  upSchubn:'ZÁSOBA',upSchubd:'Tři karty okamžitě',
+  upKlonn:'KLON',upKlond1:'Náhodná karta',upKlond2:'je zdvojnásobena',
+  upTauschn:'VÝMĚNA+',upTauschd1:'Druhá výměna',upTauschd2:'v každé úrovni',
+  bossDieb:'ZLODĚJ ČÍSLIC',bossRiss:'ROZRYVAČ MEZER',bossWirbler:'KARETNÍ VÍR',
+  bossDiebD:'Ukradne kartu po každých {n} umístěních',
+  bossRissD:'Vytrhne číslici po každých {n} umístěních',
+  bossWirblerD:'Promění dvě karty po každých {n} umístěních',
+  bossWarn:'POZOR: PŘI PŘÍŠTÍM UMÍSTĚNÍ!',
+  flCard:'-1 KARTA!',flGap:'DÍRA!',flConfuse:'ZAMÍCHÁNO!',flConflict:'KONFLIKT!',flCards:'+{n} KART',
+  logDieb:'Zloděj číslic krade kartu!',logRiss:'Rozryvač mezer vytrhává číslici!',
+  logWirbler:'Karetní vír proměňuje dvě karty!',
+  logLine1:'Linie plná! +{n} bonusových karet',logLineN:'{k} linie plné! +{n} bonusových karet',
+  logSudoku:'SUDOKU VYŘEŠENO! +1000 bodů – nová deska',
+  logDeadlock:'Uviznuto – zachrání tě už jen výměna!',
+  logSwap:'Karty vyměněny: líznuto šest nových',
+  logBoss:'Boss aktivní: {b} – {d}',logLevel:'Úroveň {n} – úkol: vyplnit {t}',
+  logDone:'Úkol splněn! +{p} bodů',logOver:'Běh ukončen: {r}',
+  overTitle:'KONEC HRY',overMeta:'Body: {p} · Úroveň: {l} · Linií: {t}',
+  overReason:'{r} – běh tady končí.',reasonNoCards:'ŽÁDNÉ KARTY',reasonStuck:'UVIZNUTO',
+  ttDigit:'Číslice {d}',ttWild:'Divoká karta {a}|{b}',ttJoker:'Žolík – libovolná číslice',
+  slotActive:' (aktivní)',btnAct:'Aktivovat',btnHtml:'HTML',btnDel:'Smazat',
+  slotRuns:'{n} běhů',slotAch:'{a}/{t} úspěchů',
+  statRuns:'Odehrané běhy',statBoards:'Vyřešená sudoku',statBest:'Nejlepší skóre',
+  statLevel:'Nejvyšší úroveň',statLines:'Vyplněné linie (celkem)',
+  achDate:'Odemčeno: {d}',achLocked:'Zatím neodemčeno',
+  noteMax:'Maximálně osm uložení her.',slotName:'Uložení {n}',
+  noteDeleted:'Uložení smazáno.',noteExported:'Uložení exportováno jako soubor HTML.',
+  noteExportBlocked:'Export blokován: stáhni herní soubor a otevři ho přímo v prohlížeči.',
+  resetArmedLbl:'Opravdu resetovat vše?',noteReset:'Všechna uložení byla resetována.',
+  mWorldBtn:'Světy',worldH:'Světy',worldSub:'Témata desky – barevné schéma desky Sudoku',
+  worldH3:'Témata desky',themeOrig:'Originál',themeMono:'Monochrom',themePapier:'Papír',
+  themeEdel:'Elegantní',themeWinter:'Zima',themeHimmel:'Nebe',themeHerbst:'Podzim',
+  themeKirsch:'Sakura',themeWeltraum:'Vesmír',
+  helpHtml:'Klepni na kartu a pak vyber volné pole. Žolíková pole (s ?) platí jako libovolná číslice a pomáhají plnit linie – nikdy je nemusíš vyplnit.<br>'+
+    'Položené číslice zůstávají na desce; každý úkol staví na dosavadní desce.<br>'+
+    'Po každém umístění lízneš jednu kartu; každá poprvé vyplněná řada, sloupec nebo čtverec přináší dvě bonusové karty.<br>'+
+    'Stejnou číslici nikdy dvakrát v řadě, sloupci ani bloku.<br>'+
+    'Divoké karty (6|9, 1|7) platí jako jedna ze svých dvou číslic, žolík jako libovolná.<br>'+
+    'Tlačítko výměny vpravo nahoře jednou za úroveň zahodí všechny karty a lízne šest nových.',
+  rulesHtml:'<h2>Pravidla Numerina</h2>'+
+    '<p class="mSub">Numerino je Sudoku-roguelike: umísťuješ karty s číslicemi na desku 9×9, plníš úkoly na desce, která se nikdy nemaže, a v Death Runu odoláváš třem druhům bossů.</p>'+
+    '<details open><summary>Hra – obecná pravidla</summary><ul>'+
+    '<li>Deska 9×9. Tmavá pole s ? jsou žolíková pole: platí jako libovolná číslice, pomáhají plnit řady, sloupce a čtverce a nikdy je nemusíš vyplnit.</li>'+
+    '<li>Tvůj karetní stůl pojme omezený počet karet s číslicemi (1–9). Klepni na kartu a pak na volné pole.</li>'+
+    '<li>Pravidlo sudoku konfliktu: číslice se nesmí vyskytovat dvakrát ve stejné řadě, sloupci ani 3×3 bloku. Neplatná pole se při přejezdu zčervenají.</li>'+
+    '<li>Položené číslice zůstávají – nic se nemaže. Každý úkol staví na už vyplněné desce.</li>'+
+    '<li>Každý úkol vyžaduje určitý počet plných linií, například dvě řady nebo dva čtverce (cíl je ve stavovém pruhu).</li>'+
+    '<li>Po každém úkolu následuje volba očarování; zásobení novými kartami se už ukazuje.</li>'+
+    '<li>Dobírací balík: po každém umístění automaticky lízneš jednu novou kartu.</li>'+
+    '<li>Bonus linie: každá poprvé vyplněná řada, sloupec nebo čtverec okamžitě dá dvě bonusové karty – jen jednou za linii a desku.</li>'+
+    '<li>Pokud je celá deska vyplněná (žolíková pole platí jako splněná), dostaneš 1000 bodů a novou, silněji zablokovanou desku.</li>'+
+    '<li>Pokud je tvůj stůl prázdný nebo nelze žádnou kartu legálně umístit, běh končí. Tlačítko výměny jednou za úroveň zahodí všechny karty a lízne šest nových (jednou; s Výměnou+ častěji).</li>'+
+    '<li>Body: 10 za umístění, 100 za linii úkolu a 250 × úroveň za splnění úkolu.</li>'+
+    '</ul></details>'+
+    '<details><summary>Bossové – Death Run</summary><ul>'+
+    '<li>V Death Runu každý třetí úroveň zaútočí boss; tři druhy se střídají a s vyššími úrovněmi útočí stále rychleji.</li>'+
+    '<li>Zloděj číslic: ukradne náhodnou kartu z tvého stolu – i divoké karty a žolíky.</li>'+
+    '<li>Rozryvač mezer: vytrhne už umístěnou číslici z desky a udělá ti tak díry do sudoku.</li>'+
+    '<li>Karetní vír: promění dvě karty na tvém stole v jiné číslice.</li>'+
+    '<li>Progressová políčka pod jménem bossa ukazují, kdy udeří. Úroveň s bossem končí jako každá jiná, jakmile je úkol splněn.</li>'+
+    '</ul></details>'+
+    '<details><summary>Očarování</summary><ul>'+
+    '<li>Divoká karta 6|9: platí jako 6 nebo jako 9 (číslici vybereš při umístění).</li>'+
+    '<li>Divoká karta 1|7: platí jako 1 nebo jako 7.</li>'+
+    '<li>Žolík: platí jednou jako libovolná číslice 1–9.</li>'+
+    '<li>Zásoba: hned tři další karty s číslicemi.</li>'+
+    '<li>Klon: náhodná karta z tvého stolu se zdvojnásobí – i divoké karty.</li>'+
+    '<li>Výměna+: odteď druhá výměna v každé úrovni.</li>'+
+    '</ul></details>'+
+    '<details><summary>Herní režim a obtížnost</summary><ul>'+
+    '<li>Death Run: hra běží bez konce; počítá se skóre a to, jak daleko se dostaneš.</li>'+
+    '<li>Lehká: více výchozích karet, více žolíkových polí, pomalejší bossové. Střední: standard. Těžká: méně karet, méně žolíkových polí, rychlejší bossové.</li>'+
+    '</ul></details>'+
+    '<details><summary>Uložení, statistiky a úspěchy</summary><ul>'+
+    '<li>Statistiky a úspěchy se ukládají automaticky v prohlížeči (localStorage); devět úspěchů pokrývá první úkol, divoké karty, žolíky, bosse, vyřešení sudoku a bodové rekordy.</li>'+
+    '</ul></details>',
+  infoHtml:'<h2>Open source a autorství</h2>'+
+    '<h3>Autorství</h3><ul>'+
+    '<li>Tuto aplikaci (Numerino) vyvinul v roce 2026 Vibe (AI asistent od Mistral AI založený na modelu GLM) společně s BaCnGaplays.</li>'+
+    '<li>Vlajka Evropské unie vpravo nahoře v hlavní nabídce (pixelgrafika) označuje Numerino jako hru vyvinutou v Evropské unii; emblém vlajky EU slouží výhradně k tomuto označení původu.</li>'+
+    '<li>Zdrojový kód je kompletně a otevřeně obsažen v tomto souboru HTML a lze ho svobodně prohlížet a upravovat.</li>'+
+    '</ul><h3>Použitý software třetích stran</h3><ul>'+
+    '<li>Nebyly začleněny žádné externí knihovny, balíčky ani cizí kód. Všechny funkce jsou napsány v obyčejném HTML, CSS a JavaScriptu bez závislostí.</li>'+
+    '<li>Zvuky vznikají výhradně pomocí webového rozhraní Web Audio integrovaného v prohlížeči. Nedochází k žádným síťovým přístupům; uložení hry zůstává lokálně v prohlížeči.</li>'+
+    '</ul><h3>Grafika</h3><ul>'+
+    '<li>Veškerá grafika (číslice, žolíková pole, sprity bossů, vlajka EU) je jako vložená pixelgrafika přímo v souboru a byla nakreslena výhradně pro tuto aplikaci.</li>'+
+    '</ul><h3>Zdrojový kód</h3><ul>'+
+    '<li>Úplný zdrojový kód této aplikace si můžeš prohlédnout v zobrazení zdrojového kódu, úplně ho označit a zkopírovat.</li>'+
+    '</ul>'
+},
+pl:{
+  menuBtnTxt:'Menu',menuBtnTt:'Otwórz menu główne',swapTt:'Wyrzuć wszystkie karty i dobierz sześć nowych (raz na poziom)',
+  headMode:'Sudoku-roguelike',chooseLbl:'Wybierz cyfrę – karta będzie wtedy liczyć jako ta cyfra',
+  overRetry:'Nowy Death Run',overMenu:'Menu główne',
+  deckCap:'Stół kart',deckHint:'Dotknij karty, a następnie wybierz wolne pole na planszy',
+  logHeadLbl:'Dziennik',helpHeadLbl:'Pomoc',
+  promoSub:'Przestrzenna gra planszowa z serii',promoTt:'Otwórz Tetromino w przeglądarce',
+  promoHideTt:'Ukryj baner – pojawi się ponownie przy następnym starcie gry',
+  euFlagTt:'Stworzone w Unii Europejskiej – kliknij raz!',
+  modeH:'Tryb gry',learnH:'Nauka',miscH:'Inne',stdBtn:'Standard',
+  diffCap:'Wybierz poziom trudności',diff1:'Łatwy',diff2:'Średni',diff3:'Trudny',
+  mRulesBtn:'Instrukcja i zasady',mSaveBtn:'Zapis gry, statystyki i osiągnięcia',
+  mSetBtn:'Ustawienia',mInfoBtn:'Open source i autorstwo',menuBack:'Powrót do gry (Esc)',
+  levelH:'Zadanie wykonane!',levelChoose:'Wybierz zaklęcie – zadziała od następnego poziomu.',
+  levelDoneTxt:'Poziom {n} ukończony – punkty: {p}',nextTaskTxt:'Następne zadanie: wypełnij {t}',
+  supplyTxt:'Zapas',noSupply:'zapas niepotrzebny',
+  closeLbl:'Zamknij',setH2:'Ustawienia',setHGrafik:'Grafika',setHSound:'Dźwięk',
+  lblFs:'Pełny ekran',fsOn:'Tryb pełnoekranowy: wł.',fsOff:'Tryb pełnoekranowy: wył.',
+  lblLight:'Schemat kolorów',lightOn:'Tryb jasny: wł.',lightOff:'Tryb jasny: wył.',
+  lblSound:'Dźwięk',muteOn:'Dźwięk: wł.',muteOff:'Dźwięk: wył.',
+  lblVol:'Efekty',lblMus:'Muzyka',musOnLbl:'Muzyka: wł.',musOffLbl:'Muzyka: wył.',
+  lblMusVol:'Głośność muzyki',lblLang:'Język',
+  srcTitle:'Kod źródłowy',
+  srcHint:'Pełny kod źródłowy tego pliku. Po zaznaczeniu można go skopiować za pomocą Ctrl+C (lub Cmd+C).',
+  srcSelAllLbl:'Zaznacz wszystko',
+  saveH1:'Zapis gry',
+  saveSubTxt:'Postęp, statystyki i osiągnięcia – zapisane w przeglądarce, eksportowalne jako plik HTML',
+  hSlots:'Sloty zapisu',slotNewLbl:'Nowy zapis',slotResetAllLbl:'Zresetuj wszystko',
+  hStats:'Statystyki (aktywny zapis)',hAch:'Osiągnięcia (aktywny zapis)',saveBackLbl:'Wstecz',
+  infoSrcLbl:'Pokaż kod źródłowy',verH:'Wersja',toastAch:'Osiągnięcie odblokowane',
+  taskRows:'WIERSZE',taskCols:'KOLUMNY',taskBoxes:'KWADRATY',
+  taskRowsN:'wiersze',taskColsN:'kolumny',taskBoxesN:'kwadraty',
+  stLevel:'POZIOM {n}',stGoal:'CEL {a}/{b} {t}',stGoal0:'CEL 0/0',
+  stScore:'PUNKTY {n}',stMode:'DEATH RUN',stRight:'KARTY {n}',
+  swapUsed:'Wymiana: użyta',swapLeft:'Wymiana ({n}×)',
+  achLineN:'Pierwsza linia',achLineD:'Wykonaj swoje pierwsze zadanie.',
+  achZauberN:'Uczeń czarodzieja',achZauberD:'Wybierz swoje pierwsze zaklęcie.',
+  achWildN:'Dzika karta',achWildD:'Umieść dziką kartę (6|9 lub 1|7).',
+  achJokerN:'Joker',achJokerD:'Umieść jokera jako dowolną cyfrę.',
+  achBossN:'Pogromca bossów',achBossD:'Ukończ swój pierwszy poziom z bossem.',
+  achJaegerN:'Łowca bossów',achJaegerD:'Ukończ wszystkie trzy rodzaje bossów w jednym podejściu.',
+  achSudokuN:'Rozwiązywacz sudoku',achSudokuD:'Wypełnij kompletną planszę Sudoku.',
+  achHochN:'Rekordzista punktowy',achHochD:'Zdobądź 5000 punktów w jednym podejściu.',
+  achMarathonN:'Maraton',achMarathonD:'Osiągnij poziom 15 w Death Runie.',
+  upW69n:'DZIKA KARTA 6|9',upW69d:'Liczy się jako 6 lub 9',
+  upW17n:'DZIKA KARTA 1|7',upW17d:'Liczy się jako 1 lub 7',
+  upJokern:'JOKER',upJokerd:'Raz dowolna cyfra',
+  upSchubn:'ZAPAS',upSchubd:'Trzy karty natychmiast',
+  upKlonn:'KLON',upKlond1:'Losowa karta',upKlond2:'zostaje podwojona',
+  upTauschn:'WYMIANA+',upTauschd1:'Druga wymiana',upTauschd2:'na każdym poziomie',
+  bossDieb:'ZŁODZIEJ CYFR',bossRiss:'ROZRYWACZ LUK',bossWirbler:'WIR KART',
+  bossDiebD:'Kradnie kartę po każdych {n} umieszczeniach',
+  bossRissD:'Wyrwia cyfrę po każdych {n} umieszczeniach',
+  bossWirblerD:'Przekształca dwie karty po każdych {n} umieszczeniach',
+  bossWarn:'UWAGA: PRZY NASTĘPNYM UMIESZCZENIU!',
+  flCard:'-1 KARTA!',flGap:'LUKA!',flConfuse:'POMIESZANE!',flConflict:'KONFLIKT!',flCards:'+{n} KART',
+  logDieb:'Złodziej cyfr kradnie kartę!',logRiss:'Rozrywacz luk wyrwia cyfrę!',
+  logWirbler:'Wir kart przekształca dwie karty!',
+  logLine1:'Linia pełna! +{n} kart bonusowych',logLineN:'{k} linie pełne! +{n} kart bonusowych',
+  logSudoku:'SUDOKU ROZWIĄZANE! +1000 punktów – nowa plansza',
+  logDeadlock:'Zablokowany – uratuje cię już tylko wymiana!',
+  logSwap:'Karty wymienione: dobrano sześć nowych',
+  logBoss:'Boss aktywny: {b} – {d}',logLevel:'Poziom {n} – zadanie: wypełnij {t}',
+  logDone:'Zadanie wykonane! +{p} punktów',logOver:'Podejście zakończone: {r}',
+  overTitle:'KONIEC GRY',overMeta:'Punkty: {p} · Poziom: {l} · Linie: {t}',
+  overReason:'{r} – podejście kończy się tutaj.',reasonNoCards:'BRAK KART',reasonStuck:'ZABLOKOWANY',
+  ttDigit:'Cyfra {d}',ttWild:'Dzika karta {a}|{b}',ttJoker:'Joker – dowolna cyfra',
+  slotActive:' (aktywny)',btnAct:'Aktywuj',btnHtml:'HTML',btnDel:'Usuń',
+  slotRuns:'{n} podejść',slotAch:'{a}/{t} osiągnięć',
+  statRuns:'Rozegrane podejścia',statBoards:'Rozwiązane sudoku',statBest:'Najlepszy wynik',
+  statLevel:'Najwyższy poziom',statLines:'Wypełnione linie (łącznie)',
+  achDate:'Odblokowane: {d}',achLocked:'Jeszcze nieodblokowane',
+  noteMax:'Maksymalnie osiem zapisów gry.',slotName:'Zapis {n}',
+  noteDeleted:'Zapis usunięty.',noteExported:'Zapis wyeksportowany jako plik HTML.',
+  noteExportBlocked:'Eksport zablokowany: pobierz plik gry i otwórz go bezpośrednio w przeglądarce.',
+  resetArmedLbl:'Naprawdę zresetować wszystko?',noteReset:'Wszystkie zapisy zostały zresetowane.',
+  mWorldBtn:'Światy',worldH:'Światy',worldSub:'Motywy planszy – kolorystyka planszy Sudoku',
+  worldH3:'Motywy planszy',themeOrig:'Oryginał',themeMono:'Monochromatyczny',themePapier:'Papier',
+  themeEdel:'Szlachetny',themeWinter:'Zima',themeHimmel:'Niebo',themeHerbst:'Jesień',
+  themeKirsch:'Kwiat wiśni',themeWeltraum:'Kosmos',
+  helpHtml:'Dotknij karty, a następnie wybierz wolne pole. Pola jokerów (z ?) liczą się jako dowolna cyfra i pomagają wypełniać linie – nigdy nie trzeba ich wypełniać.<br>'+
+    'Umieszczone cyfry zostają na planszy; każde zadanie buduje na dotychczasowej planszy.<br>'+
+    'Po każdym umieszczeniu dobierasz jedną kartę; każdy pierwszy raz wypełniony wiersz, kolumna lub kwadrat daje dwie karty bonusowe.<br>'+
+    'Nigdy ta sama cyfra dwa razy w wierszu, kolumnie lub bloku.<br>'+
+    'Dzikie karty (6|9, 1|7) liczą się jako jedna z dwóch cyfr, a joker jako każda.<br>'+
+    'Przycisk wymiany w prawym górnym rogu raz na poziom wyrzuca wszystkie karty i dobiera sześć nowych.',
+  rulesHtml:'<h2>Zasady Numerino</h2>'+
+    '<p class="mSub">Numerino to Sudoku-roguelike: umieszczasz karty cyfr na planszy 9×9, wykonujesz zadania na planszy, która nigdy nie jest czyszczona, i w Death Runie odpierasz trzy rodzaje bossów.</p>'+
+    '<details open><summary>Gra – zasady ogólne</summary><ul>'+
+    '<li>Plansza 9×9. Ciemne pola z ? to pola jokerów: liczą się jako dowolna cyfra, pomagają wypełniać wiersze, kolumny i kwadraty, a nigdy nie trzeba ich samodzielnie wypełniać.</li>'+
+    '<li>Twój stół kart mieści ograniczoną liczbę kart cyfr (1–9). Dotknij karty, a następnie wolnego pola.</li>'+
+    '<li>Zasada konfliktu sudoku: cyfra nigdy nie może wystąpić dwa razy w tym samym wierszu, kolumnie ani bloku 3×3. Nieprawidłowe pola przy najechaniu zaznaczają się na czerwono.</li>'+
+    '<li>Umieszczone cyfry zostają na miejscu – nic nie jest usuwane. Każde zadanie buduje na już wypełnionej planszy.</li>'+
+    '<li>Każde zadanie wymaga pewnej liczby pełnych linii, na przykład dwóch wierszy albo dwóch kwadratów (cel widnieje na pasku statusu).</li>'+
+    '<li>Po każdym zadaniu następuje wybór zaklęcia; zapas nowych kart jest już wtedy pokazany.</li>'+
+    '<li>Talia dobierania: po każdym umieszczeniu automatycznie dobierasz jedną nową kartę.</li>'+
+    '<li>Bonus za linię: każdy pierwszy raz wypełniony wiersz, kolumna lub kwadrat daje natychmiast dwie karty bonusowe – tylko raz na linię i planszę.</li>'+
+    '<li>Gdy cała plansza jest wypełniona (pola jokerów liczą się jako wypełnione), otrzymujesz 1000 punktów i nową, mocniej zablokowaną planszę.</li>'+
+    '<li>Jeśli twój stół jest pusty albo żadnej karty nie można legalnie umieścić, podejście kończy się. Przycisk wymiany raz na poziom wyrzuca wszystkie karty i dobiera sześć nowych (raz; z Wymianą+ częściej).</li>'+
+    '<li>Punkty: 10 za umieszczenie, 100 za linię zadania i 250 × poziom za wykonanie zadania.</li>'+
+    '</ul></details>'+
+    '<details><summary>Bossowie – Death Run</summary><ul>'+
+    '<li>W Death Runie co trzeci poziom atakuje boss; trzy rodzaje rotują, a na wyższych poziomach uderzają coraz szybciej.</li>'+
+    '<li>Złodziej cyfr: kradnie losową kartę z twojego stołu – również dzikie karty i jokery.</li>'+
+    '<li>Rozrywacz luk: wyrwia już umieszczoną cyfrę z planszy i robi ci tym samym luki w sudoku.</li>'+
+    '<li>Wir kart: przekształca dwie karty na twoim stole w inne cyfry.</li>'+
+    '<li>Pola postępu pod nazwą bossa pokazują, kiedy uderzy. Poziom z bossem kończy się jak każdy inny, gdy tylko zadanie zostanie wykonane.</li>'+
+    '</ul></details>'+
+    '<details><summary>Zaklęcia</summary><ul>'+
+    '<li>Dzika karta 6|9: liczy się jako 6 albo jako 9 (cyfrę wybierasz przy umieszczaniu).</li>'+
+    '<li>Dzika karta 1|7: liczy się jako 1 albo jako 7.</li>'+
+    '<li>Joker: liczy się raz jako dowolna cyfra 1–9.</li>'+
+    '<li>Zapas: natychmiast trzy dodatkowe karty cyfr.</li>'+
+    '<li>Klon: losowa karta z twojego stołu zostaje podwojona – również dzikie karty.</li>'+
+    '<li>Wymiana+: od teraz druga wymiana na każdym poziomie.</li>'+
+    '</ul></details>'+
+    '<details><summary>Tryb gry i poziom trudności</summary><ul>'+
+    '<li>Death Run: gra toczy się bez końca; liczą się wynik punktowy i to, jak daleko zajdziesz.</li>'+
+    '<li>Łatwy: więcej kart startowych, więcej pól jokerów, wolniejsi bossowie. Średni: standard. Trudny: mniej kart, mniej pól jokerów, szybsi bossowie.</li>'+
+    '</ul></details>'+
+    '<details><summary>Zapis gry, statystyki i osiągnięcia</summary><ul>'+
+    '<li>Statystyki i osiągnięcia zapisują się automatycznie w przeglądarce (localStorage); dziewięć osiągnięć obejmuje pierwsze zadanie, dzikie karty, jokery, bossów, rozwiązanie sudoku i rekordy punktowe.</li>'+
+    '</ul></details>',
+  infoHtml:'<h2>Open source i autorstwo</h2>'+
+    '<h3>Autorstwo</h3><ul>'+
+    '<li>Ta aplikacja (Numerino) została stworzona w 2026 roku przez Vibe (asystenta AI od Mistral AI, opartego na modelu GLM) wspólnie z BaCnGaplays.</li>'+
+    '<li>Flaga europejska w prawym górnym rogu menu głównego (grafika pikselowa) oznacza Numerino jako grę stworzoną w Unii Europejskiej; emblemat flagi UE służy wyłącznie temu oznaczeniu pochodzenia.</li>'+
+    '<li>Kod źródłowy w całości i otwarcie znajduje się w tym pliku HTML i można go swobodnie przeglądać i modyfikować.</li>'+
+    '</ul><h3>Wykorzystane oprogramowanie firm trzecich</h3><ul>'+
+    '<li>Nie dołączono żadnych zewnętrznych bibliotek, pakietów ani cudzego kodu. Wszystkie funkcje napisano w zwykłym HTML, CSS i JavaScripcie bez zależności.</li>'+
+    '<li>Dźwięki są generowane wyłącznie za pomocą zintegrowanego w przeglądarce interfejsu Web Audio. Nie ma żadnych połączeń sieciowych; zapis gry pozostaje lokalnie w przeglądarce.</li>'+
+    '</ul><h3>Grafika</h3><ul>'+
+    '<li>Wszystkie grafiki (cyfry, pola jokerów, sprity bossów, flaga UE) są osadzoną grafiką pikselową zawartą bezpośrednio w pliku i narysowaną specjalnie dla tej aplikacji.</li>'+
+    '</ul><h3>Kod źródłowy</h3><ul>'+
+    '<li>Pełny kod źródłowy tej aplikacji można podejrzeć w widoku kodu źródłowego, w całości zaznaczyć i skopiować.</li>'+
+    '</ul>'
+},
+es:{
+  menuBtnTxt:'Menú',menuBtnTt:'Abrir el menú principal',swapTt:'Tira todas las cartas y roba seis nuevas (una vez por nivel)',
+  headMode:'Sudoku roguelike',chooseLbl:'Elige un dígito: la carta contará entonces como ese dígito',
+  overRetry:'Nueva Death Run',overMenu:'Menú principal',
+  deckCap:'Mesa de cartas',deckHint:'Toca una carta y elige luego una casilla libre del tablero',
+  logHeadLbl:'Registro',helpHeadLbl:'Ayuda',
+  promoSub:'Juego de tablero espacial de la serie',promoTt:'Abrir Tetromino en el navegador',
+  promoHideTt:'Ocultar el banner: reaparece al iniciar la próxima partida',
+  euFlagTt:'Desarrollado en la Unión Europea: ¡haz clic una vez!',
+  modeH:'Modo de juego',learnH:'Aprender',miscH:'Otros',stdBtn:'Estándar',
+  diffCap:'Elige una dificultad',diff1:'Fácil',diff2:'Medio',diff3:'Difícil',
+  mRulesBtn:'Instrucciones y reglas',mSaveBtn:'Partida guardada, estadísticas y logros',
+  mSetBtn:'Ajustes',mInfoBtn:'Código abierto y autoría',menuBack:'Volver al juego (Esc)',
+  levelH:'¡Tarea completada!',levelChoose:'Elige un encantamiento: surte efecto desde el siguiente nivel.',
+  levelDoneTxt:'Nivel {n} completado – puntos: {p}',nextTaskTxt:'Próxima tarea: rellenar {t}',
+  supplyTxt:'Reposición',noSupply:'no hace falta reposición',
+  closeLbl:'Cerrar',setH2:'Ajustes',setHGrafik:'Gráficos',setHSound:'Sonido',
+  lblFs:'Pantalla completa',fsOn:'Modo pantalla completa: activado',fsOff:'Modo pantalla completa: desactivado',
+  lblLight:'Esquema de color',lightOn:'Modo claro: activado',lightOff:'Modo claro: desactivado',
+  lblSound:'Sonido',muteOn:'Sonido: activado',muteOff:'Sonido: desactivado',
+  lblVol:'Efectos',lblMus:'Música',musOnLbl:'Música: activada',musOffLbl:'Música: desactivada',
+  lblMusVol:'Volumen de la música',lblLang:'Idioma',
+  srcTitle:'Código fuente',
+  srcHint:'Código fuente completo de este archivo. Tras seleccionarlo, puedes copiarlo con Ctrl+C (o Cmd+C).',
+  srcSelAllLbl:'Seleccionar todo',
+  saveH1:'Partida guardada',
+  saveSubTxt:'Progreso, estadísticas y logros: guardados en el navegador, exportables como archivo HTML',
+  hSlots:'Ranuras de guardado',slotNewLbl:'Nueva partida guardada',slotResetAllLbl:'Restablecer todo',
+  hStats:'Estadísticas (partida activa)',hAch:'Logros (partida activa)',saveBackLbl:'Volver',
+  infoSrcLbl:'Ver código fuente',verH:'Versión',toastAch:'Logro desbloqueado',
+  taskRows:'FILAS',taskCols:'COLUMNAS',taskBoxes:'CUADRANTES',
+  taskRowsN:'filas',taskColsN:'columnas',taskBoxesN:'cuadrantes',
+  stLevel:'NIVEL {n}',stGoal:'META {a}/{b} {t}',stGoal0:'META 0/0',
+  stScore:'PUNTOS {n}',stMode:'DEATH RUN',stRight:'CARTAS {n}',
+  swapUsed:'Cambio: usado',swapLeft:'Cambio ({n}×)',
+  achLineN:'Primera línea',achLineD:'Completa tu primera tarea.',
+  achZauberN:'Aprendiz de encantador',achZauberD:'Elige tu primer encantamiento.',
+  achWildN:'Carta comodín',achWildD:'Coloca una carta comodín (6|9 o 1|7).',
+  achJokerN:'Jóker',achJokerD:'Coloca el jóker como cualquier dígito.',
+  achBossN:'Domador de jefes',achBossD:'Completa tu primer nivel de jefe.',
+  achJaegerN:'Cazador de jefes',achJaegerD:'Completa los tres tipos de jefe en una sola partida.',
+  achSudokuN:'Solucionador de sudoku',achSudokuD:'Rellena un tablero de Sudoku completo.',
+  achHochN:'Acumulador',achHochD:'Alcanza 5000 puntos en una partida.',
+  achMarathonN:'Maratón',achMarathonD:'Alcanza el nivel 15 en un Death Run.',
+  upW69n:'CARTA COMODÍN 6|9',upW69d:'Cuenta como 6 o 9',
+  upW17n:'CARTA COMODÍN 1|7',upW17d:'Cuenta como 1 o 7',
+  upJokern:'JÓKER',upJokerd:'Un dígito cualquiera, una vez',
+  upSchubn:'REPOSICIÓN',upSchubd:'Tres cartas al instante',
+  upKlonn:'CLON',upKlond1:'Una carta aleatoria',upKlond2:'se duplica',
+  upTauschn:'CAMBIO+',upTauschd1:'Un segundo cambio',upTauschd2:'en cada nivel',
+  bossDieb:'LADRÓN DE DÍGITOS',bossRiss:'DESTROZAHUECOS',bossWirbler:'REMOVEDOR DE CARTAS',
+  bossDiebD:'Roba una carta cada {n} colocaciones',
+  bossRissD:'Arranca un dígito cada {n} colocaciones',
+  bossWirblerD:'Transforma dos cartas cada {n} colocaciones',
+  bossWarn:'¡CUIDADO: EN LA PRÓXIMA COLOCACIÓN!',
+  flCard:'¡-1 CARTA!',flGap:'¡HUECO!',flConfuse:'¡CONFUNDIDO!',flConflict:'¡CONFLICTO!',flCards:'+{n} CARTAS',
+  logDieb:'¡El ladrón de dígitos roba una carta!',logRiss:'¡El destrozahuecos arranca un dígito!',
+  logWirbler:'¡El removedor de cartas transforma dos cartas!',
+  logLine1:'¡Línea completa! +{n} cartas de bonificación',logLineN:'{k} líneas completas: +{n} cartas de bonificación',
+  logSudoku:'¡SUDOKU RESUELTO! +1000 puntos – nuevo tablero',
+  logDeadlock:'Bloqueado: ¡solo el cambio puede salvarte!',
+  logSwap:'Cartas cambiadas: se robaron seis nuevas',
+  logBoss:'Jefe activo: {b} – {d}',logLevel:'Nivel {n} – tarea: rellenar {t}',
+  logDone:'¡Tarea completada! +{p} puntos',logOver:'Partida terminada: {r}',
+  overTitle:'FIN DE LA PARTIDA',overMeta:'Puntos: {p} · Nivel: {l} · Líneas: {t}',
+  overReason:'{r}: la partida termina aquí.',reasonNoCards:'SIN CARTAS',reasonStuck:'BLOQUEADO',
+  ttDigit:'Dígito {d}',ttWild:'Carta comodín {a}|{b}',ttJoker:'Jóker – cualquier dígito',
+  slotActive:' (activa)',btnAct:'Activar',btnHtml:'HTML',btnDel:'Borrar',
+  slotRuns:'{n} partidas',slotAch:'{a}/{t} logros',
+  statRuns:'Partidas jugadas',statBoards:'Sudokus resueltos',statBest:'Mejor puntuación',
+  statLevel:'Nivel más alto',statLines:'Líneas completadas (total)',
+  achDate:'Desbloqueado: {d}',achLocked:'Aún no desbloqueado',
+  noteMax:'Se admiten como máximo ocho partidas guardadas.',slotName:'Partida {n}',
+  noteDeleted:'Partida guardada eliminada.',noteExported:'Partida exportada como archivo HTML.',
+  noteExportBlocked:'Exportación bloqueada: descarga el archivo del juego y ábrelo directamente en el navegador.',
+  resetArmedLbl:'¿Restablecer todo de verdad?',noteReset:'Se han restablecido todas las partidas guardadas.',
+  mWorldBtn:'Mundos',worldH:'Mundos',worldSub:'Temas de tablero: la paleta de colores del tablero de Sudoku',
+  worldH3:'Temas de tablero',themeOrig:'Original',themeMono:'Monocromo',themePapier:'Papel',
+  themeEdel:'Noble',themeWinter:'Invierno',themeHimmel:'Cielo',themeHerbst:'Otoño',
+  themeKirsch:'Flor de cerezo',themeWeltraum:'Espacio',
+  helpHtml:'Toca una carta y elige luego una casilla libre. Las casillas comodín (con ?) cuentan como cualquier dígito y ayudan a completar líneas – nunca hay que rellenarlas.<br>'+
+    'Los dígitos colocados permanecen; cada tarea se construye sobre el tablero actual.<br>'+
+    'Tras cada colocación robas una carta; cada fila, columna o cuadrante completados por primera vez dan dos cartas de bonificación.<br>'+
+    'Nunca el mismo dígito dos veces por fila, columna o bloque.<br>'+
+    'Los comodines (6|9, 1|7) cuentan como uno de sus dos dígitos; el jóker cuenta como cualquiera.<br>'+
+    'El botón de cambio arriba a la derecha descarta todas las cartas una vez por nivel y roba seis nuevas.',
+  rulesHtml:'<h2>Reglas de Numerino</h2>'+
+    '<p class="mSub">Numerino es un Sudoku roguelike: colocas cartas de dígitos en un tablero de 9×9, completas tareas en un tablero que nunca se borra y te defiendes de tres tipos de jefes en el Death Run.</p>'+
+    '<details open><summary>El juego – reglas generales</summary><ul>'+
+    '<li>Tablero de 9×9. Las casillas oscuras con ? son casillas comodín: cuentan como cualquier dígito, ayudan a completar filas, columnas y cuadrantes, y nunca hay que rellenarlas.</li>'+
+    '<li>Tu mesa de cartas guarda un número limitado de cartas de dígitos (1–9). Toca una carta y luego una casilla libre.</li>'+
+    '<li>Regla de conflicto del Sudoku: un dígito no debe aparecer nunca dos veces en la misma fila, columna o bloque 3×3. Las casillas inválidas se marcan en rojo al pasar por encima.</li>'+
+    '<li>Los dígitos colocados permanecen – no se borra nada. Cada tarea se construye sobre el tablero ya rellenado.</li>'+
+    '<li>Cada tarea exige un número de líneas completas, por ejemplo dos filas o dos cuadrantes (el objetivo aparece en la barra de estado).</li>'+
+    '<li>Tras cada tarea sigue la elección de un encantamiento; la reposición de cartas nuevas ya se muestra entonces.</li>'+
+    '<li>Mazo de robo: tras cada colocación robas automáticamente una carta nueva.</li>'+
+    '<li>Bonus de línea: cada fila, columna o cuadrante completado por primera vez da de inmediato dos cartas de bonificación – una vez por línea y tablero.</li>'+
+    '<li>Cuando todo el tablero está relleno (las casillas comodín cuentan como completas), ganas 1000 puntos y un tablero nuevo con más bloqueos.</li>'+
+    '<li>Si tu mesa queda vacía o ninguna carta puede colocarse legalmente, la partida termina. El botón de cambio descarta todas las cartas una vez por nivel y roba seis nuevas (una vez; más a menudo con Cambio+).</li>'+
+    '<li>Puntos: 10 por colocación, 100 por línea de tarea y 250 × nivel al completar una tarea.</li>'+
+    '</ul></details>'+
+    '<details><summary>Jefes – el Death Run</summary><ul>'+
+    '<li>En el Death Run, cada tercer nivel ataca un jefe; los tres tipos rotan y golpean cada vez más rápido en niveles altos.</li>'+
+    '<li>Ladrón de dígitos: roba una carta aleatoria de tu mesa – también comodines y jókers.</li>'+
+    '<li>Destrozahuecos: arranca del tablero un dígito ya colocado y abre así huecos en tu Sudoku.</li>'+
+    '<li>Removedor de cartas: transforma dos cartas de tu mesa en otros dígitos.</li>'+
+    '<li>Las casillas de progreso bajo el nombre del jefe muestran cuándo golpeará. Un nivel de jefe termina como cualquier otro en cuanto se completa la tarea.</li>'+
+    '</ul></details>'+
+    '<details><summary>Encantamientos</summary><ul>'+
+    '<li>Carta comodín 6|9: cuenta como 6 o como 9 (elige el dígito al colocar).</li>'+
+    '<li>Carta comodín 1|7: cuenta como 1 o como 7.</li>'+
+    '<li>Jóker: cuenta una vez como cualquier dígito 1–9.</li>'+
+    '<li>Reposición: tres cartas de dígitos más al instante.</li>'+
+    '<li>Clon: una carta aleatoria de tu mesa se duplica – comodines incluidos.</li>'+
+    '<li>Cambio+: a partir de ahora, un segundo cambio en cada nivel.</li>'+
+    '</ul></details>'+
+    '<details><summary>Modo de juego y dificultad</summary><ul>'+
+    '<li>Death Run: la partida continúa sin fin; se cuentan tu puntuación y hasta dónde llegas.</li>'+
+    '<li>Fácil: más cartas iniciales, más casillas comodín, jefes más lentos. Medio: el estándar. Difícil: menos cartas, menos casillas comodín, jefes más rápidos.</li>'+
+    '</ul></details>'+
+    '<details><summary>Partida guardada, estadísticas y logros</summary><ul>'+
+    '<li>Las estadísticas y los logros se guardan automáticamente en el navegador (localStorage); nueve logros cubren la primera tarea, los comodines, los jókers, los jefes, la resolución de un Sudoku y los récords de puntos.</li>'+
+    '</ul></details>',
+  infoHtml:'<h2>Código abierto y autoría</h2>'+
+    '<h3>Autoría</h3><ul>'+
+    '<li>Esta aplicación (Numerino) fue desarrollada por Vibe (asistente de IA de Mistral AI, basado en el modelo GLM) junto con BaCnGaplays en 2026.</li>'+
+    '<li>La bandera europea arriba a la derecha del menú principal (gráfico de píxeles) distingue Numerino como un juego desarrollado en la Unión Europea; el emblema de la bandera de la UE sirve exclusivamente para esta indicación de origen.</li>'+
+    '<li>El código fuente está íntegramente y de forma abierta en este archivo HTML y puede consultarse y adaptarse libremente.</li>'+
+    '</ul><h3>Software de terceros utilizado</h3><ul>'+
+    '<li>No se ha incluido ninguna biblioteca externa, ningún paquete ni código de terceros. Todas las funciones están escritas en HTML, CSS y JavaScript ordinarios, sin dependencias.</li>'+
+    '<li>Los sonidos se generan exclusivamente con la interfaz Web Audio integrada en el navegador. No hay accesos a la red; la partida permanece localmente en el navegador.</li>'+
+    '</ul><h3>Gráficos</h3><ul>'+
+    '<li>Todos los gráficos (dígitos, casillas comodín, sprites de jefes, bandera de la UE) son pixel art incrustado directamente en el archivo y dibujados específicamente para esta aplicación.</li>'+
+    '</ul><h3>Código fuente</h3><ul>'+
+    '<li>Puedes ver el código fuente completo de esta aplicación en la vista de código fuente, seleccionarlo por completo y copiarlo.</li>'+
+    '</ul>'
+}
+};
+/* Statische Texte der Oberfläche in die gewählte Sprache übersetzen. Die
+   deutschen Texte bleiben im HTML als Rückfall; die deutsche Fassung der
+   großen Textblöcke (Regeln, Info, Hilfe) wird beim ersten Aufruf gepuffert,
+   damit ein Rückwechsel nach Deutsch sie wiederherstellt. */
+var RULES_DE=null,INFO_DE=null,HELP_DE=null;
+function applyLang(){
+  var k,el;
+  document.documentElement.setAttribute('lang',lang);
+  var M={
+    headMode:'headMode',menuBtn:'menuBtnTxt',stdBtn:'stdBtn',diffCap:'diffCap',
+    modeH:'modeH',learnH:'learnH',miscH:'miscH',
+    mRulesBtn:'mRulesBtn',mSaveBtn:'mSaveBtn',mSetBtn:'mSetBtn',mInfoBtn:'mInfoBtn',
+    menuBack:'menuBack',overRetry:'overRetry',overMenuBtn:'overMenu',
+    deckCap:'deckCap',deckHint:'deckHint',chooseLbl:'chooseLbl',
+    levelH:'levelH',setH2:'setH2',setHGrafik:'setHGrafik',setHSound:'setHSound',
+    setLblFs:'lblFs',setLblLight:'lblLight',setLblSound:'lblSound',setLblVol:'lblVol',
+    setLblMus:'lblMus',setLblMusVol:'lblMusVol',setLblLang:'lblLang',
+    setClose:'closeLbl',rulesClose:'closeLbl',infoClose:'closeLbl',
+    infoSrc:'infoSrcLbl',srcH2t:'srcTitle',srcSelAll:'srcSelAllLbl',srcClose:'closeLbl',
+    saveH1:'saveH1',saveSub:'saveSubTxt',hSlots:'hSlots',slotNew:'slotNewLbl',
+    slotResetAll:'slotResetAllLbl',hStats:'hStats',hAch:'hAch',saveBack:'saveBackLbl',
+    promoSub:'promoSub',verH:'verH',
+    mWorldBtn:'mWorldBtn',worldH1:'worldH',worldSub:'worldSub',worldH3:'worldH3',worldBack:'saveBackLbl'
+  };
+  for(k in M){el=$(k);if(el)el.textContent=tr(M[k]);}
+  /* Überschriften mit ein-/ausklappbarem Span: nur den Textknoten tauschen */
+  function setHead(id,key){
+    el=$(id);
+    if(el&&el.firstChild&&el.firstChild.nodeType===3)el.firstChild.nodeValue=tr(key)+' ';
+  }
+  setHead('logHead','logHeadLbl');setHead('helpHead','helpHeadLbl');
+  /* Tooltips */
+  $('menuBtn').title=tr('menuBtnTt');$('swapBtn').title=tr('swapTt');
+  $('promoLink').title=tr('promoTt');$('promoClose').title=tr('promoHideTt');
+  $('euFlag').title=tr('euFlagTt');$('srcHint').textContent=tr('srcHint');
+  /* Schwierigkeitsknöpfe und Sprachknöpfe synchron übersetzen */
+  qsa('.diffBtn').forEach(function(b){b.textContent=tr('diff'+b.getAttribute('data-diff'));});
+  qsa('.setLang').forEach(function(b){b.classList.toggle('selOpt',b.getAttribute('data-lang')===lang);});
+  /* Welten: Themennamen übersetzen und die gewählte Welt gelb markieren */
+  qsa('.setTheme').forEach(function(b){
+    var t=b.getAttribute('data-theme'),T=THEMES[t]||THEMES.orig;
+    var nm=b.querySelector('.thmName');
+    if(nm)nm.textContent=tr(T.name);
+    b.classList.toggle('selOpt',t===SAVE.settings.theme);
+  });
+  /* Große HTML-Blöcke je Sprache; Deutsch bleibt die eingebaute Fassung */
+  if(RULES_DE===null){
+    RULES_DE=$('rulesBody').innerHTML;
+    INFO_DE=$('infoBody').innerHTML;
+    HELP_DE=$('helpBody').innerHTML;
+  }
+  $('rulesBody').innerHTML=lang==='de'?RULES_DE:tr('rulesHtml');
+  $('infoBody').innerHTML=lang==='de'?INFO_DE:tr('infoHtml');
+  $('helpBody').innerHTML=lang==='de'?HELP_DE:tr('helpHtml');
+  renderSettings();
+  renderStatus();
+}
+/* Sprachwechsel: Auswahl speichern, Oberfläche und sichtbare dynamische
+   Bereiche sofort neu rendern. Bereits geschriebene Protokollzeilen und die
+   Namen angelegter Spielstände behalten ihre ursprüngliche Sprache. */
+function setLang(l){
+  if(l!=='de'&&l!=='en'&&l!=='fr'&&l!=='cs'&&l!=='pl'&&l!=='es')return;
+  lang=l;
+  try{window.localStorage.setItem(LANG_KEY,l);}catch(e){}
+  applyLang();
+  renderDeck();renderBoss();renderChoose();
+  if(!$('saveOverlay').classList.contains('hidden'))renderSaveMenu();
+}
 /* ================= Spielstand ================= */
-/* Version: Alpha 0.4 – mit jeder Änderung hochzählen (Alpha 0.5, 0.6 …) */
+/* Version: Alpha 0.10 – mit jeder Änderung hochzählen (Alpha 0.11, 0.12 …) */
 function loadSave(){
   var fallback=null;
   try{fallback=JSON.parse(document.getElementById('saveSlot').textContent);}catch(e){}
@@ -625,22 +1632,27 @@ function loadSave(){
     s={v:2,active:0,settings:s.settings,slots:[old]};
   }
   if(!s.slots||!s.slots.length)s=makeDefaultSave();
-  if(!s.settings)s.settings={snd:true,scan:true,vol:100,light:false};
+  if(!s.settings)s.settings={snd:true,scan:true,vol:100,light:false,musVol:100,theme:'orig'};
+  if(typeof s.settings.musVol!=='number')s.settings.musVol=100;
+  if(!s.settings.theme)s.settings.theme='orig';
   if(typeof s.active!=='number')s.active=0;
   s.active=Math.max(0,Math.min(s.slots.length-1,s.active));
   for(var i=0;i<s.slots.length;i++)normalizeSlot(s.slots[i]);
   return s;
 }
 function normalizeSlot(sl){
-  if(!sl.stats)sl.stats={runs:0,wins:0,bestScore:0,bestLevel:0,linesTotal:0};
+  if(!sl.stats)sl.stats={runs:0,wins:0,bestScore:0,bestLevel:0,linesTotal:0,boards:0};
+  if(typeof sl.stats.boards!=='number')sl.stats.boards=0;
   if(!sl.ach)sl.ach={};
+  /* Migration: alter Erfolg "Ziffernmeister" heißt nun "Sudoku-Löser" */
+  if(sl.ach.meister&&!sl.ach.sudoku)sl.ach.sudoku=sl.ach.meister;
   if(!sl.id)sl.id=1;
-  if(!sl.name)sl.name='Spielstand '+sl.id;
+  if(!sl.name)sl.name=trf('slotName',{n:sl.id});
   return sl;
 }
 function makeDefaultSave(){
-  var sl=normalizeSlot({id:1,name:'Spielstand 1',updated:''});
-  return{v:2,active:0,settings:{snd:true,scan:true,vol:100,light:false},slots:[sl]};
+  var sl=normalizeSlot({id:1,name:trf('slotName',{n:1}),updated:''});
+  return{v:2,active:0,settings:{snd:true,scan:true,vol:100,light:false,musVol:100,theme:'orig'},slots:[sl]};
 }
 function slot(){return SAVE.slots[SAVE.active];}
 function persistSave(){
@@ -650,16 +1662,18 @@ function persistSave(){
   }catch(e){}
 }
 var SAVE=loadSave();
+/* Namen und Beschreibungen der Erfolge liegen in den Sprachtabellen
+   (Schlüssel achXxxN / achXxxD); hier stehen nur Signet und Schlüssel. */
 var ACHS={
-  line:{sig:'E',name:'Erste Linie',desc:'Löse deine erste Linie auf.'},
-  zauber:{sig:'Z',name:'Zauberlehrling',desc:'Wähle deine erste Verzauberung.'},
-  wild:{sig:'W',name:'Wildcard',desc:'Platziere eine Wildkarte (6|9 oder 1|7).'},
-  joker:{sig:'J',name:'Joker',desc:'Platziere den Joker als beliebige Ziffer.'},
-  boss:{sig:'B',name:'Bossbezwinger',desc:'Beende dein erstes Boss-Level.'},
-  jaeger:{sig:'D',name:'Diebjäger',desc:'Beende alle drei Zifferndiebe in einem Run.'},
-  meister:{sig:'M',name:'Ziffernmeister',desc:'Gewinne den Standard-Run (Level 10).'},
-  hoch:{sig:'H',name:'Hochstapler',desc:'Erreiche 5000 Punkte in einem Run.'},
-  marathon:{sig:'R',name:'Marathon',desc:'Erreiche Level 15 im Endlos-Modus.'}
+  line:{sig:'E',n:'achLineN',d:'achLineD'},
+  zauber:{sig:'Z',n:'achZauberN',d:'achZauberD'},
+  wild:{sig:'W',n:'achWildN',d:'achWildD'},
+  joker:{sig:'J',n:'achJokerN',d:'achJokerD'},
+  boss:{sig:'B',n:'achBossN',d:'achBossD'},
+  jaeger:{sig:'D',n:'achJaegerN',d:'achJaegerD'},
+  sudoku:{sig:'S',n:'achSudokuN',d:'achSudokuD'},
+  hoch:{sig:'H',n:'achHochN',d:'achHochD'},
+  marathon:{sig:'R',n:'achMarathonN',d:'achMarathonD'}
 };
 var toastQ=[],toastBusy=false;
 function showToast(sig,lbl,name){
@@ -681,31 +1695,78 @@ function unlock(id){
   if(sl.ach[id])return;
   sl.ach[id]={d:new Date().toISOString().slice(0,10)};
   persistSave();
-  showToast(ACHS[id].sig,'Erfolg freigeschaltet',ACHS[id].name);
+  showToast(ACHS[id].sig,tr('toastAch'),tr(ACHS[id].n));
   sfx(880,0.12);setTimeout(function(){sfx(1170,0.18);},120);
 }
 /* ================= Zustand ================= */
 var W=320,H=340,GX=73,GY=40,CELL=18,GSZ=173;
-var C={gridbg:'#142818',cell:'#20362a',cellAlt:'#244030',line:'#3a5c48',sep:'#5a9070',
+var C={gridbg:'#142818',board:'#10241a',cell:'#20362a',cellAlt:'#244030',line:'#3a5c48',sep:'#5a9070',
   bright:'#8ac2a0',digit:'#e8f2ec',magic:'#6ee7c8',gold:'#ffd23f',red:'#ff5555',
-  dim:'#6a8c78',white:'#ffffff',block:'#4a3040',blockbg:'#1a1424'};
+  dim:'#6a8c78',white:'#ffffff',block:'#4a3040',blockbg:'#1a1424',jokerIn:'#2a1c30',jokerQ:'#ffd23f'};
+/* ================= Welten (Brettthemen) ================= */
+/* Neun Themen steuern die Farbgebung des Sudoku-Bretts: das grüne Original,
+   ein monochromes Grau-Blau-Thema, Papier als heller Tinten-Look, das edle
+   Purpur-Gold-Thema, Winter mit Eisblau und Schnee, Himmel auf hellem
+   Wolkenblau, Herbst in Braun und Orange, die rosa Kirschblüte sowie der
+   dunkle Weltraum. applyTheme() überschreibt die Felder von C an Ort und
+   Stelle, sodass alle bestehenden Referenzen (Brettzeichnung, Schwebe-
+   Schatten, Leerlauf-Schrift) automatisch die neuen Farben übernehmen.
+   Die Wahl wird dauerhaft in SAVE.settings.theme gespeichert. */
+var THEMES={
+  orig:{name:'themeOrig',gridbg:'#142818',board:'#10241a',cell:'#20362a',cellAlt:'#244030',
+    sep:'#5a9070',bright:'#8ac2a0',digit:'#e8f2ec',magic:'#6ee7c8',blockbg:'#1a1424',
+    jokerIn:'#2a1c30',jokerQ:'#ffd23f',dim:'#6a8c78',white:'#ffffff'},
+  mono:{name:'themeMono',gridbg:'#10161a',board:'#0c1114',cell:'#1c2c34',cellAlt:'#223440',
+    sep:'#5a7884',bright:'#9ab4be',digit:'#e4f0f4',magic:'#8fc4d8',blockbg:'#141c20',
+    jokerIn:'#26343c',jokerQ:'#ffd23f',dim:'#68808c',white:'#ffffff'},
+  papier:{name:'themePapier',gridbg:'#e8dcc4',board:'#d8c9a8',cell:'#f4ecda',cellAlt:'#ece0c4',
+    sep:'#a8946c',bright:'#6a5636',digit:'#2a2018',magic:'#7a4a8a',blockbg:'#c8b48c',
+    jokerIn:'#b8a476',jokerQ:'#8a6410',dim:'#8a7a5c',white:'#5a4630'},
+  edel:{name:'themeEdel',gridbg:'#0c0812',board:'#080510',cell:'#2e2444',cellAlt:'#262040',
+    sep:'#b99a4d',bright:'#e8d48a',digit:'#f0e8d8',magic:'#ffd23f',blockbg:'#1a1026',
+    jokerIn:'#2e1c40',jokerQ:'#ffd23f',dim:'#8a7a9a',white:'#ffffff'},
+  winter:{name:'themeWinter',gridbg:'#d8e8f4',board:'#c0d4e4',cell:'#f0f6fa',cellAlt:'#e2ecf4',
+    sep:'#8aa8c0',bright:'#4a6a8a',digit:'#24384c',magic:'#3a7ab0',blockbg:'#b8ccdd',
+    jokerIn:'#a4bcd0',jokerQ:'#c07a10',dim:'#6a8aa4',white:'#34506e'},
+  himmel:{name:'themeHimmel',gridbg:'#9ec8ec',board:'#86b4dc',cell:'#d8ecfa',cellAlt:'#bcd8f0',
+    sep:'#6a9ec4',bright:'#2a5a8a',digit:'#123a5c',magic:'#2a8ab0',blockbg:'#78a8cc',
+    jokerIn:'#6494b8',jokerQ:'#b06a08',dim:'#4a7aa0',white:'#1c4468'},
+  herbst:{name:'themeHerbst',gridbg:'#2a1c10',board:'#20140a',cell:'#4a3018',cellAlt:'#54381c',
+    sep:'#a87840',bright:'#d8a860',digit:'#f4e8d0',magic:'#e89a3c',blockbg:'#241608',
+    jokerIn:'#3a2410',jokerQ:'#ffd23f',dim:'#8a6a48',white:'#ffffff'},
+  kirsch:{name:'themeKirsch',gridbg:'#f0dce2',board:'#e2c8d2',cell:'#faf0f4',cellAlt:'#f0dde6',
+    sep:'#c89ab0',bright:'#8a4a68',digit:'#5a2438',magic:'#c04878',blockbg:'#d8b0c2',
+    jokerIn:'#c89ab0',jokerQ:'#a86a08',dim:'#9a6a84',white:'#7a3a58'},
+  weltraum:{name:'themeWeltraum',gridbg:'#080818',board:'#050510',cell:'#181838',cellAlt:'#202048',
+    sep:'#5a5a9a',bright:'#9a9adc',digit:'#e8e8ff',magic:'#6ac8f0',blockbg:'#100c22',
+    jokerIn:'#241c44',jokerQ:'#ffd23f',dim:'#6a6a9a',white:'#ffffff'}
+};
+function applyTheme(){
+  var T=THEMES[SAVE.settings.theme]||THEMES.orig,k;
+  for(k in T){if(k!=='name')C[k]=T[k];}
+}
+/* Joker-Felder ("Blockaden") nützen dem Spieler – mehr davon = leichter,
+   weil sie Linien miterfüllen. Daher invertiert: Leicht erhält +2, Schwer −2. */
 var DIFF={
-  1:{deck:14,block:-2,boss:2},
+  1:{deck:14,block:2,boss:2},
   2:{deck:12,block:0,boss:0},
-  3:{deck:10,block:2,boss:-1}
+  3:{deck:10,block:-2,boss:-1}
 };
+/* Namen und Beschreibungen der Verzauberungen liegen in den Sprachtabellen
+   (Schlüssel upXxxN / upXxxD); hier stehen nur Icon, Klasse und Schlüssel. */
 var UP={
-  w69:{icon:'6|9',cls:'drCatSpell',name:'WILDKARTE 6|9',desc:['Gilt als 6 oder als 9']},
-  w17:{icon:'1|7',cls:'drCatSpell',name:'WILDKARTE 1|7',desc:['Gilt als 1 oder als 7']},
-  joker:{icon:'*',cls:'drCatSpell',name:'JOKER',desc:['Einmal jede Ziffer']},
-  schub:{icon:'+',cls:'drCatSlot',name:'NACHSCHUB',desc:['Drei Karten sofort']},
-  klon:{icon:'K',cls:'drCatMove',name:'KLON',desc:['Zufällige Karte','wird verdoppelt']},
-  meissel:{icon:'M',cls:'drCatStone',name:'MEISSEL',desc:['Bis zu drei Blockaden','entfernen']}
+  w69:{icon:'6|9',cls:'drCatSpell',nk:'upW69n',dk:['upW69d']},
+  w17:{icon:'1|7',cls:'drCatSpell',nk:'upW17n',dk:['upW17d']},
+  joker:{icon:'*',cls:'drCatSpell',nk:'upJokern',dk:['upJokerd']},
+  schub:{icon:'+',cls:'drCatSlot',nk:'upSchubn',dk:['upSchubd']},
+  klon:{icon:'K',cls:'drCatMove',nk:'upKlonn',dk:['upKlond1','upKlond2']},
+  tausch:{icon:'T',cls:'drCatSlot',nk:'upTauschn',dk:['upTauschd1','upTauschd2']}
 };
-var S={running:false,mode:'run',diff:2,level:1,goal:2,lines:0,totLines:0,score:0,
-  grid:[],inv:[],sel:-1,wildChoice:null,boss:null,bossCount:0,swapUsed:false,
+var S={running:false,diff:2,level:1,task:null,totLines:0,score:0,boards:0,
+  grid:[],inv:[],sel:-1,wildChoice:null,boss:null,bossKinds:{},swapUsed:false,swapMax:1,
+  pending:[],
   done:false,doneTimer:0,over:false,
-  floats:[],parts:[],clearFx:[],shake:0,mx:-1,my:-1,time:0,log:[]};
+  floats:[],parts:[],shake:0,mx:-1,my:-1,time:0,log:[]};
 function $(){return document.getElementById(arguments[0]);}
 function rnd(n){return Math.floor(Math.random()*n);}
 function cellRect(r,c){return{x:GX+1+c*(CELL+1),y:GY+1+r*(CELL+1),w:CELL,h:CELL};}
@@ -748,6 +1809,9 @@ function genGrid(l){
     if(openCount(boxIdx(b))<5)continue;
     S.grid[idx].b=true;placed++;
   }
+  /* Linien-Bonus-Merker: 9 Reihen, 9 Spalten, 9 Quadrate (je Brett einmal) */
+  S.lineFlags=[];
+  for(var f=0;f<27;f++)S.lineFlags.push(false);
 }
 function conflicts(r,c,d){
   for(var i=0;i<9;i++){
@@ -770,52 +1834,71 @@ function lineDone(cells){
   }
   return{ok:true,open:open};
 }
-/* ================= Aktionen ================= */
-function doClears(r,c){
-  var lines=[],b=Math.floor(r/3)*3+Math.floor(c/3);
-  var row=lineDone(rowCells(r));if(row.ok)lines.push(rowCells(r));
-  var col=lineDone(colCells(c));if(col.ok)lines.push(colCells(c));
-  var bx=lineDone(boxIdx(b));if(bx.ok)lines.push(boxIdx(b));
-  if(!lines.length)return;
-  var refund=0,pts=0;
-  for(var li=0;li<lines.length;li++){
-    pts+=100+li*100;
-    var cells=lines[li],open=0;
-    for(var i=0;i<cells.length;i++){if(!S.grid[cells[i]].b)open++;}
-    refund+=open;
-    for(i=0;i<cells.length;i++){
-      var g=S.grid[cells[i]];
-      if(!g.b){
-        g.d=0;g.m=false;
-        var rc=cellRect(Math.floor(cells[i]/9),cells[i]%9);
-        S.clearFx.push({x:rc.x,y:rc.y,t:0.25});
-        for(var p=0;p<4;p++)S.parts.push({x:rc.x+9,y:rc.y+9,
-          vx:(Math.random()-0.5)*50,vy:-Math.random()*50-15,life:0.4+Math.random()*0.4,col:'#ffffff'});
-      }
-    }
-  }
-  refund+=lines.length;
-  addCards(refund);
-  S.lines+=lines.length;S.totLines+=lines.length;S.score+=pts;
-  unlock('line');
-  if(S.score>=5000)unlock('hoch');
-  var cr=cellRect(r,c);
-  S.floats.push({t:'+'+pts,x:cr.x,y:cr.y-10,col:'#ffd23f',life:1});
-  addLog(lines.length+' Linie(n) aufgeloest! +'+refund+' Karten','#3fbf3f');
-  sfx(660,0.12);setTimeout(function(){sfx(880,0.15);},90);
-  renderDeck();renderStatus();
+/* ================= Aktionen & Aufgaben ================= */
+var TASKTYPES=['rows','cols','boxes'];
+var TASKLBL={rows:'taskRows',cols:'taskCols',boxes:'taskBoxes'};
+var TASKNAME={rows:'taskRowsN',cols:'taskColsN',boxes:'taskBoxesN'};
+function progressForType(type){
+  if(!S.grid.length)return 0;
+  var n=0,i;
+  if(type==='rows'){for(i=0;i<9;i++)if(lineDone(rowCells(i)).ok)n++;}
+  else if(type==='cols'){for(i=0;i<9;i++)if(lineDone(colCells(i)).ok)n++;}
+  else{for(i=0;i<9;i++)if(lineDone(boxIdx(i)).ok)n++;}
+  return n;
 }
-function bossSteal(){
+function nextTask(l){
+  var t={type:TASKTYPES[(l-1)%3],count:Math.min(2+Math.floor((l-1)/3),6)};
+  var cur=progressForType(t.type);
+  if(cur>=t.count)t.count=cur+1;
+  return t;
+}
+function taskLabel(t){return t.count+' '+tr(TASKNAME[t.type]);}
+function boardFull(){
+  if(!S.grid.length)return false;
+  for(var i=0;i<81;i++){var g=S.grid[i];if(!g.b&&!g.d)return false;}
+  return true;
+}
+function bossAct(){
   S.boss.timer=0;
-  if(!S.inv.length)return;
-  var i=rnd(S.inv.length);
-  S.inv.splice(i,1);
-  if(S.sel===i)S.sel=-1;else if(S.sel>i)S.sel--;
-  S.wildChoice=null;
-  S.shake=6;
-  sfx(220,0.25,'square',0.2,-160);
-  S.floats.push({t:'-1 KARTE!',x:180,y:250,col:'#ff5555',life:1});
-  addLog('Der Zifferndieb klaut eine Karte!','#ff5555');
+  var k=S.boss.kind;
+  if(k==='dieb'){
+    if(!S.inv.length)return;
+    var i=rnd(S.inv.length);
+    S.inv.splice(i,1);
+    if(S.sel===i)S.sel=-1;else if(S.sel>i)S.sel--;
+    S.wildChoice=null;
+    S.shake=6;
+    sfx(220,0.25,'square',0.2,-160);
+    S.floats.push({t:tr('flCard'),x:180,y:250,col:'#ff5555',life:1});
+    addLog(tr('logDieb'),'#ff5555');
+  }else if(k==='riss'){
+    var cand=[];
+    for(var j=0;j<81;j++)if(S.grid[j].d)cand.push(j);
+    if(!cand.length)return;
+    var idx=cand[rnd(cand.length)];
+    S.grid[idx].d=0;S.grid[idx].m=false;
+    var rc=cellRect(Math.floor(idx/9),idx%9);
+    for(var p=0;p<5;p++)S.parts.push({x:rc.x+9,y:rc.y+9,
+      vx:(Math.random()-0.5)*60,vy:-Math.random()*60-20,life:0.4+Math.random()*0.4,col:'#ff5555'});
+    S.shake=6;
+    sfx(160,0.3,'sawtooth',0.2,-100);
+    S.floats.push({t:tr('flGap'),x:rc.x,y:rc.y-10,col:'#ff5555',life:1});
+    addLog(tr('logRiss'),'#ff5555');
+  }else{
+    var idxs=[];
+    for(var q=0;q<S.inv.length;q++)if(S.inv[q].kind==='n')idxs.push(q);
+    if(!idxs.length)return;
+    var hits=Math.min(2,idxs.length);
+    for(var n=0;n<hits;n++){
+      var pick=idxs[rnd(idxs.length)];
+      S.inv[pick].d=1+rnd(9);
+    }
+    S.wildChoice=null;
+    S.shake=5;
+    sfx(300,0.25,'triangle',0.2,200);
+    S.floats.push({t:tr('flConfuse'),x:150,y:250,col:'#9a6af0',life:1});
+    addLog(tr('logWirbler'),'#9a6af0');
+  }
   renderDeck();renderStatus();renderBoss();renderChoose();
 }
 function tryPlace(r,c){
@@ -827,21 +1910,49 @@ function tryPlace(r,c){
   if(g.d){sfx(120,0.1,'sawtooth');return;}
   if(conflicts(r,c,d)){
     sfx(110,0.18,'sawtooth');S.shake=5;
-    S.floats.push({t:'KONFLIKT!',x:rc.x,y:rc.y-10,col:'#ff5555',life:1});
+    S.floats.push({t:tr('flConflict'),x:rc.x,y:rc.y-10,col:'#ff5555',life:1});
     return;
   }
   g.d=d;g.m=(card.kind!=='n');
   if(card.kind==='w')unlock('wild');
   if(card.kind==='j')unlock('joker');
   S.inv.splice(S.sel,1);S.sel=-1;S.wildChoice=null;
+  S.score+=10;
+  if(S.score>=5000)unlock('hoch');
   sfx(500,0.07);
-  doClears(r,c);
-  var doneNow=(S.lines>=S.goal);
-  if(!doneNow&&S.boss){
-    S.boss.timer++;
-    if(S.boss.timer>=S.boss.every)bossSteal();
+  /* Linien-Bonus: jede erstmals volle Reihe/Spalte/Quadrat gibt zwei Bonuskarten */
+  var lb=0;
+  var lr=r,lc=9+c,lx=18+(Math.floor(r/3)*3+Math.floor(c/3));
+  if(!S.lineFlags[lr]&&lineDone(rowCells(r)).ok){S.lineFlags[lr]=true;lb++;}
+  if(!S.lineFlags[lc]&&lineDone(colCells(c)).ok){S.lineFlags[lc]=true;lb++;}
+  if(!S.lineFlags[lx]&&lineDone(boxIdx(lx-18)).ok){S.lineFlags[lx]=true;lb++;}
+  if(lb){
+    addCards(2*lb);
+    S.floats.push({t:trf('flCards',{n:2*lb}),x:rc.x,y:rc.y-10,col:'#3fbf3f',life:1});
+    addLog(trf(lb>1?'logLineN':'logLine1',{k:lb,n:2*lb}),'#3fbf3f');
+    sfx(660,0.12);setTimeout(function(){sfx(880,0.15);},90);
+  }
+  /* Nachziehstapel: nach jeder Platzierung wandert eine neue Karte auf den Tisch */
+  addCards(1);
+  /* Sudoku gelöst: Bonuspunkte, neues Brett, Aufgabe gilt als erfüllt */
+  if(boardFull()){
+    S.score+=1000;
+    S.boards++;
+    unlock('sudoku');
+    addLog(tr('logSudoku'),'#ffd23f');
+    sfx(800,0.2);setTimeout(function(){sfx(1100,0.25);},200);
+    setTimeout(function(){sfx(1400,0.3);},400);
+    S.floats.push({t:'+1000',x:150,y:180,col:'#ffd23f',life:1});
+    genGrid(S.level+1);
+    levelDone();
+    return;
   }
   renderDeck();renderStatus();renderBoss();renderChoose();
+  var doneNow=(progressForType(S.task.type)>=S.task.count);
+  if(!doneNow&&S.boss){
+    S.boss.timer++;
+    if(S.boss.timer>=S.boss.every)bossAct();
+  }
   if(doneNow){levelDone();return;}
   checkDeadlock();
 }
@@ -862,47 +1973,56 @@ function canPlaceAny(){
 }
 function checkDeadlock(){
   if(canPlaceAny())return;
-  if(!S.inv.length){gameOver('KEINE KARTEN MEHR');}
+  if(!S.inv.length){gameOver(tr('reasonNoCards'));}
   else if(!S.swapUsed){
-    addLog('Festgefahren – nur noch der Tausch rettet!','#ff5555');
+    addLog(tr('logDeadlock'),'#ff5555');
     sfx(200,0.2,'sawtooth');
-  }else{gameOver('FESTGEFAHREN');}
+  }else{gameOver(tr('reasonStuck'));}
 }
 function swap(){
-  if(!S.running||S.over||S.swapUsed||!S.inv.length)return;
+  if(!S.running||S.over||S.swapUsed>=S.swapMax||!S.inv.length)return;
   S.swapUsed=true;S.inv=[];S.sel=-1;S.wildChoice=null;
   addCards(6);
-  addLog('Karten getauscht: sechs neue gezogen','#3fbf3f');
+  addLog(tr('logSwap'),'#3fbf3f');
   sfx(300,0.1);setTimeout(function(){sfx(450,0.1);},100);
   renderDeck();renderStatus();renderChoose();
   checkDeadlock();
 }
-/* ================= Level ================= */
-function isBossLevel(l){return S.mode==='endless'?(l%3===0):(l===3||l===6||l===9);}
-function bossEvery(l){
-  var m=DIFF[S.diff].boss;
-  if(S.mode==='run'){return Math.max(2,(l===3?5:l===6?4:3)+m);}
-  return Math.max(2,6-Math.floor(l/3)+m);
-}
+/* ================= Level & Bosse ================= */
+/* Boss-Namen liegen in den Sprachtabellen (Schlüssel bossXxx); die Römische
+   Ziffer kennzeichnet die zweite, dritte und weitere Runde der Rotation. */
+var BOSSES=[
+  {kind:'dieb',nk:'bossDieb',pal:0},
+  {kind:'riss',nk:'bossRiss',pal:1},
+  {kind:'wirbler',nk:'bossWirbler',pal:2}
+];
+function isBossLevel(l){return l%3===0;}
+function bossEvery(l){return Math.max(2,6-Math.floor(l/3)+DIFF[S.diff].boss);}
 function startLevel(l){
   S.log=[];
   $('logList').innerHTML='';
   S.level=l;
-  S.goal=Math.min(2+Math.floor((l-1)/2),7);
-  S.lines=0;S.swapUsed=false;S.done=false;S.boss=null;
-  genGrid(l);
+  S.task=nextTask(l);
+  S.swapUsed=false;S.done=false;S.boss=null;
+  if(!S.grid.length)genGrid(l);
   if(isBossLevel(l)){
-    var palIdx=Math.max(0,Math.min(2,Math.floor(l/3)-1));
-    S.boss={every:bossEvery(l),timer:0,pal:palIdx,
-      name:'ZIFFERNDIEB'+(l>=9?' III':l>=6?' II':'')};
+    var cyc=Math.floor(l/3);
+    var bi=(cyc-1)%3;
+    var big=Math.floor((cyc-1)/3);
+    var bs=BOSSES[bi];
+    var ev=bossEvery(l);
+    S.boss={kind:bs.kind,pal:bs.pal,every:ev,timer:0,
+      name:tr(bs.nk)+(big===1?' II':big===2?' III':big>=3?' IV':''),
+      desc:trf(bs.kind==='dieb'?'bossDiebD':bs.kind==='riss'?'bossRissD':'bossWirblerD',{n:ev})};
     sfx(180,0.3,'sawtooth',0.2,-60);
-    addLog('Level '+l+' – Ziel: '+S.goal+' Linien','#ffd23f');
-    addLog('Boss aktiv: '+S.boss.name+' klaut jede '+S.boss.every+'. Karte','#ff9a6a');
-  }else{
-    addLog('Level '+l+' – Ziel: '+S.goal+' Linien','#ffd23f');
+    addLog(trf('logBoss',{b:S.boss.name,d:S.boss.desc}),'#ff9a6a');
   }
-  var top=DIFF[S.diff].deck;
-  while(S.inv.length<top)addCards(1);
+  addLog(trf('logLevel',{n:l,t:taskLabel(S.task)}),'#ffd23f');
+  var cap=DIFF[S.diff].deck;
+  while(S.inv.length<cap){
+    if(S.pending.length)S.inv.push({kind:'n',d:S.pending.shift()});
+    else S.inv.push({kind:'n',d:1+rnd(9)});
+  }
   renderDeck();renderStatus();renderBoss();renderChoose();
 }
 function pick3(){
@@ -915,22 +2035,32 @@ function pick3(){
 }
 function levelDone(){
   S.done=true;S.doneTimer=0.9;
-  S.score+=250*S.level;
+  var pts=250*S.level+100*S.task.count;
+  S.score+=pts;S.totLines+=S.task.count;
+  unlock('line');
   sfx(700,0.2);setTimeout(function(){sfx(1000,0.25);},180);
-  addLog('Level '+S.level+' geschafft! +'+(250*S.level)+' Punkte','#ffd23f');
+  addLog(trf('logDone',{p:pts}),'#ffd23f');
   renderStatus();
 }
 function openLevelModal(){
   var opts=pick3(),box=$('upCards');
   box.innerHTML='';
-  $('levelDone').textContent='Level '+S.level+' geschafft – Punkte: '+S.score;
+  $('levelDone').textContent=trf('levelDoneTxt',{n:S.level,p:S.score});
+  var nt=nextTask(S.level+1);
+  var cap=DIFF[S.diff].deck,need=Math.max(0,cap-S.inv.length),pend=[];
+  for(var i=0;i<need;i++)pend.push(1+rnd(9));
+  S.pending=pend;
+  $('levelSub').innerHTML=trf('nextTaskTxt',{t:taskLabel(nt)})+
+    '<br>'+tr('supplyTxt')+': '+(pend.length?pend.join(' · '):tr('noSupply'))+
+    '<br>'+tr('levelChoose');
   unlock('zauber');
   for(var i=0;i<opts.length;i++){
     (function(key){
       var u=UP[key],el=document.createElement('button');
       el.className='drCardBox';
       el.innerHTML='<span class="drCard '+u.cls+'"><span class="upIco">'+u.icon+'</span>'+
-        '<span class="upName">'+u.name+'</span><span class="upDesc">'+u.desc.join('<br>')+'</span></span>';
+        '<span class="upName">'+tr(u.nk)+'</span><span class="upDesc">'+
+        u.dk.map(function(k){return tr(k);}).join('<br>')+'</span></span>';
       el.addEventListener('click',function(){applyUpgrade(key);});
       box.appendChild(el);
     })(opts[i]);
@@ -940,37 +2070,33 @@ function openLevelModal(){
 function applyUpgrade(key){
   $('levelModal').classList.add('hidden');
   var l=S.level;
-  var wasBoss=S.boss!==null;
-  if(wasBoss){
-    S.bossCount++;
+  var bk=S.boss?S.boss.kind:null;
+  if(bk){
+    S.bossKinds[bk]=1;
     unlock('boss');
-    if(S.bossCount>=3)unlock('jaeger');
+    if(Object.keys(S.bossKinds).length>=3)unlock('jaeger');
   }
-  if(S.mode==='run'&&l>=10){victory();return;}
-  if(S.mode==='endless'&&l>=15)unlock('marathon');
   startLevel(l+1);
   if(key==='w69')S.inv.push({kind:'w',a:6,b:9});
   if(key==='w17')S.inv.push({kind:'w',a:1,b:7});
   if(key==='joker')S.inv.push({kind:'j'});
   if(key==='schub')addCards(3);
+  if(key==='tausch')S.swapMax++;
   if(key==='klon'){
     if(S.inv.length){var src=S.inv[rnd(S.inv.length)];
       S.inv.push({kind:src.kind,d:src.d,a:src.a,b:src.b});}
     else addCards(1);
   }
-  if(key==='meissel'){
-    var n=0,guard=0;
-    while(n<3&&guard<300){guard++;var i=rnd(81);if(S.grid[i].b){S.grid[i].b=false;n++;}}
-    if(n)addLog('Meissel entfernt '+n+' Blockade(n)','#3fbf3f');
-  }
   sfx(900,0.15);
   renderDeck();renderStatus();
 }
-function initRun(mode,diff){
-  S.mode=mode;S.diff=diff;
+function initRun(diff){
+  S.diff=diff;
   S.score=0;S.inv=[];S.totLines=0;S.sel=-1;S.wildChoice=null;
-  S.bossCount=0;S.over=false;S.running=true;
-  S.floats=[];S.parts=[];S.clearFx=[];S.shake=0;
+  S.bossKinds={};S.swapMax=1;S.pending=[];
+  S.over=false;S.running=true;
+  S.grid=[];
+  S.floats=[];S.parts=[];S.shake=0;
   $('overOverlay').classList.add('hidden');
   $('levelModal').classList.add('hidden');
   $('promoBanner').classList.remove('hidden');
@@ -982,6 +2108,8 @@ function runEndStats(win){
   var st=slot().stats;
   st.runs++;
   if(win)st.wins++;
+  st.boards+=S.boards||0;
+  S.boards=0;
   if(S.score>st.bestScore)st.bestScore=S.score;
   if(S.level>st.bestLevel)st.bestLevel=S.level;
   st.linesTotal+=S.totLines;
@@ -991,37 +2119,27 @@ function gameOver(reason){
   S.over=true;S.running=false;
   runEndStats(false);
   sfx(300,0.4,'sawtooth',0.25,-200);
-  $('overTitle').textContent='GAME OVER';
+  $('overTitle').textContent=tr('overTitle');
   $('overTitle').style.color='#ff5555';
-  $('overMeta').textContent='Punkte: '+S.score+' · Level: '+S.level+' · Linien: '+S.totLines;
-  $('overReason').textContent=reason+' – der Run endet hier.';
+  $('overMeta').textContent=trf('overMeta',{p:S.score,l:S.level,t:S.totLines});
+  $('overReason').textContent=trf('overReason',{r:reason});
   $('overOverlay').classList.remove('hidden');
-  addLog('Run beendet: '+reason,'#ff5555');
-}
-function victory(){
-  S.over=true;S.running=false;
-  runEndStats(true);
-  unlock('meister');
-  sfx(600,0.2);setTimeout(function(){sfx(800,0.2);},200);
-  setTimeout(function(){sfx(1000,0.3);},400);setTimeout(function(){sfx(1200,0.4);},600);
-  $('overTitle').textContent='SIEG!';
-  $('overTitle').style.color='#ffd23f';
-  $('overMeta').textContent='Punkte: '+S.score+' · Linien: '+S.totLines;
-  $('overReason').textContent='Alle zehn Level geschafft – die Ziffern sind entzaubert!';
-  $('overOverlay').classList.remove('hidden');
+  addLog(trf('logOver',{r:reason}),'#ff5555');
 }
 /* ================= DOM-Rendering ================= */
 function renderStatus(){
-  $('stLevel').textContent='LEVEL '+S.level;
-  $('stGoal').textContent='ZIEL '+S.lines+'/'+S.goal;
-  $('stScore').textContent='PUNKTE '+S.score;
-  $('stMode').textContent=S.mode==='run'?'RUN':'ENDLOS';
-  $('stRight').textContent='KARTEN '+S.inv.length;
+  $('stLevel').textContent=trf('stLevel',{n:S.level});
+  if(S.task&&S.grid.length){
+    $('stGoal').textContent=trf('stGoal',{a:progressForType(S.task.type),b:S.task.count,t:tr(TASKLBL[S.task.type])});
+  }else{$('stGoal').textContent=tr('stGoal0');}
+  $('stScore').textContent=trf('stScore',{n:S.score});
+  $('stMode').textContent=tr('stMode');
+  $('stRight').textContent=trf('stRight',{n:S.inv.length});
   var sb=$('swapBtn');
   if(!S.running){sb.disabled=true;}
-  else{sb.disabled=S.swapUsed||!S.inv.length;
-    if(S.swapUsed){sb.classList.remove('warnOpt');sb.classList.add('selOpt');sb.textContent='Tausch: benutzt';}
-    else{sb.classList.remove('selOpt');sb.classList.add('warnOpt');sb.textContent='Tausch (1×)';}
+  else{sb.disabled=S.swapUsed>=S.swapMax||!S.inv.length;
+    if(S.swapUsed>=S.swapMax){sb.classList.remove('warnOpt');sb.classList.add('selOpt');sb.textContent=tr('swapUsed');}
+    else{sb.classList.remove('selOpt');sb.classList.add('warnOpt');sb.textContent=trf('swapLeft',{n:S.swapMax-S.swapUsed});}
   }
 }
 function drawCardCv(cvs,card){
@@ -1041,7 +2159,7 @@ function renderDeck(){
       var b=document.createElement('button');
       b.className='zCard'+(card.kind==='w'?' kindW':card.kind==='j'?' kindJ':'')+
         (S.sel===idx?' selOpt':'');
-      b.title=card.kind==='n'?('Ziffer '+card.d):(card.kind==='w'?('Wildkarte '+card.a+'|'+card.b):'Joker – jede Ziffer');
+      b.title=card.kind==='n'?trf('ttDigit',{d:card.d}):(card.kind==='w'?trf('ttWild',{a:card.a,b:card.b}):tr('ttJoker'));
       var cvs=document.createElement('canvas');cvs.width=28;cvs.height=35;
       drawCardCv(cvs,card);
       b.appendChild(cvs);
@@ -1049,7 +2167,7 @@ function renderDeck(){
       hand.appendChild(b);
     })(i);
   }
-  $('stRight').textContent='KARTEN '+S.inv.length;
+  $('stRight').textContent=trf('stRight',{n:S.inv.length});
 }
 function selectCard(i){
   if(S.sel===i){S.sel=-1;S.wildChoice=null;}
@@ -1075,7 +2193,7 @@ function renderChoose(){
       b.className='btn small czBtn'+(S.wildChoice===d?' selOpt':'');
       b.textContent=d;
       b.addEventListener('click',function(){
-        S.wildChoice=d;sfx(700,0.05);renderChoose();
+        S.wildChoice=d;renderChoose();
       });
       row.appendChild(b);
     })(ds[i]);
@@ -1087,91 +2205,89 @@ function renderBoss(){
   p.classList.remove('hidden');
   drawSprite($('bossCv').getContext('2d'),BOSSROWS,BOSSPAL[S.boss.pal],0,0,1);
   $('bossName').textContent=S.boss.name;
-  $('bossDesc').textContent='Klaut nach je '+S.boss.every+' Platzierungen eine Karte';
+  $('bossDesc').textContent=S.boss.desc;
   var prog=$('bossProg');prog.innerHTML='';
   for(var i=0;i<S.boss.every;i++){
     var sq=document.createElement('span');
     sq.className='bpSq'+(i<S.boss.timer?' on':'');
     prog.appendChild(sq);
   }
-  $('bossWarn').textContent=(S.boss.timer===S.boss.every-1)?'ACHTUNG: NÄCHSTE PLATZIERUNG KLAUT!':'';
+  $('bossWarn').textContent=(S.boss.timer===S.boss.every-1)?tr('bossWarn'):'';
 }
 function renderSaveMenu(){
-  var i,k;
-  /* Slot-Liste */
-  var sl2=$('slotList');
-  sl2.innerHTML='';
+  var i;
+  /* Slot-Liste: Zeile mit den drei Aktionsknöpfen wie in Tetromino */
+  var html='';
   for(i=0;i<SAVE.slots.length;i++){
-    (function(idx){
-      var sl=SAVE.slots[idx],st=sl.stats;
-      var row=document.createElement('button');
-      row.className='slotRow'+(idx===SAVE.active?' act':'');
-      var meta='Punkte: '+st.bestScore+' · Level: '+st.bestLevel+
-        ' · Linien: '+st.linesTotal+' · Erfolge: '+Object.keys(sl.ach).length;
-      if(sl.updated)meta+=' · Stand: '+sl.updated.slice(0,10);
-      row.innerHTML='<span class="slotBody"><b>'+sl.name+'</b><span class="slotMeta">'+meta+'</span></span>';
-      row.addEventListener('click',function(){
-        if(SAVE.active===idx)return;
-        SAVE.active=idx;persistSave();sfx(600,0.05);renderSaveMenu();
-      });
-      sl2.appendChild(row);
-    })(i);
+    var sl=SAVE.slots[i];
+    var meta='';
+    if(sl.updated)meta+=sl.updated.slice(0,10)+' · ';
+    meta+=trf('slotRuns',{n:sl.stats.runs})+' · '+trf('slotAch',{a:Object.keys(sl.ach).length,t:Object.keys(ACHS).length});
+    html+='<div class="slotRow'+(i===SAVE.active?' act':'')+'">'+
+      '<span class="slotBody"><b>'+sl.name+(i===SAVE.active?tr('slotActive'):'')+'</b>'+
+      '<span class="slotMeta">'+meta+'</span></span>'+
+      '<span class="slotActs">'+
+      '<button class="btn small" data-slot="'+i+'" data-act="act">'+tr('btnAct')+'</button>'+
+      '<button class="btn small" data-slot="'+i+'" data-act="dl">'+tr('btnHtml')+'</button>'+
+      '<button class="btn small" data-slot="'+i+'" data-act="del">'+tr('btnDel')+'</button>'+
+      '</span></div>';
   }
+  $('slotList').innerHTML=html;
   /* Statistik des aktiven Slots */
-  var st=slot().stats,slst=$('statList');
-  slst.innerHTML='';
+  var st=slot().stats;
   var rows=[
-    ['Runs gespielt',st.runs],
-    ['Gewonnene Standard-Runs',st.wins],
-    ['Bester Punktestand',st.bestScore],
-    ['Höchstes Level',st.bestLevel],
-    ['Linien aufgelöst (gesamt)',st.linesTotal]
+    [tr('statRuns'),st.runs],
+    [tr('statBoards'),st.boards],
+    [tr('statBest'),st.bestScore],
+    [tr('statLevel'),st.bestLevel],
+    [tr('statLines'),st.linesTotal]
   ];
-  for(i=0;i<rows.length;i++){
-    var d=document.createElement('div');
-    d.className='statRow';
-    d.textContent=rows[i][0]+': '+rows[i][1];
-    slst.appendChild(d);
-  }
-  /* Erfolge des aktiven Slots */
-  var al=$('achList');al.innerHTML='';
+  var sh='';
+  for(i=0;i<rows.length;i++)sh+='<div class="statRow">'+rows[i][0]+': '+rows[i][1]+'</div>';
+  $('statList').innerHTML=sh;
+  /* Erfolge des aktiven Slots: freigeschaltete zeigen ein Häkchen */
+  var ah='';
   var keys=Object.keys(ACHS);
-  for(k=0;k<keys.length;k++){
-    var key=keys[k],a=ACHS[key],got=slot().ach[key];
-    var r2=document.createElement('div');
-    r2.className='achRow'+(got?'':' locked');
-    r2.innerHTML='<span class="achSig">'+a.sig+'</span><span class="achBody">'+
-      '<span class="achName">'+a.name+'</span><span class="achDesc">'+a.desc+'</span>'+
-      '<span class="achDate">'+(got?('Freigeschaltet: '+got.d):'Noch nicht freigeschaltet')+'</span></span>';
-    al.appendChild(r2);
+  for(i=0;i<keys.length;i++){
+    var key=keys[i],a=ACHS[key],got=slot().ach[key];
+    ah+='<div class="achRow'+(got?'':' locked')+'">'+
+      '<span class="achSig">'+(got?'\u2713':a.sig)+'</span><span class="achBody">'+
+      '<span class="achName">'+tr(a.n)+'</span><span class="achDesc">'+tr(a.d)+'</span>'+
+      '<span class="achDate">'+(got?trf('achDate',{d:got.d}):tr('achLocked'))+'</span></span></div>';
   }
+  $('achList').innerHTML=ah;
+  resetArmed=0;
+  $('slotResetAll').textContent=tr('slotResetAllLbl');
+  saveNoteMsg('');
 }
 function slotNew(){
-  if(SAVE.slots.length>=8){noteSave('Maximal acht Spielstände möglich.');return;}
+  if(SAVE.slots.length>=8){saveNoteMsg(tr('noteMax'));return;}
   var maxId=1;
   for(var i=0;i<SAVE.slots.length;i++){if(SAVE.slots[i].id>maxId)maxId=SAVE.slots[i].id;}
-  SAVE.slots.push(normalizeSlot({id:maxId+1,name:'Spielstand '+(SAVE.slots.length+1),updated:''}));
+  SAVE.slots.push(normalizeSlot({id:maxId+1,name:trf('slotName',{n:SAVE.slots.length+1}),updated:''}));
   SAVE.active=SAVE.slots.length-1;
-  persistSave();renderSaveMenu();sfx(700,0.06);
+  persistSave();renderSaveMenu();
 }
-var resetArmed=0;
-function slotResetAll(){
-  var b=$('slotResetAll');
-  if(!resetArmed){
-    resetArmed=1;
-    b.textContent='Wirklich alle zurücksetzen?';
-    setTimeout(function(){resetArmed=0;if(b)b.textContent='Alle zurücksetzen';},4000);
-    return;
-  }
-  resetArmed=0;b.textContent='Alle zurücksetzen';
-  SAVE=makeDefaultSave();
-  persistSave();renderSaveMenu();sfx(200,0.2,'sawtooth');
-  noteSave('Alle Spielstände wurden zurückgesetzt.');
+function activateSlot(idx){
+  if(SAVE.active===idx)return;
+  SAVE.active=idx;persistSave();renderSaveMenu();
 }
-function slotExport(){
+function delSlot(idx){
+  SAVE.slots.splice(idx,1);
+  if(!SAVE.slots.length){
+    SAVE.slots=[normalizeSlot({id:1,name:trf('slotName',{n:1}),updated:''})];
+    SAVE.active=0;
+  }else if(SAVE.active===idx){SAVE.active=Math.min(idx,SAVE.slots.length-1);}
+  else if(SAVE.active>idx){SAVE.active--;}
+  persistSave();renderSaveMenu();
+  saveNoteMsg(tr('noteDeleted'));
+}
+function downloadSlot(idx){
   try{
+    var clone=JSON.parse(JSON.stringify(SAVE));
+    clone.active=idx;
     var html='<!doctype html>\n'+document.documentElement.outerHTML;
-    var json=JSON.stringify(SAVE);
+    var json=JSON.stringify(clone);
     html=html.replace(/(<script id="saveSlot" type="application\/json">)[\s\S]*?(<\/script>)/,
       function(m,a,b){return a+json+b;});
     var blob=new Blob([html],{type:'text/html'});
@@ -1180,27 +2296,43 @@ function slotExport(){
     a.download='numerino-spielstand.html';
     document.body.appendChild(a);a.click();
     setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},2000);
-    noteSave('Spielstand als HTML-Datei exportiert.');
+    saveNoteMsg(tr('noteExported'));
   }catch(e){
-    noteSave('Export blockiert: Lade die Spieldatei herunter und öffne sie direkt im Browser.');
+    saveNoteMsg(tr('noteExportBlocked'));
   }
 }
-function noteSave(t){
-  var n=$('saveNote');n.textContent=t;
-  n.style.color='#ff9a6a';
+function saveNoteMsg(t){
+  var n=$('saveNote');
+  n.textContent=t||'';
+  n.classList.toggle('hidden',!t);
+}
+var resetArmed=0;
+function slotResetAll(){
+  var b=$('slotResetAll');
+  if(!resetArmed){
+    resetArmed=1;
+    b.textContent=tr('resetArmedLbl');
+    setTimeout(function(){resetArmed=0;if(b)b.textContent=tr('slotResetAllLbl');},4000);
+    return;
+  }
+  resetArmed=0;b.textContent=tr('slotResetAllLbl');
+  SAVE=makeDefaultSave();
+  persistSave();renderSaveMenu();
+  sfx(200,0.2,'sawtooth');
+  saveNoteMsg(tr('noteReset'));
 }
 /* ================= Canvas-Rendering ================= */
 var cv=$('board'),ctx=cv.getContext('2d');
 function drawGrid(){
   ctx.fillStyle=C.gridbg;ctx.fillRect(0,0,W,H);
-  ctx.fillStyle='#10241a';ctx.fillRect(GX-2,GY-2,GSZ+4,GSZ+4);
+  ctx.fillStyle=C.board;ctx.fillRect(GX-2,GY-2,GSZ+4,GSZ+4);
   for(var r=0;r<9;r++)for(var c=0;c<9;c++){
     var g=S.grid[r*9+c],rc=cellRect(r,c);
     if(!S.grid.length)break;
     if(g.b){
       ctx.fillStyle=C.blockbg;ctx.fillRect(rc.x,rc.y,CELL,CELL);
-      ctx.fillStyle=C.block;
-      for(var k=0;k<CELL;k+=2){ctx.fillRect(rc.x+k,rc.y+k,2,2);ctx.fillRect(rc.x+CELL-2-k,rc.y+k,2,2);}
+      ctx.fillStyle=C.jokerIn;ctx.fillRect(rc.x+2,rc.y+2,CELL-4,CELL-4);
+      drawTxt(ctx,'?',rc.x+6,rc.y+4,C.jokerQ,2);
     }else{
       ctx.fillStyle=((Math.floor(r/3)+Math.floor(c/3))%2===0)?C.cell:C.cellAlt;
       ctx.fillRect(rc.x,rc.y,CELL,CELL);
@@ -1216,12 +2348,6 @@ function drawGrid(){
   ctx.fillStyle=C.bright;
   ctx.fillRect(GX-2,GY-2,GSZ+4,2);ctx.fillRect(GX-2,GY+GSZ,GSZ+4,2);
   ctx.fillRect(GX-2,GY-2,2,GSZ+4);ctx.fillRect(GX+GSZ,GY-2,2,GSZ+4);
-  for(var f=0;f<S.clearFx.length;f++){
-    var fx=S.clearFx[f];
-    ctx.globalAlpha=Math.min(0.6,fx.t*2.4);
-    ctx.fillStyle='#ffffff';ctx.fillRect(fx.x,fx.y,CELL,CELL);
-    ctx.globalAlpha=1;
-  }
 }
 function markRed(i){
   var rc=cellRect(Math.floor(i/9),i%9);
@@ -1288,14 +2414,12 @@ function update(dt){
   if(S.shake>0)S.shake=Math.max(0,S.shake-dt*18);
   S.floats=S.floats.filter(function(f){f.life-=dt*0.8;f.y-=dt*14;return f.life>0;});
   S.parts=S.parts.filter(function(p){p.life-=dt;p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=140*dt;return p.life>0;});
-  S.clearFx=S.clearFx.filter(function(fx){fx.t-=dt;return fx.t>0;});
   if(S.done&&S.running){
     S.doneTimer-=dt;
     if(S.doneTimer<=0){
       S.done=false;
-      if(S.mode==='run'&&S.level>=10){victory();}
-      else if(S.mode==='endless'&&S.level>=15){unlock('marathon');openLevelModal();}
-      else{openLevelModal();}
+      if(S.level>=15)unlock('marathon');
+      openLevelModal();
     }
   }
 }
@@ -1325,33 +2449,60 @@ cv.addEventListener('pointermove',function(e){
 });
 cv.addEventListener('pointerleave',function(){S.mx=-1;S.my=-1;});
 /* ================= Menüs & Buttons ================= */
-function openMenu(){$('menuOverlay').classList.remove('hidden');}
+function openMenu(){
+  $('menuOverlay').classList.remove('hidden');
+  /* Die Schwierigkeitswahl gehört zur Startvorbereitung und darf beim
+     Rückkehren ins Hauptmenü nicht offen stehen bleiben (wie in Tetromino). */
+  $('diffRow').classList.add('hidden');
+}
 function closeMenu(){$('menuOverlay').classList.add('hidden');}
 $('menuBtn').addEventListener('click',openMenu);
 $('menuBack').addEventListener('click',closeMenu);
-$('runBtn').addEventListener('click',function(){initRun('run',S.diff);});
-$('endlessBtn').addEventListener('click',function(){initRun('endless',S.diff);});
+$('stdBtn').addEventListener('click',function(){
+  $('diffRow').classList.remove('hidden');
+  markDiff();
+});
 Array.prototype.forEach.call(document.querySelectorAll('.diffBtn'),function(b){
   b.addEventListener('click',function(){
-    Array.prototype.forEach.call(document.querySelectorAll('.diffBtn'),function(x){x.classList.remove('selOpt');});
-    b.classList.add('selOpt');
+    /* Klick auf eine Schwierigkeit startet die Runde (wie in Tetromino) */
     S.diff=parseInt(b.getAttribute('data-diff'),10);
-    sfx(700,0.04);
+    initRun(S.diff);
   });
 });
 $('mRulesBtn').addEventListener('click',function(){$('rulesModal').classList.remove('hidden');});
 $('rulesClose').addEventListener('click',function(){$('rulesModal').classList.add('hidden');});
 $('mSaveBtn').addEventListener('click',function(){renderSaveMenu();$('saveOverlay').classList.remove('hidden');});
 $('saveBack').addEventListener('click',function(){$('saveOverlay').classList.add('hidden');});
+/* Welten: Öffnen zeichnet die Mini-Vorschauen frisch und markiert die Wahl */
+$('mWorldBtn').addEventListener('click',function(){
+  drawThemePreviews();
+  $('themeOverlay').classList.remove('hidden');
+});
+$('worldBack').addEventListener('click',function(){$('themeOverlay').classList.add('hidden');});
 $('slotNew').addEventListener('click',slotNew);
-$('slotExport').addEventListener('click',slotExport);
 $('slotResetAll').addEventListener('click',slotResetAll);
+$('slotList').addEventListener('click',function(e){
+  /* Delegierte Behandlung der drei Aktionsknöpfe je Spielstandszeile */
+  var el=e.target,act=null,idx=-1;
+  while(el&&el.getAttribute){
+    if(el.getAttribute('data-act')){
+      act=el.getAttribute('data-act');
+      idx=parseInt(el.getAttribute('data-slot'),10);
+      break;
+    }
+    el=el.parentNode;
+  }
+  if(act===null||isNaN(idx))return;
+  if(act==='act')activateSlot(idx);
+  else if(act==='dl')downloadSlot(idx);
+  else if(act==='del')delSlot(idx);
+});
 $('mSetBtn').addEventListener('click',function(){renderSettings();$('setModal').classList.remove('hidden');});
 $('setClose').addEventListener('click',function(){$('setModal').classList.add('hidden');});
 $('mInfoBtn').addEventListener('click',function(){$('infoModal').classList.remove('hidden');});
 $('infoClose').addEventListener('click',function(){$('infoModal').classList.add('hidden');});
 $('swapBtn').addEventListener('click',swap);
-$('overRetry').addEventListener('click',function(){initRun(S.mode,S.diff);});
+$('overRetry').addEventListener('click',function(){initRun(S.diff);});
 $('overMenuBtn').addEventListener('click',function(){
   $('overOverlay').classList.add('hidden');S.running=false;openMenu();
 });
@@ -1365,7 +2516,7 @@ $('helpHead').addEventListener('click',function(){
 });
 document.addEventListener('keydown',function(e){
   if(e.key!=='Escape')return;
-  var order=['srcModal','infoModal','setModal','rulesModal','levelModal','saveOverlay'];
+  var order=['srcModal','infoModal','setModal','rulesModal','levelModal','saveOverlay','themeOverlay'];
   for(var i=0;i<order.length;i++){
     var el=$(order[i]);
     if(!el.classList.contains('hidden')){el.classList.add('hidden');return;}
@@ -1375,22 +2526,29 @@ document.addEventListener('keydown',function(e){
 });
 /* ================= Einstellungen ================= */
 function renderSettings(){
-  $('setScan').textContent='Scanlinien: '+(SAVE.settings.scan?'an':'aus');
-  $('setMute').textContent='Ton: '+(SAVE.settings.snd?'an':'aus');
-  $('setLight').textContent='Light-Modus: '+(SAVE.settings.light?'an':'aus');
-  $('setFs').textContent='Vollbildmodus: '+(document.fullscreenElement?'an':'aus');
+  $('setMute').textContent=tr(SAVE.settings.snd?'muteOn':'muteOff');
+  $('setLight').textContent=tr(SAVE.settings.light?'lightOn':'lightOff');
+  $('setFs').textContent=tr(document.fullscreenElement?'fsOn':'fsOff');
+  $('setMus').textContent=tr(musOn?'musOnLbl':'musOffLbl');
+  /* Auswahl-Markierung wie in Tetromino: aktive Zustände sind gelb
+     hinterlegt (Ton aus, Light an, Vollbild an, Musik an) */
+  $('setMute').classList.toggle('selOpt',!SAVE.settings.snd);
+  $('setLight').classList.toggle('selOpt',SAVE.settings.light);
+  $('setFs').classList.toggle('selOpt',!!document.fullscreenElement);
+  $('setMus').classList.toggle('selOpt',musOn);
   $('setVol').value=SAVE.settings.vol;
+  $('setMusVol').value=SAVE.settings.musVol;
 }
 function applyLight(){
   document.documentElement.classList.toggle('light',!!SAVE.settings.light);
 }
-$('setScan').addEventListener('click',function(){
-  SAVE.settings.scan=!SAVE.settings.scan;persistSave();renderSettings();
-  $('scan').style.display=SAVE.settings.scan?'block':'none';
-});
 $('setMute').addEventListener('click',function(){
   SAVE.settings.snd=!SAVE.settings.snd;persistSave();renderSettings();
   if(SAVE.settings.snd)sfx(700,0.06);
+});
+$('setMus').addEventListener('click',function(){toggleMusic();});
+$('setMusVol').addEventListener('input',function(){
+  SAVE.settings.musVol=parseInt(this.value,10);persistSave();
 });
 $('setLight').addEventListener('click',function(){
   SAVE.settings.light=!SAVE.settings.light;applyLight();persistSave();renderSettings();
@@ -1406,9 +2564,55 @@ $('setFs').addEventListener('click',function(){
     setTimeout(renderSettings,300);
   }catch(e){}
 });
-if(!SAVE.settings.scan){$('scan').style.display='none';}
+/* Sprachwahl: sechs Knöpfe mit Pixel-Flagge; die Auswahl wird dauerhaft im
+   localStorage gespeichert und beim Start wiederhergestellt */
+qsa('.setLang').forEach(function(b){
+  b.addEventListener('click',function(){setLang(b.getAttribute('data-lang'));});
+});
+/* Schwierigkeit: die gewählte Stufe ist gelb hinterlegt (wie in Tetromino) */
+function markDiff(){
+  qsa('.diffBtn').forEach(function(b){
+    b.classList.toggle('selOpt',parseInt(b.getAttribute('data-diff'),10)===S.diff);
+  });
+}
+/* Brettthemen: Auswahl übernimmt die Farben sofort und wird dauerhaft
+   gemerkt; die Mini-Vorschauen zeigen stets die Farben des jeweiligen Themas. */
+qsa('.setTheme').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    SAVE.settings.theme=btn.getAttribute('data-theme');
+    persistSave();
+    applyTheme();
+    qsa('.setTheme').forEach(function(b){b.classList.toggle('selOpt',b===btn);});
+  });
+});
+function drawThemePreviews(){
+  /* Jeder Knopf trägt ein zehnmal zehn Pixel großes Vorschaubild (auf 40
+     Bildpunkte skaliert, pixelig wie das Brett): ein 3×3-Ausschnitt im
+     Schachbrettmuster mit Blocktrennern, einem Joker-Feld, einer normalen
+     und einer verzauberten Ziffer sowie dem Brettrahmen. */
+  qsa('.setTheme').forEach(function(btn){
+    var c=btn.querySelector('.thmPrev'),g=c.getContext('2d');
+    var T=THEMES[btn.getAttribute('data-theme')]||THEMES.orig;
+    var x,y;
+    g.fillStyle=T.gridbg;g.fillRect(0,0,10,10);
+    for(x=0;x<3;x++)for(y=0;y<3;y++){
+      g.fillStyle=((x+y)%2===0)?T.cell:T.cellAlt;
+      g.fillRect(1+x*3,1+y*3,3,3);
+    }
+    g.fillStyle=T.sep;
+    g.fillRect(4,1,1,8);g.fillRect(7,1,1,8);
+    g.fillRect(1,4,8,1);g.fillRect(1,7,8,1);
+    g.fillStyle=T.blockbg;g.fillRect(1,1,3,3);
+    g.fillStyle=T.jokerQ;g.fillRect(2,2,1,1);
+    g.fillStyle=T.digit;g.fillRect(5,5,1,1);
+    g.fillStyle=T.magic;g.fillRect(8,8,1,1);
+    g.fillStyle=T.bright;
+    g.fillRect(0,0,10,1);g.fillRect(0,9,10,1);
+    g.fillRect(0,0,1,10);g.fillRect(9,0,1,10);
+  });
+}
+drawThemePreviews();
 applyLight();
-/* Einklappbare Überschriften (Einstellungen, Erfolge) */
 Array.prototype.forEach.call(document.querySelectorAll('.setSecH'),function(h){
   h.addEventListener('click',function(e){
     e.stopPropagation();
@@ -1447,7 +2651,11 @@ $('euFlag').addEventListener('click',function(){
   tag.classList.remove('pop');
   void tag.offsetWidth;
   tag.classList.add('pop');
-  sfx(520,0.06);setTimeout(function(){sfx(660,0.08);},80);
+  /* Kurzes Fanfaren-Motiv (E4–E4–F4–G4), identisch zur Europaflagge in Tetromino */
+  sfx(329.63,0.09,'square',0.10);
+  sfx(329.63,0.09,'square',0.10,null,0.12);
+  sfx(349.23,0.09,'square',0.10,null,0.24);
+  sfx(392.00,0.16,'square',0.10,null,0.36);
 });
 /* Werbebanner: Tetromino (T-Stueck als Pixelgrafik, Tetromino-Farbwelt) */
 (function(){
@@ -1463,9 +2671,22 @@ $('euFlag').addEventListener('click',function(){
 /* Banner-Ausblendung: nur im Speicher, kehrt bei jedem Spielstart zurueck */
 $('promoClose').addEventListener('click',function(){
   $('promoBanner').classList.add('hidden');
-  sfx(300,0.06);
+});
+/* Klick-Geräusch für jede Bedienfläche (delegiert, wie in Tetromino): Ein
+   einziger Listener am Dokument fängt Klicks auf alle Knöpfe der Klasse .btn
+   ab – auch auf Knöpfe, die erst zur Laufzeit erzeugt werden. Der Klick steigt
+   vom Ziel auf den umgebenden Knopf auf (Bubbling). */
+document.addEventListener('click',function(e){
+  var el=e.target;
+  while(el){
+    if(el.classList&&el.classList.contains('btn')){sfx(988,0.03,'square',0.09);return;}
+    el=el.parentNode;
+  }
 });
 /* ================= Start ================= */
+applyTheme();
+applyLang();
+markDiff();
 renderStatus();
 </script>
 </body>
