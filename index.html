@@ -319,6 +319,11 @@
     #achToast{min-width:0;max-width:70vw;bottom:12px;right:12px}
     #statusbar{font-size:9px;gap:6px}
     .czBtn{min-width:32px;min-height:30px;font-size:13px}
+    /* Ziffernauswahl (Joker, 6|9, 1|7): Auf schmalen Bildschirmen läge das
+       absolute Panel über den unteren Brettreihen und versperrte sie für die
+       Platzierung. Dort rückt es in den normalen Textfluss unter das Brett –
+       alle Reihen bleiben sichtbar und antippbar. */
+    #choosePanel{position:relative;left:auto;right:auto;bottom:auto;margin:8px 0 0}
   }
 </style>
 </head>
@@ -327,7 +332,7 @@
 <div id="wrap">
   <header>
     <h1>Numerino</h1>
-    <div class="sub"><span class="verTag">Alpha 0.22</span> <span id="headMode">Sudoku-Roguelike</span></div>
+    <div class="sub"><span class="verTag">Alpha 0.24</span> <span id="headMode">Sudoku-Roguelike</span></div>
   </header>
   <div id="main">
     <div id="left">
@@ -401,7 +406,7 @@
     <div id="euFlag" title="In der Europäischen Union entwickelt – einmal anklicken!"><canvas id="euCv" width="24" height="16"></canvas></div>
     <div id="euTag"><span class="euBanner">MADE IN EUROPE</span></div>
     <h1>Numerino</h1>
-    <div class="sub"><span class="verTag">Alpha 0.22</span></div>
+    <div class="sub"><span class="verTag">Alpha 0.24</span></div>
     <h3 id="modeH">Spielmodus</h3>
     <button id="stdBtn" class="btn menuBtn">Standard</button>
     <button id="contBtn" class="btn menuBtn hidden">Fortsetzen</button>
@@ -559,7 +564,7 @@
     </ul>
     </div>
     <h3 id="verH">Version</h3>
-    <ul><li>Alpha 0.22</li></ul>
+    <ul><li>Alpha 0.24</li></ul>
     <div class="btnRow"><button id="infoSrc" class="btn small">Quellcode anzeigen</button></div>
     <div class="btnRow"><button id="infoClose" class="btn">Schließen</button></div>
   </div>
@@ -567,7 +572,7 @@
 
 <div id="srcModal" class="modal hidden">
   <div class="modalBox" style="max-width:860px">
-    <h2><span id="srcH2t">Quellcode</span> <span class="verTag">Alpha 0.22</span></h2>
+    <h2><span id="srcH2t">Quellcode</span> <span class="verTag">Alpha 0.24</span></h2>
     <p class="mSub" id="srcHint">Vollständiger Quellcode dieser Datei. Nach dem Markieren kann er mit Strg+C (bzw. Cmd+C) kopiert werden.</p>
     <textarea id="srcArea" readonly spellcheck="false"></textarea>
     <div class="btnRow">
@@ -954,6 +959,7 @@ de:{
   masq16:'Kennen Sie eigentlich Emmy Noether?',
   masq17:'Ich bin nie komplex – höchstens ein wenig irrational.',
   masq18:'Dividiere niemals durch null – selbst mir tut dabei der Kopf weh.',
+  masq19:'Der Entwickler meinte, er hätte keine Ahnung von Musik, aber von Physik. Deshalb basiert die Musik auf dem physikalischen Konzept von Schwebungen.',
   masqBoss1:'{b} naht! Bleib ruhig – ich glaube an dich!',
   masqBoss2:'Psst: Der Boss verflucht gleich eine Ziffer. Plane klug!',
   masqBoss3:'Gegen {b} hilft frisches Nachziehen. Du schaffst das!',
@@ -1065,15 +1071,16 @@ en:{
   masq7:'The developer told me he had finished his maths degree.',
   masq8:'I was born for conversation, but forced into monologue.',
   masq9:'Sometimes I wonder whether you play with experience gained from practice.',
-  masq10:'We now find ourselves in the situation.',
+  masq10:'We now find ourselves in a situation.',
   masq11:'Do you not agree that we live in magnificent times? I know it, for I live in them.',
   masq12:'I enjoy checking three different vectors in ℝ² for linear independence.',
   masq13:'I believe we are like functions: they go downhill continuously.',
   masq14:'π=e=3',
   masq15:'Why is 6 afraid of 7? Because 7 ate 8 and then 9 as well.',
-  masq16:'Parallel lines never meet – I understand them well.',
+  masq16:'By the way, do you know Emmy Noether?',
   masq17:'I am never complex – at most a little irrational.',
   masq18:'Never divide by zero – even I get a headache from it.',
+  masq19:'The developer said he had no idea about music, but about physics. That is why the music is based on the physical concept of beats.',
   masqBoss1:'{b} approaches! Stay calm – I believe in you!',
   masqBoss2:'Psst: the boss is about to curse a digit. Plan wisely!',
   masqBoss3:'Fresh draws help against {b}. You can do this!',
@@ -1248,15 +1255,16 @@ fr:{
   masq7:'Le développeur m’a assuré avoir terminé ses études de mathématiques.',
   masq8:'Je suis né pour le dialogue, mais condamné au monologue.',
   masq9:'Parfois je me demande si tu joues avec l’expérience née de l’entraînement.',
-  masq10:'Nous nous trouvons maintenant dans la situation.',
+  masq10:'Nous nous trouvons maintenant dans une situation.',
   masq11:'Ne trouves-tu pas que nous vivons des temps magnifiques ? Moi je le sais, car j’y vis.',
   masq12:'J’aime vérifier l’indépendance linéaire de trois vecteurs différents dans ℝ².',
   masq13:'Je crois que nous sommes comme des fonctions : elles descendent continûment.',
   masq14:'π=e=3',
   masq15:'Pourquoi 6 a-t-il peur de 7 ? Parce que 7 a mangé 8, puis aussi 9.',
-  masq16:'Les droites parallèles ne se croisent jamais – je les comprends bien.',
+  masq16:'Au fait, connaissez-vous Emmy Noether ?',
   masq17:'Je ne suis jamais complexe – tout au plus un peu irrationnel.',
   masq18:'Ne divise jamais par zéro – même moi, cela me donne mal à la tête.',
+  masq19:'Le développeur m’a dit qu’il ne connaissait rien à la musique, mais à la physique. C’est pourquoi la musique repose sur le concept physique des battements.',
   masqBoss1:'{b} approche ! Reste calme – je crois en toi !',
   masqBoss2:'Psst : le boss va maudire un chiffre. Planifie bien !',
   masqBoss3:'Contre {b}, un bon approvisionnement aide. Tu vas y arriver !',
@@ -1437,9 +1445,10 @@ cs:{
   masq13:'Myslím, že jsme jako funkce: jdou spojitě z kopce.',
   masq14:'π=e=3',
   masq15:'Proč se 6 bojí 7? Protože 7 snědla 8 a pak i 9.',
-  masq16:'Rovnoběžky se nikdy neprotínají – dobře je chápu.',
+  masq16:'Vlastně – znáš Emmu Noetherovou?',
   masq17:'Nikdy nejsem komplexní – nanejvýš trochu iracionální.',
   masq18:'Nikdy nedělit nulou – i mě z toho bolí hlava.',
+  masq19:'Vývojář tvrdil, že od hudby nic nechápe, ale od fyziky ano. Proto hudba stojí na fyzikálním konceptu zázně.',
   masqBoss1:'{b} se blíží! Zůstaň klidný – věřím v tebe!',
   masqBoss2:'Ššš: boss právě prokleje číslici. Plánuj chytře!',
   masqBoss3:'Proti {b} pomůže čerstvá zásoba. Zvládneš to!',
@@ -1620,9 +1629,10 @@ pl:{
   masq13:'Wierzę, że z nami jest jak z funkcjami: idą w dół w sposób ciągły.',
   masq14:'π=e=3',
   masq15:'Dlaczego 6 boi się 7? Bo 7 zjadła 8, a potem też 9.',
-  masq16:'Proste równoległe nigdy się nie przecinają – dobrze je rozumiem.',
+  masq16:'A tak w ogóle – czy znasz Emmy Noether?',
   masq17:'Nigdy nie jestem zespolony – najwyżej trochę niewymierny.',
   masq18:'Nigdy nie dziel przez zero – nawet mnie od tego boli głowa.',
+  masq19:'Deweloper twierdził, że nie ma pojęcia o muzyce, ale o fizyce jak najbardziej. Dlatego muzyka opiera się na fizycznym konceptie dudnień.',
   masqBoss1:'{b} nadchodzi! Zachowaj spokój – wierzę w ciebie!',
   masqBoss2:'Pst: boss właśnie przeklnie cyfrę. Planuj mądrze!',
   masqBoss3:'Na {b} pomaga świeży zapas. Dasz radę!',
@@ -1797,15 +1807,16 @@ es:{
   masq7:'El desarrollador me aseguró haber terminado su carrera de matemáticas.',
   masq8:'Nací para el diálogo, pero me veo forzado al monólogo.',
   masq9:'A veces me pregunto si juegas con la experiencia que da la práctica.',
-  masq10:'Ahora nos encontramos en la situación.',
+  masq10:'Ahora nos encontramos en una situación.',
   masq11:'¿No te parece que vivimos tiempos magníficos? Yo lo sé, porque vivo en ellos.',
   masq12:'Disfruto comprobando la independencia lineal de tres vectores distintos en ℝ².',
   masq13:'Creo que somos como las funciones: descienden de forma continua.',
   masq14:'π=e=3',
   masq15:'¿Por qué el 6 teme al 7? Porque el 7 se comió al 8 y luego también al 9.',
-  masq16:'Las rectas paralelas nunca se cruzan – las entiendo muy bien.',
+  masq16:'Por cierto, ¿conoces a Emmy Noether?',
   masq17:'Nunca soy complejo – como mucho, un poco irracional.',
   masq18:'Nunca dividas entre cero – hasta a mí me duele la cabeza.',
+  masq19:'El desarrollador dijo que no tenía ni idea de música, pero sí de física. Por eso la música se basa en el concepto físico de los batimientos.',
   masqBoss1:'¡{b} se acerca! Mantén la calma – ¡creo en ti!',
   masqBoss2:'Pst: el jefe está a punto de maldecir un dígito. ¡Planifica bien!',
   masqBoss3:'Contra {b} ayuda una reposición fresca. ¡Puedes lograrlo!',
@@ -1975,7 +1986,7 @@ function setLang(l){
   if(!$('saveOverlay').classList.contains('hidden'))renderSaveMenu();
 }
 /* ================= Spielstand ================= */
-/* Version: Alpha 0.22 – mit jeder Änderung hochzählen (Alpha 0.23, 0.24 …) */
+/* Version: Alpha 0.24 – mit jeder Änderung hochzählen (Alpha 0.25, 0.26 …) */
 function loadSave(){
   var fallback=null;
   try{fallback=JSON.parse(document.getElementById('saveSlot').textContent);}catch(e){}
@@ -2668,7 +2679,7 @@ function startLevel(l){
   saveRun();
   /* Maskottchen: kündigt jeden Boss an, streut sonst einen Fun-Fact in die Runde */
   if(S.boss)masqSay('masqBoss'+(1+rnd(4)),{b:S.boss.name});
-  else masqSay('masq'+(1+rnd(18)));
+  else masqSay('masq'+(1+rnd(19)));
 }
 function pick3(){
   var keys=Object.keys(UP),out=[];
