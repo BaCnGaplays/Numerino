@@ -332,7 +332,7 @@
 <div id="wrap">
   <header>
     <h1>Numerino</h1>
-    <div class="sub"><span class="verTag">Alpha 0.24</span> <span id="headMode">Sudoku-Roguelike</span></div>
+    <div class="sub"><span class="verTag">Alpha 0.27</span> <span id="headMode">Sudoku-Roguelike</span></div>
   </header>
   <div id="main">
     <div id="left">
@@ -406,7 +406,7 @@
     <div id="euFlag" title="In der Europäischen Union entwickelt – einmal anklicken!"><canvas id="euCv" width="24" height="16"></canvas></div>
     <div id="euTag"><span class="euBanner">MADE IN EUROPE</span></div>
     <h1>Numerino</h1>
-    <div class="sub"><span class="verTag">Alpha 0.24</span></div>
+    <div class="sub"><span class="verTag">Alpha 0.27</span></div>
     <h3 id="modeH">Spielmodus</h3>
     <button id="stdBtn" class="btn menuBtn">Standard</button>
     <button id="contBtn" class="btn menuBtn hidden">Fortsetzen</button>
@@ -564,7 +564,7 @@
     </ul>
     </div>
     <h3 id="verH">Version</h3>
-    <ul><li>Alpha 0.24</li></ul>
+    <ul><li>Alpha 0.27</li></ul>
     <div class="btnRow"><button id="infoSrc" class="btn small">Quellcode anzeigen</button></div>
     <div class="btnRow"><button id="infoClose" class="btn">Schließen</button></div>
   </div>
@@ -572,7 +572,7 @@
 
 <div id="srcModal" class="modal hidden">
   <div class="modalBox" style="max-width:860px">
-    <h2><span id="srcH2t">Quellcode</span> <span class="verTag">Alpha 0.24</span></h2>
+    <h2><span id="srcH2t">Quellcode</span> <span class="verTag">Alpha 0.27</span></h2>
     <p class="mSub" id="srcHint">Vollständiger Quellcode dieser Datei. Nach dem Markieren kann er mit Strg+C (bzw. Cmd+C) kopiert werden.</p>
     <textarea id="srcArea" readonly spellcheck="false"></textarea>
     <div class="btnRow">
@@ -960,11 +960,31 @@ de:{
   masq17:'Ich bin nie komplex – höchstens ein wenig irrational.',
   masq18:'Dividiere niemals durch null – selbst mir tut dabei der Kopf weh.',
   masq19:'Der Entwickler meinte, er hätte keine Ahnung von Musik, aber von Physik. Deshalb basiert die Musik auf dem physikalischen Konzept von Schwebungen.',
+  masq20:'Der Name Sudoku kommt aus dem Japanischen als Abkürzung des Satzes "Sūji wa dokushin ni kagiru" – sinngemäß "Die Zahlen bleiben einzeln".',
+  masq21:'Immer dran denken: Erst die Base, dann die Säure, sonst geschieht das Ungeheure.',
+  masq22:'Ich finde Textaufgaben ja unfassbar schwer.',
+  masq23:'Was war Beethovens Lieblingsfrucht? A-na-na-nas.',
+  masq24:'Mit Erfahrung, aus Übung.',
+  masq25:'Fordert man das Intervallschachtelungsprinzip als Axiom, so folgt in ℝ die Konvergenz jeder Cauchy-Folge.',
+  masq26:'Fordert man die Konvergenz jeder Cauchy-Folge in ℝ, so folgt daraus das Intervallschachtelungsprinzip.',
+  masq27:'ℝ ist supremums-vollständig.',
+  masq28:'Es ist ja nicht unsere Schuld, wenn die Schule Ihnen nichts mehr beibringt.',
+  masq29:'Soll ich mal einen Kalauer feuern? Warum können Geister so schlecht lügen? Weil sie so leicht zu durchschauen sind!',
+  masq30:'Soll ich mal einen Kalauer feuern? Warum gehen Ameisen nicht in die Kirche? Weil sie in Sekten sind!',
+  masq31:'Soll ich mal einen Kalauer feuern? Was sagt der große Stift zum kleinen Stift? Wachsmalstift!',
+  masq32:'Soll ich mal einen Kalauer feuern? Was macht ein Clown im Büro? Mein Vorgesetzter sein.',
+  masq33:'Soll ich mal einen Kalauer feuern? Wie nennt man ein Kaninchen im Fitnessstudio? Pumpernickel!',
+  masq34:'Hier sehen Sie, wo Mathematik im Alltag Anwendung findet.',
+  masq35:'In einer Gruppe von nur 23 Personen liegt die Wahrscheinlichkeit bereits bei über 50 %, dass zwei Menschen am selben Tag Geburtstag haben.',
+  masq36:'Die Zahl 111.111.111 mit sich selbst multipliziert ergibt genau 12345678987654321. Das Ergebnis lässt sich vorwärts wie rückwärts identisch lesen.',
+  masq37:'Das Volumen einer Pizza mit dem Radius z und der Höhe a lässt sich mathematisch als Pi · z · z · a schreiben',
+  masq38:'Während 99,99 % aller Menschen ihr Kreuz auf den ersten Zentimetern des allersten A4-Blattes machen, weil ein einziges Blatt bereits 30 Millionen Euro abbildet, müssten die Reichsten der Welt eine Kette aus 30.000 Blättern über eine Strecke von 9 Kilometern Länge auslegen, um am Ende ihr Kreuz zu setzen.',
   masqBoss1:'{b} naht! Bleib ruhig – ich glaube an dich!',
   masqBoss2:'Psst: Der Boss verflucht gleich eine Ziffer. Plane klug!',
   masqBoss3:'Gegen {b} hilft frisches Nachziehen. Du schaffst das!',
   masqBoss4:'Bosse hassen Combos! Sammle die Linien!',
   masqOver:'Das war ein starker Run! Beim nächsten Mal klappt es – ich warte hier!',
+  masqOver2:'Und es endet in der Katastrophe.',
   ttMasq:'Numerino – antippen für die letzte Nachricht',
   logLine1:'Linie voll! +{n} Bonuskarten',logLineN:'{k} Linien voll! +{n} Bonuskarten',
   logSudoku:'SUDOKU GELOEST! +1000 Punkte – neues Brett',
@@ -1081,11 +1101,31 @@ en:{
   masq17:'I am never complex – at most a little irrational.',
   masq18:'Never divide by zero – even I get a headache from it.',
   masq19:'The developer said he had no idea about music, but about physics. That is why the music is based on the physical concept of beats.',
+  masq20:'The name Sudoku is an abbreviation of the Japanese phrase "Sūji wa dokushin ni kagiru" – roughly "the numbers remain single".',
+  masq21:'Always remember: first the base, then the acid – or the monstrous will happen.',
+  masq22:'I find word problems unbelievably difficult.',
+  masq23:'What was Beethoven’s favourite fruit? Ba-na-na-nas.',
+  masq24:'With experience, from practice.',
+  masq25:'If one postulates the nested intervals principle as an axiom, then in ℝ every Cauchy sequence converges.',
+  masq26:'If one demands the convergence of every Cauchy sequence in ℝ, the nested intervals principle follows from it.',
+  masq27:'ℝ is supremum-complete.',
+  masq28:'It is not our fault, after all, if school no longer teaches you anything.',
+  masq29:'Shall I fire off a pun? Why are ghosts such bad liars? Because they are so easy to see through!',
+  masq30:'Shall I fire off a pun? Why do ants not go to church? Because they are in sects!',
+  masq31:'Shall I fire off a pun? What does the big pen say to the little pen? Grow up, crayon!',
+  masq32:'Shall I fire off a pun? What does a clown do in an office? Being my boss.',
+  masq33:'Shall I fire off a pun? What do you call a rabbit at the gym? Pumpernickel!',
+  masq34:'Here you can see where mathematics is applied in everyday life.',
+  masq35:'In a group of just 23 people, the probability that two of them share a birthday is already over 50 %.',
+  masq36:'The number 111,111,111 multiplied by itself gives exactly 12345678987654321. The result reads identically forwards and backwards.',
+  masq37:'The volume of a pizza with radius z and height a can be written mathematically as Pi · z · z · a.',
+  masq38:'While 99.99 % of all people make their cross within the first centimetres of the very first A4 sheet, because a single sheet already represents 30 million euros, the richest people in the world would have to lay out a chain of 30,000 sheets over a distance of 9 kilometres to make their cross at the end.',
   masqBoss1:'{b} approaches! Stay calm – I believe in you!',
   masqBoss2:'Psst: the boss is about to curse a digit. Plan wisely!',
   masqBoss3:'Fresh draws help against {b}. You can do this!',
   masqBoss4:'Bosses hate combos! Collect those lines!',
   masqOver:'That was a strong run! Next time it will work – I will be waiting!',
+  masqOver2:'And it ends in catastrophe.',
   ttMasq:'Numerino – tap for the last message',
   logLine1:'Line full! +{n} bonus cards',logLineN:'{k} lines full! +{n} bonus cards',
   logSudoku:'SUDOKU SOLVED! +1000 points – new board',
@@ -1265,11 +1305,31 @@ fr:{
   masq17:'Je ne suis jamais complexe – tout au plus un peu irrationnel.',
   masq18:'Ne divise jamais par zéro – même moi, cela me donne mal à la tête.',
   masq19:'Le développeur m’a dit qu’il ne connaissait rien à la musique, mais à la physique. C’est pourquoi la musique repose sur le concept physique des battements.',
+  masq20:'Le nom Sudoku est l’abréviation de la phrase japonaise « Sūji wa dokushin ni kagiru » – en substance, "les chiffres restent seuls".',
+  masq21:'Toujours y penser : d’abord la base, puis l’acide – sinon le monstrueux arrive.',
+  masq22:'Je trouve les problèmes à énoncés incroyablement difficiles.',
+  masq23:'Quel était le fruit préféré de Beethoven ? Ba-na-na-nas.',
+  masq24:'Avec l’expérience, née de l’entraînement.',
+  masq25:'Si l’on exige le principe des intervalles emboîtés comme axiome, alors dans ℝ toute suite de Cauchy converge.',
+  masq26:'Si l’on exige la convergence de toute suite de Cauchy dans ℝ, le principe des intervalles emboîtés en découle.',
+  masq27:'ℝ possède la propriété de la borne supérieure.',
+  masq28:'Ce n’est pas notre faute, après tout, si l’école ne vous apprend plus rien.',
+  masq29:'Dois-je lancer un calembour ? Pourquoi les fantômes mentent-ils si mal ? Parce qu’ils sont si faciles à percer à jour !',
+  masq30:'Dois-je lancer un calembour ? Pourquoi les fourmis ne vont-elles pas à l’église ? Parce qu’elles vivent en sectes !',
+  masq31:'Dois-je lancer un calembour ? Que dit le grand stylo au petit stylo ? Grandis, crayon de cire !',
+  masq32:'Dois-je lancer un calembour ? Que fait un clown au bureau ? Être mon supérieur.',
+  masq33:'Dois-je lancer un calembour ? Comment appelle-t-on un lapin à la salle de sport ? Pumpernickel !',
+  masq34:'Voici où les mathématiques s’appliquent dans la vie quotidienne.',
+  masq35:'Dans un groupe de seulement 23 personnes, la probabilité que deux d’entre elles partagent la même date d’anniversaire dépasse déjà 50 %.',
+  masq36:'Le nombre 111 111 111 multiplié par lui-même donne exactement 12345678987654321. Ce résultat se lit de façon identique dans les deux sens.',
+  masq37:'Le volume d’une pizza de rayon z et de hauteur a s’écrit mathématiquement Pi · z · z · a.',
+  masq38:'Alors que 99,99 % des gens font leur croix dans les premiers centimètres de la toute première feuille A4, parce qu’une seule feuille représente déjà 30 millions d’euros, les plus riches du monde devraient étaler une chaîne de 30 000 feuilles sur 9 kilomètres pour y faire leur croix.',
   masqBoss1:'{b} approche ! Reste calme – je crois en toi !',
   masqBoss2:'Psst : le boss va maudire un chiffre. Planifie bien !',
   masqBoss3:'Contre {b}, un bon approvisionnement aide. Tu vas y arriver !',
   masqBoss4:'Les bosses détestent les combos ! Ramasse ces lignes !',
   masqOver:'C’était une belle partie ! La prochaine fois ça marchera – je t’attends !',
+  masqOver2:'Et tout finit dans la catastrophe.',
   ttMasq:'Numerino – touche pour le dernier message',
   logLine1:'Ligne complète ! +{n} cartes bonus',logLineN:'{k} lignes complètes ! +{n} cartes bonus',
   logSudoku:'SUDOKU RÉSOLU ! +1000 points – nouvelle grille',
@@ -1449,11 +1509,31 @@ cs:{
   masq17:'Nikdy nejsem komplexní – nanejvýš trochu iracionální.',
   masq18:'Nikdy nedělit nulou – i mě z toho bolí hlava.',
   masq19:'Vývojář tvrdil, že od hudby nic nechápe, ale od fyziky ano. Proto hudba stojí na fyzikálním konceptu zázně.',
+  masq20:'Název Sudoku je zkratkou japonské věty "Sūji wa dokushin ni kagiru" – volně řečeno, "číslice zůstávají samotné".',
+  masq21:'Stále pamatuj: nejdřív zásadu, pak kyselinu – jinak se stane cosi hrozného.',
+  masq22:'Slovní úlohy mi připadají neuvěřitelně těžké.',
+  masq23:'Jaké bylo Beethovenovo oblíbené ovoce? Ba-na-na-ny.',
+  masq24:'Se zkušeností, z cvičení.',
+  masq25:'Vyžádáme-li princip vnořených intervalů jako axiom, pak v ℝ konverguje každá Cauchyova posloupnost.',
+  masq26:'Vyžádáme-li v ℝ konvergenci každé Cauchyovy posloupnosti, plyne z toho princip vnořených intervalů.',
+  masq27:'ℝ má vlastnost nejmenší horní meze.',
+  masq28:'Vždyť to není naše vina, když vás škola už nic nenaučí.',
+  masq29:'Mám pustit jednu hříčku? Proč jsou duchové takoví špatní lháři? Protože je tak snadné prohlédnout!',
+  masq30:'Mám pustit jednu hříčku? Proč mravenci nechodí do kostela? Protože jsou v sektách!',
+  masq31:'Mám pustit jednu hříčku? Co říká velké pero malému peru? Roste, voskovko!',
+  masq32:'Mám pustit jednu hříčku? Co dělá klaun v kanceláři? Být můj nadřízený.',
+  masq33:'Mám pustit jednu hříčku? Jak se říká králíkovi v posilovně? Pumpernickel!',
+  masq34:'Tady vidíte, kde se matematika uplatňuje v každodenním životě.',
+  masq35:'Ve skupině jen 23 lidí je pravděpodobnost, že dva z nich mají narozeniny ve stejný den, už přes 50 %.',
+  masq36:'Číslo 111 111 111 vynásobené samo sebou dává přesně 12345678987654321. Výsledek se čte stejně vpřed i vzad.',
+  masq37:'Objem pizzy s poloměrem z a výškou a lze matematicky zapsat jako Pi · z · z · a.',
+  masq38:'Zatímco 99,99 % všech lidí kreslí svůj křížek na prvních centimetrech úplně prvního listu A4, protože jediný list už představuje 30 milionů eur, nejbohatší lidé světa by museli vyložit řetěz 30 000 listů v délce 9 kilometrů, aby nakonec mohli udělat svůj křížek.',
   masqBoss1:'{b} se blíží! Zůstaň klidný – věřím v tebe!',
   masqBoss2:'Ššš: boss právě prokleje číslici. Plánuj chytře!',
   masqBoss3:'Proti {b} pomůže čerstvá zásoba. Zvládneš to!',
   masqBoss4:'Bossové nenávidí combo! Sbírej ty linie!',
   masqOver:'To byl silný běh! Příště to vyjde – budu tu čekat!',
+  masqOver2:'A končí to katastrofou.',
   ttMasq:'Numerino – klepni pro poslední zprávu',
   logLine1:'Linie plná! +{n} bonusových karet',logLineN:'{k} linie plné! +{n} bonusových karet',
   logSudoku:'SUDOKU VYŘEŠENO! +1000 bodů – nová deska',
@@ -1633,11 +1713,31 @@ pl:{
   masq17:'Nigdy nie jestem zespolony – najwyżej trochę niewymierny.',
   masq18:'Nigdy nie dziel przez zero – nawet mnie od tego boli głowa.',
   masq19:'Deweloper twierdził, że nie ma pojęcia o muzyce, ale o fizyce jak najbardziej. Dlatego muzyka opiera się na fizycznym konceptie dudnień.',
+  masq20:'Nazwa Sudoku to skrót japońskiego zdania "Sūji wa dokushin ni kagiru" – w wolnym tłumaczeniu "cyfry pozostają samotne".',
+  masq21:'Zawsze o tym pamiętaj: najpierw zasadę, potem kwas – inaczej stanie się coś strasznego.',
+  masq22:'Zadania tekstowe uważam za niewiarygodnie trudne.',
+  masq23:'Jaki był ulubiony owoc Beethovena? Ba-na-na-ny.',
+  masq24:'Z doświadczeniem, nabytym przez ćwiczenia.',
+  masq25:'Jeśli przyjmiemy zasadę zagnieżdżonych przedziałów jako aksjomat, to w ℝ każdy ciąg Cauchy’ego jest zbieżny.',
+  masq26:'Jeśli przyjmiemy zbieżność każdego ciągu Cauchy’ego w ℝ, wynika z tego zasada zagnieżdżonych przedziałów.',
+  masq27:'ℝ jest zupełny względem supremów.',
+  masq28:'To przecież nie nasza wina, jeśli szkoła już nic was nie nauczy.',
+  masq29:'Mam odpalić jeden kalambur? Dlaczego duchy tak słabo kłamią? Bo tak łatwo je przejrzeć!',
+  masq30:'Mam odpalić jeden kalambur? Dlaczego mrówki nie chodzą do kościoła? Bo należą do sekt!',
+  masq31:'Mam odpalić jeden kalambur? Co mówi duże pisak małemu pisakowi? Rośnij, woskowa kredko!',
+  masq32:'Mam odpalić jeden kalambur? Co robi klaun w biurze? Być moim szefem.',
+  masq33:'Mam odpalić jeden kalambur? Jak nazywa się królik na siłowni? Pumpernickel!',
+  masq34:'Tutaj widzą państwo, gdzie matematyka znajduje zastosowanie w codziennym życiu.',
+  masq35:'W grupie zaledwie 23 osób prawdopodobieństwo, że dwie z nich mają urodziny tego samego dnia, przekracza już 50 %.',
+  masq36:'Liczba 111 111 111 pomnożona przez samą siebie daje dokładnie 12345678987654321. Wynik czyta się tak samo od przodu i od tyłu.',
+  masq37:'Objętość pizzy o promieniu z i wysokości a można matematycznie zapisać jako Pi · z · z · a.',
+  masq38:'Podczas gdy 99,99 % wszystkich ludzi stawia swój krzyżyk na pierwszych centymetrach samego pierwszego arkusza A4, bo jeden arkusz przedstawia już 30 milionów euro, najbogatsi ludzie świata musieliby rozłożyć łańcuch 30 000 arkuszy na dystansie 9 kilometrów, by na końcu postawić swój krzyżyk.',
   masqBoss1:'{b} nadchodzi! Zachowaj spokój – wierzę w ciebie!',
   masqBoss2:'Pst: boss właśnie przeklnie cyfrę. Planuj mądrze!',
   masqBoss3:'Na {b} pomaga świeży zapas. Dasz radę!',
   masqBoss4:'Bossowie nienawidzą combo! Zbieraj te linie!',
   masqOver:'To był mocny podjazd! Następnym razem się uda – będę tu czekał!',
+  masqOver2:'I wszystko kończy się katastrofą.',
   ttMasq:'Numerino – stuknij, aby zobaczyć ostatnią wiadomość',
   logLine1:'Linia pełna! +{n} kart bonusowych',logLineN:'{k} linie pełne! +{n} kart bonusowych',
   logSudoku:'SUDOKU ROZWIĄZANE! +1000 punktów – nowa plansza',
@@ -1817,11 +1917,31 @@ es:{
   masq17:'Nunca soy complejo – como mucho, un poco irracional.',
   masq18:'Nunca dividas entre cero – hasta a mí me duele la cabeza.',
   masq19:'El desarrollador dijo que no tenía ni idea de música, pero sí de física. Por eso la música se basa en el concepto físico de los batimientos.',
+  masq20:'El nombre Sudoku es la abreviatura de la frase japonesa "Sūji wa dokushin ni kagiru", que en esencia significa "los números se quedan solos".',
+  masq21:'Recuérdalo siempre: primero la base, luego el ácido; de lo contrario, sucede lo monstruoso.',
+  masq22:'Los problemas de enunciado me parecen increíblemente difíciles.',
+  masq23:'¿Cuál era la fruta favorita de Beethoven? Ba-na-na-nas.',
+  masq24:'Con la experiencia, que da la práctica.',
+  masq25:'Si se postula el principio de intervalos encajados como axioma, entonces en ℝ toda sucesión de Cauchy converge.',
+  masq26:'Si se exige la convergencia de toda sucesión de Cauchy en ℝ, de ello se deduce el principio de intervalos encajados.',
+  masq27:'ℝ posee la propiedad del supremo.',
+  masq28:'No es culpa nuestra, en fin, si la escuela ya no le enseña nada.',
+  masq29:'¿Suelto un juego de palabras? ¿Por qué los fantasmas mienten tan mal? ¡Porque son tan transparentes!',
+  masq30:'¿Suelto un juego de palabras? ¿Por qué las hormigas no van a la iglesia? ¡Porque están en sectas!',
+  masq31:'¿Suelto un juego de palabras? ¿Qué le dice el gran bolígrafo al bolígrafo pequeño? ¡Crece, lápiz de cera!',
+  masq32:'¿Suelto un juego de palabras? ¿Qué hace un payaso en la oficina? Ser mi jefe.',
+  masq33:'¿Suelto un juego de palabras? ¿Cómo se llama un conejo en el gimnasio? ¡Pumpernickel!',
+  masq34:'Aquí puede ver dónde se aplica la matemática en la vida cotidiana.',
+  masq35:'En un grupo de solo 23 personas, la probabilidad de que dos compartan cumpleaños ya supera el 50 %.',
+  masq36:'El número 111.111.111 multiplicado por sí mismo da exactamente 12345678987654321. El resultado se lee igual hacia delante y hacia atrás.',
+  masq37:'El volumen de una pizza de radio z y altura a se puede escribir matemáticamente como Pi · z · z · a.',
+  masq38:'Mientras el 99,99 % de todas las personas hace su cruz en los primeros centímetros de la primera hoja A4, porque una sola hoja ya representa 30 millones de euros, los más ricos del mundo tendrían que tender una cadena de 30.000 hojas a lo largo de 9 kilómetros para poner su cruz al final.',
   masqBoss1:'¡{b} se acerca! Mantén la calma – ¡creo en ti!',
   masqBoss2:'Pst: el jefe está a punto de maldecir un dígito. ¡Planifica bien!',
   masqBoss3:'Contra {b} ayuda una reposición fresca. ¡Puedes lograrlo!',
   masqBoss4:'¡Los jefes odian los combos! ¡Recoge esas líneas!',
   masqOver:'¡Fue una gran partida! La próxima vez lo lograrás – ¡aquí te espero!',
+  masqOver2:'Y todo termina en catástrofe.',
   ttMasq:'Numerino – toca para el último mensaje',
   logLine1:'¡Línea completa! +{n} cartas de bonificación',logLineN:'{k} líneas completas: +{n} cartas de bonificación',
   logSudoku:'¡SUDOKU RESUELTO! +1000 puntos – nuevo tablero',
@@ -1986,7 +2106,7 @@ function setLang(l){
   if(!$('saveOverlay').classList.contains('hidden'))renderSaveMenu();
 }
 /* ================= Spielstand ================= */
-/* Version: Alpha 0.24 – mit jeder Änderung hochzählen (Alpha 0.25, 0.26 …) */
+/* Version: Alpha 0.27 – mit jeder Änderung hochzählen (Alpha 0.28, 0.29 …) */
 function loadSave(){
   var fallback=null;
   try{fallback=JSON.parse(document.getElementById('saveSlot').textContent);}catch(e){}
@@ -2155,7 +2275,7 @@ var S={running:false,diff:2,level:1,task:null,totLines:0,score:0,boards:0,
   pending:[],
   done:false,doneTimer:0,over:false,dragCell:null,
   floats:[],parts:[],shake:0,mx:-1,my:-1,time:0,log:[],
-  kr:4,kc:4,kb:false};
+  kr:4,kc:4,kb:false,masqT:0};
 function $(){return document.getElementById(arguments[0]);}
 function rnd(n){return Math.floor(Math.random()*n);}
 /* Ziffern-Palette: jede Ziffer trägt ihren eigenen Farbton (Hue-Schritt 40
@@ -2679,7 +2799,7 @@ function startLevel(l){
   saveRun();
   /* Maskottchen: kündigt jeden Boss an, streut sonst einen Fun-Fact in die Runde */
   if(S.boss)masqSay('masqBoss'+(1+rnd(4)),{b:S.boss.name});
-  else masqSay('masq'+(1+rnd(19)));
+  else masqSay('masq'+(1+rnd(38)));
 }
 function pick3(){
   var keys=Object.keys(UP),out=[];
@@ -2864,7 +2984,7 @@ function gameOver(reason){
   $('overOverlay').classList.remove('hidden');
   addLog(trf('logOver',{r:reason}),'#ff5555');
   /* Numerino spendet Trost – emotional support am Run-Ende */
-  masqSay('masqOver');
+  masqSay(rnd(2)?'masqOver':'masqOver2');
 }
 /* ================= DOM-Rendering ================= */
 function renderStatus(){
@@ -3324,6 +3444,19 @@ function update(dt){
     if(S.doneTimer<=0){
       S.done=false;
       openLevelModal();
+    }
+  }
+  /* Smalltalk-Timer: alle 30 Sekunden spricht Numerino von selbst einen
+     zufälligen Runde-Spruch – nur während eines laufenden Runs und nur,
+     wenn gerade kein Menü oder Dialog offen ist. Der Zähler steht still,
+     solange gesperrt ist, und startet nach dem Schließen neu; ohne Run
+     bleibt Numerino still. */
+  if(!S.running||S.over||S.done||uiBlocked()){S.masqT=0;}
+  else{
+    S.masqT+=dt;
+    if(S.masqT>=30){
+      S.masqT=0;
+      masqSay('masq'+(1+rnd(38)));
     }
   }
 }
