@@ -43,6 +43,8 @@
   .zCard.selOpt{border-color:#7fe07f;box-shadow:0 0 6px rgba(127,224,127,0.6)}
   .zCard.kindW{background:#efe4fb;border-color:#9a4fd8}
   .zCard.kindJ{background:#f8ead2;border-color:#c07a2d}
+  .zCard.kindQ{background:#e3ecfb;border-color:#2a6af0}
+  #chooseRow .btn:disabled{opacity:.35;cursor:default}
   /* Karte ohne jedes legale Feld: gedimmt, damit toter Nachschub erkennbar ist */
   .zCard.unplayable{opacity:.45;filter:grayscale(.5)}
   /* Schwebe-Geist beim Drag-and-Drop: folgt dem Zeiger über dem Brett */
@@ -307,7 +309,7 @@
 <div id="wrap">
   <header>
     <h1>Numerino</h1>
-    <div class="sub"><span class="verTag">Alpha 0.16</span> <span id="headMode">Sudoku-Roguelike</span></div>
+    <div class="sub"><span class="verTag">Alpha 0.17</span> <span id="headMode">Sudoku-Roguelike</span></div>
   </header>
   <div id="main">
     <div id="left">
@@ -369,7 +371,8 @@
           Nach jeder Platzierung ziehst du eine Karte nach, solange dein Tisch die Obergrenze deiner Schwierigkeit (14/12/10) nicht überschreitet; jede erstmals volle Reihe, Spalte oder jedes Quadrat gibt zwei Bonuskarten, jedes erstmals volle Quadrat zusätzlich 150 Punkte.
           Schließen mehrere Platzierungen hintereinander Linien ab, wächst eine Combo: jede weitere Linie bringt 50 Punkte je Combo-Stufe, die Statusleiste zeigt die Serie. Jede Ziffer trägt ihre eigene Farbe auf Brett und Karten – fehlende Ziffern sind so auf einen Blick zu erkennen.
           Ein ohne Tausch bezwungenes Boss-Level belohnt 300 Punkte und zwei Bonuskarten; sechs der neun Welten schaltest du dauerhaft über Erfolge frei.
-          Goldene Punkte markieren Felder mit genau einer noch möglichen Ziffer, rote Punkte Felder ohne jede Möglichkeit – dort lauert eine Sackgasse. Beim Überfahren eines Feldes zeigt der Rand rechts die Ziffern, die seiner Reihe, Spalte und seinem Quadrat noch fehlen.
+          Farbige Punkte zeigen, wie viele Hand-Karten auf ein freies Feld passen: Gelb heißt wenige (drei oder weniger), Rot genau eine, Schwarz keine – nur der Quantenjoker kann schwarze Felder noch retten. Beim Überfahren eines Feldes zeigt der Rand rechts die Ziffern, die seiner Reihe, Spalte und seinem Quadrat noch fehlen.
+          Der Quantenjoker (Q, als Verzauberung) verwandelt jedes freie Feld in ein ?-Feld im Quantenzustand. Jeder Boss verflucht zu Beginn seiner Runde eine Ziffer – sie bleibt bis zum Levelende unlegbar.
           Gleiche Ziffer nie zweimal pro Reihe, Spalte oder Block.
           Wildkarten (6|9, 1|7) gelten als eine der beiden Ziffern, der Joker als jede.
           Der Tausch-Knopf oben rechts wirft einmal je Level alle Karten weg und zieht sechs neue.
@@ -397,7 +400,7 @@
     <div id="euFlag" title="In der Europäischen Union entwickelt – einmal anklicken!"><canvas id="euCv" width="24" height="16"></canvas></div>
     <div id="euTag"><span class="euBanner">MADE IN EUROPE</span></div>
     <h1>Numerino</h1>
-    <div class="sub"><span class="verTag">Alpha 0.16</span></div>
+    <div class="sub"><span class="verTag">Alpha 0.17</span></div>
     <h3 id="modeH">Spielmodus</h3>
     <button id="stdBtn" class="btn menuBtn">Standard</button>
     <button id="contBtn" class="btn menuBtn hidden">Fortsetzen</button>
@@ -433,7 +436,7 @@
   <div class="modalBox">
     <div id="rulesBody">
     <h2>Regeln von Numerino</h2>
-    <p class="mSub">Numerino ist ein Sudoku-Roguelike: Du platzierst Ziffernkarten auf einem 9×9-Brett, erfüllst Aufgaben auf einem Brett, das niemals gelöscht wird, und wehrst im Death Run drei Boss-Arten ab. Die Ziffern sind einfache Arbeiter – die Bosse die Chefetage: Aktionär, Monopolist und Spekulant.</p>
+    <p class="mSub">Numerino ist ein Sudoku-Roguelike: Du platzierst Ziffernkarten auf einem 9×9-Brett, erfüllst Aufgaben auf einem Brett, das niemals gelöscht wird, und wehrst im Death Run vier Boss-Arten ab. Die Ziffern sind einfache Arbeiter – die Bosse die Chefetage: Aktionär, Monopolist, Spekulant und Rationalisierer.</p>
     <details open>
     <summary>Das Spiel – allgemeine Regeln</summary>
     <ul>
@@ -459,10 +462,12 @@
     <details>
     <summary>Bosse – der Death Run</summary>
     <ul>
-      <li>Im Death Run greift jeder dritte Level ein Boss an; die drei Arten rotieren und schlagen mit höheren Leveln immer schneller zu.</li>
+      <li>Im Death Run greift jeder dritte Level ein Boss an; die vier Arten rotieren und schlagen mit höheren Leveln immer schneller zu.</li>
       <li>Aktionär: klaut mit höheren Leveln immer mehr Karten aus deinem Kartentisch – auch Wildkarten und Joker, aber nie die letzte Karte.</li>
       <li>Monopolist: reißt bereits platzierte Ziffern aus dem Brett und schlägt so Lücken in dein Sudoku – mit höheren Leveln mehrere auf einmal.</li>
       <li>Spekulant: verwandelt Karten deines Tisches in andere Ziffern – mit höheren Leveln immer mehr, ab Level 9 auch Wildkarten.</li>
+      <li>Rationalisierer: baut ?-Felder ab und macht sie wieder zu normalen Pflichtfeldern – gesicherte Linien kippen zurück in offene Arbeit.</li>
+      <li>Zu Beginn jeder Boss-Runde wird zudem eine Ziffer verflucht: Sie bleibt bis zum Levelende überall unlegbar.</li>
       <li>Die Fortschrittskästchen unter dem Boss-Namen zeigen, wann er zuschlägt. Ein Boss-Level endet wie jedes andere, sobald die Aufgabe erfüllt ist.</li>
       <li>Boss-Belohnung: Ein ohne Tausch bezwungenes Boss-Level gibt 300 Punkte und zwei Bonuskarten.</li>
     </ul>
@@ -550,7 +555,7 @@
     </ul>
     </div>
     <h3 id="verH">Version</h3>
-    <ul><li>Alpha 0.16</li></ul>
+    <ul><li>Alpha 0.17</li></ul>
     <div class="btnRow"><button id="infoSrc" class="btn small">Quellcode anzeigen</button></div>
     <div class="btnRow"><button id="infoClose" class="btn">Schließen</button></div>
   </div>
@@ -558,7 +563,7 @@
 
 <div id="srcModal" class="modal hidden">
   <div class="modalBox" style="max-width:860px">
-    <h2><span id="srcH2t">Quellcode</span> <span class="verTag">Alpha 0.16</span></h2>
+    <h2><span id="srcH2t">Quellcode</span> <span class="verTag">Alpha 0.17</span></h2>
     <p class="mSub" id="srcHint">Vollständiger Quellcode dieser Datei. Nach dem Markieren kann er mit Strg+C (bzw. Cmd+C) kopiert werden.</p>
     <textarea id="srcArea" readonly spellcheck="false"></textarea>
     <div class="btnRow">
@@ -661,7 +666,8 @@ var BOSSROWS=[
 var BOSSPAL=[
 {H:'#e8d8b0',P:'#a04fd0',D:'#5a2a80',W:'#ffffff',K:'#101018',R:'#e04040',G:'#40c060'},
 {H:'#e8d8b0',P:'#d04040',D:'#802020',W:'#ffffff',K:'#101018',R:'#f0a020',G:'#40c060'},
-{H:'#e8d8b0',P:'#3050d0',D:'#1a2a70',W:'#ffffff',K:'#101018',R:'#40e0f0',G:'#40c060'}
+{H:'#e8d8b0',P:'#3050d0',D:'#1a2a70',W:'#ffffff',K:'#101018',R:'#40e0f0',G:'#40c060'},
+{H:'#e8d8b0',P:'#3aa07a',D:'#185a42',W:'#ffffff',K:'#101018',R:'#9a6af0',G:'#40c060'}
 ];
 function drawSprite(g,rows,pal,x,y,sc){
   for(var r=0;r<rows.length;r++){
@@ -843,29 +849,35 @@ de:{
   stLevel:'LEVEL {n}',stGoal:'ZIEL {a}/{b} {t}',stGoal0:'ZIEL 0/0',
   stScore:'PUNKTE {n}',stCombo:'COMBO x{n}',stMode:'DEATH RUN',stRight:'KARTEN {n}',
   swapUsed:'Tausch: benutzt',swapLeft:'Tausch ({n}×)',
-  achLineN:'Lehrling',achLineD:'Erfülle deine erste Aufgabe.',
-  achZauberN:'Facharbeiter',achZauberD:'Wähle deine erste Verzauberung.',
-  achWildN:'Springer',achWildD:'Platziere eine Wildkarte (6|9 oder 1|7).',
-  achJokerN:'Allrounder',achJokerD:'Platziere den Joker als beliebige Ziffer.',
-  achBossN:'Betriebsrat',achBossD:'Beende dein erstes Boss-Level.',
-  achJaegerN:'Gewerkschafter',achJaegerD:'Beende alle drei Boss-Arten in einem Run.',
-  achSudokuN:'Schichtmeister',achSudokuD:'Fülle ein komplettes Sudoku-Brett.',
-  achHochN:'Akkordkönig',achHochD:'Erreiche 5000 Punkte in einem Run.',
-  achMarathonN:'Streikorganisator',achMarathonD:'Erreiche Level 15 im Death Run.',
+  achLineN:'Lehrling',achLineD:'Erfülle zehn Aufgaben in einem Run.',
+  achZauberN:'Facharbeiter',achZauberD:'Wähle fünf Verzauberungen in einem Run.',
+  achWildN:'Springer',achWildD:'Platziere zehn Wildkarten (6|9 oder 1|7) in einem Run.',
+  achJokerN:'Allrounder',achJokerD:'Platziere fünf Joker als beliebige Ziffer in einem Run.',
+  achBossN:'Betriebsrat',achBossD:'Beende drei Boss-Level in einem Run.',
+  achJaegerN:'Gewerkschafter',achJaegerD:'Beende alle vier Boss-Arten in einem Run.',
+  achSudokuN:'Schichtmeister',achSudokuD:'Fülle zwei komplette Sudoku-Bretter in einem Run.',
+  achHochN:'Akkordkönig',achHochD:'Erreiche 10000 Punkte in einem Run.',
+  achMarathonN:'Streikorganisator',achMarathonD:'Erreiche Level 20 im Death Run.',
   upW69n:'WILDKARTE 6|9',upW69d:'Gilt als 6 oder als 9',
   upW17n:'WILDKARTE 1|7',upW17d:'Gilt als 1 oder als 7',
   upJokern:'JOKER',upJokerd:'Einmal jede Ziffer',
+  upQuantn:'QUANTENJOKER',upQuantd:'Macht ein freies Feld zum ?-Feld',
   upSchubn:'NACHSCHUB',upSchubd:'Drei Karten sofort',
   upKlonn:'KLON',upKlond1:'Zufällige Karte',upKlond2:'wird verdoppelt',
   upTauschn:'TAUSCH+',upTauschd1:'Zweiter Tausch',upTauschd2:'in jedem Level',
-  bossDieb:'AKTIONÄR',bossRiss:'MONOPOLIST',bossWirbler:'SPEKULANT',
+  bossDieb:'AKTIONÄR',bossRiss:'MONOPOLIST',bossWirbler:'SPEKULANT',bossSani:'RATIONALISIERER',
   bossDiebD:'Klaut nach je {n} Platzierungen {k} Karte(n)',
   bossRissD:'Reißt nach je {n} Platzierungen {k} Ziffer(n) heraus',
   bossWirblerD:'Verwandelt nach je {n} Platzierungen {k} Karten (auch Wildkarten)',
+  bossSaniD:'Baut nach je {n} Platzierungen {k} ?-Feld(er) ab',
   bossWarn:'ACHTUNG: BEI DER NÄCHSTEN PLATZIERUNG!',
   flCard:'-1 KARTE!',flCardN:'-{k} KARTEN!',flGap:'LUECKE!',flConfuse:'VERWIRRT!',flConflict:'KONFLIKT!',flCards:'+{n} KARTEN',
   logDieb:'Der Aktionär klaut {k} Karte(n)!',logRiss:'Der Monopolist reißt eine Ziffer heraus!',
   logWirbler:'Der Spekulant verwandelt {k} Karten!',
+  logSani:'Der Rationalisierer baut {k} ?-Feld(er) ab!',
+  logCurse:'Ziffer {d} ist verflucht – in dieser Boss-Runde nicht legbar!',
+  logQuant:'Quantenjoker: Feld in den Quantenzustand versetzt!',
+  flCurse:'{d} VERFLUCHT!',
   logLine1:'Linie voll! +{n} Bonuskarten',logLineN:'{k} Linien voll! +{n} Bonuskarten',
   logSudoku:'SUDOKU GELOEST! +1000 Punkte – neues Brett',
   logDeadlock:'Festgefahren – nur noch der Tausch rettet!',
@@ -875,6 +887,7 @@ de:{
   overTitle:'GAME OVER',overMeta:'Punkte: {p} · Level: {l} · Linien: {t}',
   overReason:'{r} – der Run endet hier.',reasonNoCards:'KEINE KARTEN MEHR',reasonStuck:'FESTGEFAHREN',
   ttDigit:'Ziffer {d}',ttWild:'Wildkarte {a}|{b}',ttJoker:'Joker – jede Ziffer',ttUnplayable:'kein legales Feld mehr',
+  ttQuant:'Quantenjoker – verwandelt ein freies Feld in ein ?-Feld',
   slotActive:' (aktiv)',btnAct:'Aktivieren',btnHtml:'HTML',btnDel:'Löschen',
   slotRuns:'{n} Runs',slotAch:'{a}/{t} Erfolge',
   statRuns:'Runs gespielt',statBoards:'Gelöste Sudokus',statBest:'Bester Punktestand',
@@ -929,29 +942,35 @@ en:{
   stLevel:'LEVEL {n}',stGoal:'GOAL {a}/{b} {t}',stGoal0:'GOAL 0/0',
   stScore:'POINTS {n}',stCombo:'COMBO x{n}',stMode:'DEATH RUN',stRight:'CARDS {n}',
   swapUsed:'Swap: used',swapLeft:'Swap ({n}×)',
-  achLineN:'Apprentice',achLineD:'Complete your first task.',
-  achZauberN:'Skilled worker',achZauberD:'Choose your first enchantment.',
-  achWildN:'Stand-in',achWildD:'Place a wildcard (6|9 or 1|7).',
-  achJokerN:'All-rounder',achJokerD:'Place the joker as any digit.',
-  achBossN:'Works council',achBossD:'Finish your first boss level.',
-  achJaegerN:'Unionist',achJaegerD:'Finish all three boss types in one run.',
-  achSudokuN:'Shift master',achSudokuD:'Fill a complete Sudoku board.',
-  achHochN:'Piece-rate king',achHochD:'Reach 5000 points in one run.',
-  achMarathonN:'Strike organizer',achMarathonD:'Reach level 15 in a Death Run.',
+  achLineN:'Apprentice',achLineD:'Complete ten tasks in one run.',
+  achZauberN:'Skilled worker',achZauberD:'Choose five enchantments in one run.',
+  achWildN:'Stand-in',achWildD:'Place ten wildcards (6|9 or 1|7) in one run.',
+  achJokerN:'All-rounder',achJokerD:'Place five jokers as any digit in one run.',
+  achBossN:'Works council',achBossD:'Finish three boss levels in one run.',
+  achJaegerN:'Unionist',achJaegerD:'Finish all four boss types in one run.',
+  achSudokuN:'Shift master',achSudokuD:'Fill two complete Sudoku boards in one run.',
+  achHochN:'Piece-rate king',achHochD:'Reach 10000 points in one run.',
+  achMarathonN:'Strike organizer',achMarathonD:'Reach level 20 in a Death Run.',
   upW69n:'WILDCARD 6|9',upW69d:'Counts as 6 or as 9',
   upW17n:'WILDCARD 1|7',upW17d:'Counts as 1 or as 7',
   upJokern:'JOKER',upJokerd:'Any digit, once',
+  upQuantn:'QUANTUM JOKER',upQuantd:'Turns a free cell into a ? cell',
   upSchubn:'SUPPLY',upSchubd:'Three cards instantly',
   upKlonn:'CLONE',upKlond1:'A random card',upKlond2:'gets doubled',
   upTauschn:'SWAP+',upTauschd1:'A second swap',upTauschd2:'every level',
-  bossDieb:'SHAREHOLDER',bossRiss:'MONOPOLIST',bossWirbler:'SPECULATOR',
+  bossDieb:'SHAREHOLDER',bossRiss:'MONOPOLIST',bossWirbler:'SPECULATOR',bossSani:'RATIONALIZER',
   bossDiebD:'Steals {k} card(s) after every {n} placements',
   bossRissD:'Rips out {k} digit(s) after every {n} placements',
   bossWirblerD:'Transforms {k} cards (wildcards included) after every {n} placements',
+  bossSaniD:'Removes {k} ? cell(s) after every {n} placements',
   bossWarn:'WARNING: ON THE NEXT PLACEMENT!',
   flCard:'-1 CARD!',flCardN:'-{k} CARDS!',flGap:'GAP!',flConfuse:'SHUFFLED!',flConflict:'CONFLICT!',flCards:'+{n} CARDS',
   logDieb:'The shareholder steals {k} card(s)!',logRiss:'The monopolist tears out a digit!',
   logWirbler:'The speculator transforms {k} cards!',
+  logSani:'The rationalizer removes {k} ? cell(s)!',
+  logCurse:'Digit {d} is cursed – unplayable in this boss round!',
+  logQuant:'Quantum joker: cell placed in a quantum state!',
+  flCurse:'{d} CURSED!',
   logLine1:'Line full! +{n} bonus cards',logLineN:'{k} lines full! +{n} bonus cards',
   logSudoku:'SUDOKU SOLVED! +1000 points – new board',
   logDeadlock:'Deadlocked – only a swap can save you!',
@@ -961,6 +980,7 @@ en:{
   overTitle:'GAME OVER',overMeta:'Score: {p} · Level: {l} · Lines: {t}',
   overReason:'{r} – the run ends here.',reasonNoCards:'NO CARDS LEFT',reasonStuck:'DEADLOCKED',
   ttDigit:'Digit {d}',ttWild:'Wildcard {a}|{b}',ttJoker:'Joker – any digit',ttUnplayable:'no legal cell left',
+  ttQuant:'Quantum joker – turns a free cell into a ? cell',
   slotActive:' (active)',btnAct:'Activate',btnHtml:'HTML',btnDel:'Delete',
   slotRuns:'{n} runs',slotAch:'{a}/{t} achievements',
   statRuns:'Runs played',statBoards:'Sudokus solved',statBest:'Best score',
@@ -986,14 +1006,15 @@ en:{
     'After each placement you draw one new card while your table stays below the limit of your difficulty (14/12/10); every row, column or box completed for the first time gives two bonus cards, and every box completed for the first time gives 150 extra points.<br>'+
     'When several placements in a row complete lines, a combo grows: every further line earns 50 points per combo step – the status bar shows the streak. Every digit carries its own colour on board and cards, making missing digits easy to spot.<br>'+
     'A boss level beaten without the swap button rewards 300 points and two bonus cards; six of the nine worlds are unlocked permanently through achievements.<br>'+
-    'Gold dots mark cells with exactly one possible digit left, red dots mark cells with no possible digit – a deadlock is lurking there. Hovering a cell shows the digits still missing from its row, column and box at the right edge.<br>'+
+    'Coloured dots show how many of your hand cards still fit a free cell: yellow means few (three or fewer), red exactly one, black none at all – only the quantum joker can still save black cells. Hovering a cell shows the digits still missing from its row, column and box at the right edge.<br>'+
+    'The quantum joker (Q, as an enchantment) turns any free cell into a ? cell in a quantum state. Every boss curses one digit at the start of its round – it stays unplayable until the level ends.<br>'+
     'Never place the same digit twice in a row, column or box.<br>'+
     'Wildcards (6|9, 1|7) count as either of their two digits; the joker counts as any digit.<br>'+
     'The swap button at the top right discards all your cards once per level and draws six new ones.<br>'+
     'Keyboard: arrow keys move a cursor, 1–9 select a matching card (tap repeatedly to cycle), Enter or space places at the cursor.<br>'+
     'Your run is saved automatically – in the main menu you can continue it.',
   rulesHtml:'<h2>Rules of Numerino</h2>'+
-    '<p class="mSub">Numerino is a Sudoku roguelike: you place digit cards on a 9×9 board, complete tasks on a board that is never cleared, and fend off three boss types in the Death Run. The digits are simple workers – the bosses are management: the Shareholder, the Monopolist and the Speculator.</p>'+
+    '<p class="mSub">Numerino is a Sudoku roguelike: you place digit cards on a 9×9 board, complete tasks on a board that is never cleared, and fend off four boss types in the Death Run. The digits are simple workers – the bosses are management: the Shareholder, the Monopolist, the Speculator and the Rationalizer.</p>'+
     '<details open><summary>The game – general rules</summary><ul>'+
     '<li>9×9 board. Dark cells with a ? are joker cells: they count as any digit, help complete rows, columns and boxes, and never need to be filled themselves.</li>'+
     '<li>Your card table holds a limited number of digit cards (1–9). Tap a card, then tap an empty cell.</li>'+
@@ -1014,10 +1035,12 @@ en:{
     '<li>Points: 10 per placement, 100 per task line, 150 per first completed box and 250 × level on task completion.</li>'+
     '</ul></details>'+
     '<details><summary>Bosses – the Death Run</summary><ul>'+
-    '<li>In the Death Run, every third level a boss attacks; the three types rotate and strike faster and faster at higher levels.</li>'+
+    '<li>In the Death Run, every third level a boss attacks; the four types rotate and strike faster and faster at higher levels.</li>'+
     '<li>Shareholder: steals more and more cards from your card table as levels rise – including wildcards and jokers, but never your last card.</li>'+
     '<li>Monopolist: tears already placed digits out of the board, punching gaps into your Sudoku – several at once at higher levels.</li>'+
     '<li>Speculator: transforms cards on your table into other digits – more and more as levels rise, and wildcards too from level 9.</li>'+
+    '<li>Rationalizer: dismantles ? cells and turns them back into normal cells to fill – secured lines tip back into open work.</li>'+
+    '<li>At the start of every boss round one digit is cursed as well: it stays unplayable everywhere until the level ends.</li>'+
     '<li>The progress boxes under the boss name show when it will strike. A boss level ends like any other as soon as the task is complete.</li>'+
     '<li>Boss reward: a boss level beaten without the swap button gives 300 points and two bonus cards.</li>'+
     '</ul></details>'+
@@ -1086,29 +1109,35 @@ fr:{
   stLevel:'NIVEAU {n}',stGoal:'OBJECTIF {a}/{b} {t}',stGoal0:'OBJECTIF 0/0',
   stScore:'POINTS {n}',stCombo:'COMBO x{n}',stMode:'DEATH RUN',stRight:'CARTES {n}',
   swapUsed:'Échange : utilisé',swapLeft:'Échange ({n}×)',
-  achLineN:'Apprenti',achLineD:'Accomplissez votre première mission.',
-  achZauberN:'Ouvrier qualifié',achZauberD:'Choisissez votre premier enchantement.',
-  achWildN:'Remplaçant',achWildD:'Posez une carte magique (6|9 ou 1|7).',
-  achJokerN:'Factotum',achJokerD:'Posez le joker comme n’importe quel chiffre.',
-  achBossN:'Comité d’entreprise',achBossD:'Terminez votre premier niveau de boss.',
-  achJaegerN:'Syndicaliste',achJaegerD:'Terminez les trois types de boss en une seule partie.',
-  achSudokuN:'Chef d’équipe',achSudokuD:'Remplissez une grille de Sudoku complète.',
-  achHochN:'Roi du rendement',achHochD:'Atteignez 5000 points en une partie.',
-  achMarathonN:'Organisateur de grève',achMarathonD:'Atteignez le niveau 15 dans un Death Run.',
+  achLineN:'Apprenti',achLineD:'Accomplissez dix missions en une seule partie.',
+  achZauberN:'Ouvrier qualifié',achZauberD:'Choisissez cinq enchantements en une seule partie.',
+  achWildN:'Remplaçant',achWildD:'Posez dix cartes magiques (6|9 ou 1|7) en une seule partie.',
+  achJokerN:'Factotum',achJokerD:'Posez cinq jokers comme n’importe quel chiffre en une seule partie.',
+  achBossN:'Comité d’entreprise',achBossD:'Terminez trois niveaux de boss en une seule partie.',
+  achJaegerN:'Syndicaliste',achJaegerD:'Terminez les quatre types de boss en une seule partie.',
+  achSudokuN:'Chef d’équipe',achSudokuD:'Remplissez deux grilles de Sudoku complètes en une seule partie.',
+  achHochN:'Roi du rendement',achHochD:'Atteignez 10000 points en une partie.',
+  achMarathonN:'Organisateur de grève',achMarathonD:'Atteignez le niveau 20 dans un Death Run.',
   upW69n:'CARTE MAGIQUE 6|9',upW69d:'Vaut comme un 6 ou un 9',
   upW17n:'CARTE MAGIQUE 1|7',upW17d:'Vaut comme un 1 ou un 7',
   upJokern:'JOKER',upJokerd:'N’importe quel chiffre, une fois',
+  upQuantn:'JOKER QUANTIQUE',upQuantd:'Change une case libre en case ?',
   upSchubn:'APPROVISIONNEMENT',upSchubd:'Trois cartes immédiatement',
   upKlonn:'CLONE',upKlond1:'Une carte aléatoire',upKlond2:'est doublée',
   upTauschn:'ÉCHANGE+',upTauschd1:'Un second échange',upTauschd2:'à chaque niveau',
-  bossDieb:'ACTIONNAIRE',bossRiss:'MONOPOLISTE',bossWirbler:'SPÉCULATEUR',
+  bossDieb:'ACTIONNAIRE',bossRiss:'MONOPOLISTE',bossWirbler:'SPÉCULATEUR',bossSani:'RATIONALISEUR',
   bossDiebD:'Vole {k} carte(s) toutes les {n} poses',
   bossRissD:'Arrache {k} chiffre(s) toutes les {n} poses',
   bossWirblerD:'Transforme {k} cartes (cartes magiques incluses) toutes les {n} poses',
+  bossSaniD:'Retire {k} case(s) ? toutes les {n} poses',
   bossWarn:'ATTENTION : À LA PROCHAINE POSE !',
   flCard:'-1 CARTE !',flCardN:'-{k} CARTES !',flGap:'TROU !',flConfuse:'MÉLANGÉ !',flConflict:'CONFLIT !',flCards:'+{n} CARTES',
   logDieb:'L’actionnaire vole {k} carte(s) !',logRiss:'Le monopoleur arrache un chiffre !',
   logWirbler:'Le spéculateur transforme {k} cartes !',
+  logSani:'Le rationaliseur retire {k} case(s) ? !',
+  logCurse:'Le chiffre {d} est maudit – impossible à poser pendant ce niveau de boss !',
+  logQuant:'Joker quantique : case placée en état quantique !',
+  flCurse:'{d} MAUDIT !',
   logLine1:'Ligne complète ! +{n} cartes bonus',logLineN:'{k} lignes complètes ! +{n} cartes bonus',
   logSudoku:'SUDOKU RÉSOLU ! +1000 points – nouvelle grille',
   logDeadlock:'Bloqué – seul l’échange peut vous sauver !',
@@ -1118,6 +1147,7 @@ fr:{
   overTitle:'GAME OVER',overMeta:'Points : {p} · Niveau : {l} · Lignes : {t}',
   overReason:'{r} – la partie s’arrête ici.',reasonNoCards:'PLUS DE CARTES',reasonStuck:'BLOQUÉ',
   ttDigit:'Chiffre {d}',ttWild:'Carte magique {a}|{b}',ttJoker:'Joker – n’importe quel chiffre',ttUnplayable:'plus de case légale',
+  ttQuant:'Joker quantique – change une case libre en case ?',
   slotActive:' (active)',btnAct:'Activer',btnHtml:'HTML',btnDel:'Supprimer',
   slotRuns:'{n} parties',slotAch:'{a}/{t} succès',
   statRuns:'Parties jouées',statBoards:'Sudokus résolus',statBest:'Meilleur score',
@@ -1143,14 +1173,15 @@ fr:{
     'Après chaque pose, vous piochez une carte tant que votre table reste sous la limite de votre difficulté (14/12/10) ; chaque rangée, colonne ou carré complété pour la première fois rapporte deux cartes bonus, et chaque carré complété pour la première fois rapporte 150 points supplémentaires.<br>'+
     'Lorsque plusieurs poses d’affilée complètent des lignes, un combo grandit : chaque ligne supplémentaire rapporte 50 points par palier de combo – la barre d’état affiche la série. Chaque chiffre porte sa propre couleur sur la grille et les cartes, repérer les chiffres manquants devient immédiat.<br>'+
     'Un niveau de boss vaincu sans bouton d’échange rapporte 300 points et deux cartes bonus ; six des neuf mondes se débloquent définitivement via des succès.<br>'+
-    'Les points dorés marquent les cases où un seul chiffre reste possible, les points rouges les cases sans aucune possibilité – une impasse y menace. Survolez une case : le bord droit montre les chiffres encore absents de sa rangée, colonne et carré.<br>'+
+    'Les points colorés indiquent combien de cartes de votre main s’adaptent encore à une case libre : jaune signifie peu (trois ou moins), rouge exactement une, noir aucune – seul le joker quantique peut encore sauver les cases noires. Survolez une case : le bord droit montre les chiffres encore absents de sa rangée, colonne et carré.<br>'+
+    'Le joker quantique (Q, en enchantement) change n’importe quelle case libre en case ? en état quantique. Chaque boss maudit un chiffre au début de son tour – il reste impossible à poser jusqu’à la fin du niveau.<br>'+
     'Jamais deux fois le même chiffre dans une rangée, une colonne ou un bloc.<br>'+
     'Les cartes magiques (6|9, 1|7) comptent comme l’un de leurs deux chiffres ; le joker compte comme n’importe quel chiffre.<br>'+
     'Le bouton d’échange en haut à droite jette toutes vos cartes une fois par niveau et en tire six nouvelles.<br>'+
     'Clavier : les flèches déplacent un curseur, 1–9 sélectionnent une carte correspondante (appuyez plusieurs fois pour faire défiler), Entrée ou la barre d’espace pose sur le curseur.<br>'+
     'Votre partie est sauvegardée automatiquement – dans le menu principal, vous pouvez la continuer.',
   rulesHtml:'<h2>Règles de Numerino</h2>'+
-    '<p class="mSub">Numerino est un Sudoku-roguelike : vous placez des cartes de chiffres sur une grille 9×9, vous accomplissez des missions sur une grille jamais effacée et vous repoussez trois types de boss dans le Death Run. Les chiffres sont de simples ouvriers – les patrons sont la direction : l’Actionnaire, le Monopoleur et le Spéculateur.</p>'+
+    '<p class="mSub">Numerino est un Sudoku-roguelike : vous placez des cartes de chiffres sur une grille 9×9, vous accomplissez des missions sur une grille jamais effacée et vous repoussez quatre types de boss dans le Death Run. Les chiffres sont de simples ouvriers – les patrons sont la direction : l’Actionnaire, le Monopoleur, le Spéculateur et le Rationaliseur.</p>'+
     '<details open><summary>Le jeu – règles générales</summary><ul>'+
     '<li>Grille 9×9. Les cases sombres avec un ? sont des cases joker : elles comptent comme n’importe quel chiffre, aident à compléter rangées, colonnes et carrés, et n’ont jamais besoin d’être remplies.</li>'+
     '<li>Votre table de cartes contient un nombre limité de cartes de chiffres (1–9). Touchez une carte, puis touchez une case libre.</li>'+
@@ -1171,10 +1202,12 @@ fr:{
     '<li>Points : 10 par pose, 100 par ligne de mission, 150 par premier carré complet et 250 × niveau à l’accomplissement d’une mission.</li>'+
     '</ul></details>'+
     '<details><summary>Boss – le Death Run</summary><ul>'+
-    '<li>Dans le Death Run, un boss attaque tous les trois niveaux ; les trois types tournent et frappent de plus en plus vite aux niveaux élevés.</li>'+
+    '<li>Dans le Death Run, un boss attaque tous les trois niveaux ; les quatre types tournent et frappent de plus en plus vite aux niveaux élevés.</li>'+
     '<li>Actionnaire : vole de plus en plus cartes de votre table au fil des niveaux – cartes magiques et jokers compris, mais jamais votre dernière carte.</li>'+
     '<li>Monopoleur : arrache des chiffres déjà posés de la grille et ouvre ainsi des trous dans votre Sudoku – plusieurs à la fois aux niveaux élevés.</li>'+
     '<li>Spéculateur : transforme des cartes de votre table en d’autres chiffres – de plus en plus au fil des niveaux, et les cartes magiques aussi à partir du niveau 9.</li>'+
+    '<li>Rationaliseur : démonte des cases ? et en refait des cases normales à remplir – les lignes sécurisées retombent en travail ouvert.</li>'+
+    '<li>Au début de chaque tour de boss, un chiffre est de plus maudit : il reste impossible à poser partout jusqu’à la fin du niveau.</li>'+
     '<li>Les cases de progression sous le nom du boss indiquent quand il frappera. Un niveau de boss se termine comme les autres dès que la mission est accomplie.</li>'+
     '<li>Récompense de boss : un niveau de boss vaincu sans bouton d’échange donne 300 points et deux cartes bonus.</li>'+
     '</ul></details>'+
@@ -1243,29 +1276,35 @@ cs:{
   stLevel:'ÚROVEŇ {n}',stGoal:'CÍL {a}/{b} {t}',stGoal0:'CÍL 0/0',
   stScore:'BODY {n}',stCombo:'COMBO x{n}',stMode:'DEATH RUN',stRight:'KARTY {n}',
   swapUsed:'Výměna: použita',swapLeft:'Výměna ({n}×)',
-  achLineN:'Učeň',achLineD:'Splň svůj první úkol.',
-  achZauberN:'Kvalifikovaný dělník',achZauberD:'Vyber své první očarování.',
-  achWildN:'Náhradník',achWildD:'Umísti divokou kartu (6|9 nebo 1|7).',
-  achJokerN:'Univerzál',achJokerD:'Umísti žolíka jako libovolnou číslici.',
-  achBossN:'Podniková rada',achBossD:'Dokonči svou první úroveň s bossem.',
-  achJaegerN:'Odborář',achJaegerD:'Dokonči všechny tři druhy bossů v jednom běhu.',
-  achSudokuN:'Směnový mistr',achSudokuD:'Vyplň úplnou desku Sudoku.',
-  achHochN:'Král akordu',achHochD:'Dosáhni 5000 bodů v jednom běhu.',
-  achMarathonN:'Organizátor stávky',achMarathonD:'Dosáhni 15. úrovně v Death Runu.',
+  achLineN:'Učeň',achLineD:'Splň deset úkolů v jednom běhu.',
+  achZauberN:'Kvalifikovaný dělník',achZauberD:'Vyber pět očarování v jednom běhu.',
+  achWildN:'Náhradník',achWildD:'Umísti deset divokých karet (6|9 nebo 1|7) v jednom běhu.',
+  achJokerN:'Univerzál',achJokerD:'Umísti pět žolíků jako libovolnou číslici v jednom běhu.',
+  achBossN:'Podniková rada',achBossD:'Dokonči tři úrovně s bossem v jednom běhu.',
+  achJaegerN:'Odborář',achJaegerD:'Dokonči všechny čtyři druhy bossů v jednom běhu.',
+  achSudokuN:'Směnový mistr',achSudokuD:'Vyplň dvě úplné desky Sudoku v jednom běhu.',
+  achHochN:'Král akordu',achHochD:'Dosáhni 10000 bodů v jednom běhu.',
+  achMarathonN:'Organizátor stávky',achMarathonD:'Dosáhni 20. úrovně v Death Runu.',
   upW69n:'DIVOKÁ KARTA 6|9',upW69d:'Platí jako 6 nebo 9',
   upW17n:'DIVOKÁ KARTA 1|7',upW17d:'Platí jako 1 nebo 7',
   upJokern:'ŽOLÍK',upJokerd:'Jednou libovolná číslice',
+  upQuantn:'KVANTOVÝ ŽOLÍK',upQuantd:'Převede volné pole na pole ?',
   upSchubn:'ZÁSOBA',upSchubd:'Tři karty okamžitě',
   upKlonn:'KLON',upKlond1:'Náhodná karta',upKlond2:'je zdvojnásobena',
   upTauschn:'VÝMĚNA+',upTauschd1:'Druhá výměna',upTauschd2:'v každé úrovni',
-  bossDieb:'AKCIONÁŘ',bossRiss:'MONOPOLISTA',bossWirbler:'SPEKULANT',
+  bossDieb:'AKCIONÁŘ',bossRiss:'MONOPOLISTA',bossWirbler:'SPEKULANT',bossSani:'RACIONALIZÉR',
   bossDiebD:'Ukradne {k} karet po každých {n} umístěních',
   bossRissD:'Vytrhne {k} číslici(e) po každých {n} umístěních',
   bossWirblerD:'Promění {k} karet (i divoké karty) po každých {n} umístěních',
+  bossSaniD:'Odstraní {k} polí ? po každých {n} umístěních',
   bossWarn:'POZOR: PŘI PŘÍŠTÍM UMÍSTĚNÍ!',
   flCard:'-1 KARTA!',flCardN:'-{k} KARET!',flGap:'DÍRA!',flConfuse:'ZAMÍCHÁNO!',flConflict:'KONFLIKT!',flCards:'+{n} KART',
   logDieb:'Akcionář kradne {k} karet!',logRiss:'Monopolista vytrhává číslici!',
   logWirbler:'Spekulant proměňuje {k} karet!',
+  logSani:'Racionalizér odstraňuje {k} polí ?!',
+  logCurse:'Číslice {d} je prokletá – v této úrovni s bossem ji nelze položit!',
+  logQuant:'Kvantový žolík: pole převedeno do kvantového stavu!',
+  flCurse:'{d} PROKLETÁ!',
   logLine1:'Linie plná! +{n} bonusových karet',logLineN:'{k} linie plné! +{n} bonusových karet',
   logSudoku:'SUDOKU VYŘEŠENO! +1000 bodů – nová deska',
   logDeadlock:'Uviznuto – zachrání tě už jen výměna!',
@@ -1275,6 +1314,7 @@ cs:{
   overTitle:'KONEC HRY',overMeta:'Body: {p} · Úroveň: {l} · Linií: {t}',
   overReason:'{r} – běh tady končí.',reasonNoCards:'ŽÁDNÉ KARTY',reasonStuck:'UVIZNUTO',
   ttDigit:'Číslice {d}',ttWild:'Divoká karta {a}|{b}',ttJoker:'Žolík – libovolná číslice',ttUnplayable:'už žádné legální pole',
+  ttQuant:'Kvantový žolík – převede volné pole na pole ?',
   slotActive:' (aktivní)',btnAct:'Aktivovat',btnHtml:'HTML',btnDel:'Smazat',
   slotRuns:'{n} běhů',slotAch:'{a}/{t} úspěchů',
   statRuns:'Odehrané běhy',statBoards:'Vyřešená sudoku',statBest:'Nejlepší skóre',
@@ -1300,14 +1340,15 @@ cs:{
     'Po každém umístění lízneš jednu kartu, dokud tvůj stůl nezůstává pod limitem obtížnosti (14/12/10); každá poprvé vyplněná řada, sloupec nebo čtverec přináší dvě bonusové karty a každý poprvé vyplněný čtverec navíc 150 bodů.<br>'+
     'Když několik umístění v řadě doplní linie, combo roste: každá další linie přináší 50 bodů za stupeň comba – stavová lišta ukazuje sérii. Každá číslice má na desce i kartách svou vlastní barvu, takže chybějící číslice poznáš na první pohled.<br>'+
     'Úroveň s bossem zvládnutá bez tlačítka výměny odmění 300 bodů a dvě bonusové karty; šest z devíti světů odemkneš trvale přes úspěchy.<br>'+
-    'Zlaté tečky označují pole, kde zbývá jediná možná číslice, červené tečky pole bez jakékoli možnosti – tam číhá slepá ulička. Při najetí na pole ukazuje pravý okraj číslice, které jeho řadě, sloupci a čtverci chybí.<br>'+
+    'Barevné tečky ukazují, kolik karet z ruky se ještě vejde na volné pole: žlutá znamená málo (tři nebo méně), červená přesně jednu, černá žádnou – černá pole může zachránit jen kvantový žolík. Při najetí na pole ukazuje pravý okraj číslice, které jeho řadě, sloupci a čtverci chybí.<br>'+
+    'Kvantový žolík (Q, jako očarování) převede jakékoli volné pole na pole ? v kvantovém stavu. Každý boss na začátku svého kola prokleje jednu číslici – až do konce úrovně ji nelze položit.<br>'+
     'Stejnou číslici nikdy dvakrát v řadě, sloupci ani bloku.<br>'+
     'Divoké karty (6|9, 1|7) platí jako jedna ze svých dvou číslic, žolík jako libovolná.<br>'+
     'Tlačítko výměny vpravo nahoře jednou za úroveň zahodí všechny karty a lízne šest nových.<br>'+
     'Klávesnice: šipky pohybují kurzorem, 1–9 vyberou odpovídající kartu (opakováním listuješ), Enter nebo mezerník umístí na kurzor.<br>'+
     'Tvůj běh se ukládá automaticky – v hlavním menu ho můžeš pokračovat.',
   rulesHtml:'<h2>Pravidla Numerina</h2>'+
-    '<p class="mSub">Numerino je Sudoku-roguelike: umísťuješ karty s číslicemi na desku 9×9, plníš úkoly na desce, která se nikdy nemaže, a v Death Runu odoláváš třem druhům bossů. Číslice jsou prostí dělníci – bossové jsou vedení: Akcionář, Monopolista a Spekulant.</p>'+
+    '<p class="mSub">Numerino je Sudoku-roguelike: umísťuješ karty s číslicemi na desku 9×9, plníš úkoly na desce, která se nikdy nemaže, a v Death Runu odoláváš čtyřem druhům bossů. Číslice jsou prostí dělníci – bossové jsou vedení: Akcionář, Monopolista, Spekulant a Racionalizér.</p>'+
     '<details open><summary>Hra – obecná pravidla</summary><ul>'+
     '<li>Deska 9×9. Tmavá pole s ? jsou žolíková pole: platí jako libovolná číslice, pomáhají plnit řady, sloupce a čtverce a nikdy je nemusíš vyplnit.</li>'+
     '<li>Tvůj karetní stůl pojme omezený počet karet s číslicemi (1–9). Klepni na kartu a pak na volné pole.</li>'+
@@ -1328,10 +1369,12 @@ cs:{
     '<li>Body: 10 za umístění, 100 za linii úkolu, 150 za první vyplněný čtverec a 250 × úroveň za splnění úkolu.</li>'+
     '</ul></details>'+
     '<details><summary>Bossové – Death Run</summary><ul>'+
-    '<li>V Death Runu každý třetí úroveň zaútočí boss; tři druhy se střídají a s vyššími úrovněmi útočí stále rychleji.</li>'+
+    '<li>V Death Runu každý třetí úroveň zaútočí boss; čtyři druhy se střídají a s vyššími úrovněmi útočí stále rychleji.</li>'+
     '<li>Akcionář: s rostoucími úrovněmi ukradne stále více karet z tvého stolu – i divoké karty a žolíky, ale nikdy tvou poslední kartu.</li>'+
     '<li>Monopolista: vytrhne už umístěné číslice z desky a udělá ti tak díry do sudoku – na vyšších úrovních několik najednou.</li>'+
     '<li>Spekulant: promění karty na tvém stole v jiné číslice – s vyššími úrovněmi stále více, od 9. úrovně i divoké karty.</li>'+
+    '<li>Racionalizér: rozbere pole ? a udělá z nich znovu obyčejná pole k vyplnění – zajištěné linie se vrátí do otevřené práce.</li>'+
+    '<li>Na začátku každého kola bossa je navíc prokleta jedna číslice: až do konce úrovně ji nelze nikde položit.</li>'+
     '<li>Progressová políčka pod jménem bossa ukazují, kdy udeří. Úroveň s bossem končí jako každá jiná, jakmile je úkol splněn.</li>'+
     '<li>Odměna za bosse: úroveň s bossem zvládnutá bez tlačítka výměny dá 300 bodů a dvě bonusové karty.</li>'+
     '</ul></details>'+
@@ -1400,29 +1443,35 @@ pl:{
   stLevel:'POZIOM {n}',stGoal:'CEL {a}/{b} {t}',stGoal0:'CEL 0/0',
   stScore:'PUNKTY {n}',stCombo:'COMBO x{n}',stMode:'DEATH RUN',stRight:'KARTY {n}',
   swapUsed:'Wymiana: użyta',swapLeft:'Wymiana ({n}×)',
-  achLineN:'Praktykant',achLineD:'Wykonaj swoje pierwsze zadanie.',
-  achZauberN:'Fachowiec',achZauberD:'Wybierz swoje pierwsze zaklęcie.',
-  achWildN:'Zmiennik',achWildD:'Umieść dziką kartę (6|9 lub 1|7).',
-  achJokerN:'Złota rączka',achJokerD:'Umieść jokera jako dowolną cyfrę.',
-  achBossN:'Rada zakładowa',achBossD:'Ukończ swój pierwszy poziom z bossem.',
-  achJaegerN:'Związkowiec',achJaegerD:'Ukończ wszystkie trzy rodzaje bossów w jednym podejściu.',
-  achSudokuN:'Mistrz zmianowy',achSudokuD:'Wypełnij kompletną planszę Sudoku.',
-  achHochN:'Król akordu',achHochD:'Zdobądź 5000 punktów w jednym podejściu.',
-  achMarathonN:'Organizator strajku',achMarathonD:'Osiągnij poziom 15 w Death Runie.',
+  achLineN:'Praktykant',achLineD:'Wykonaj dziesięć zadań w jednym podejściu.',
+  achZauberN:'Fachowiec',achZauberD:'Wybierz pięć zaklęć w jednym podejściu.',
+  achWildN:'Zmiennik',achWildD:'Umieść dziesięć dzikich kart (6|9 lub 1|7) w jednym podejściu.',
+  achJokerN:'Złota rączka',achJokerD:'Umieść pięć jokerów jako dowolną cyfrę w jednym podejściu.',
+  achBossN:'Rada zakładowa',achBossD:'Ukończ trzy poziomy z bossem w jednym podejściu.',
+  achJaegerN:'Związkowiec',achJaegerD:'Ukończ wszystkie cztery rodzaje bossów w jednym podejściu.',
+  achSudokuN:'Mistrz zmianowy',achSudokuD:'Wypełnij dwie kompletne plansze Sudoku w jednym podejściu.',
+  achHochN:'Król akordu',achHochD:'Zdobądź 10000 punktów w jednym podejściu.',
+  achMarathonN:'Organizator strajku',achMarathonD:'Osiągnij poziom 20 w Death Runie.',
   upW69n:'DZIKA KARTA 6|9',upW69d:'Liczy się jako 6 lub 9',
   upW17n:'DZIKA KARTA 1|7',upW17d:'Liczy się jako 1 lub 7',
   upJokern:'JOKER',upJokerd:'Raz dowolna cyfra',
+  upQuantn:'JOKER KWANTOWY',upQuantd:'Zmienia wolne pole w pole ?',
   upSchubn:'ZAPAS',upSchubd:'Trzy karty natychmiast',
   upKlonn:'KLON',upKlond1:'Losowa karta',upKlond2:'zostaje podwojona',
   upTauschn:'WYMIANA+',upTauschd1:'Druga wymiana',upTauschd2:'na każdym poziomie',
-  bossDieb:'AKCJONARIUSZ',bossRiss:'MONOPOLISTA',bossWirbler:'SPEKULANT',
+  bossDieb:'AKCJONARIUSZ',bossRiss:'MONOPOLISTA',bossWirbler:'SPEKULANT',bossSani:'RACIONALIZATOR',
   bossDiebD:'Kradnie {k} kart po każdych {n} umieszczeniach',
   bossRissD:'Wyrwia {k} cyfrę/cyfry po każdych {n} umieszczeniach',
   bossWirblerD:'Przekształca {k} kart (także dzikie karty) po każdych {n} umieszczeniach',
+  bossSaniD:'Usuwa {k} pola ? po każdych {n} umieszczeniach',
   bossWarn:'UWAGA: PRZY NASTĘPNYM UMIESZCZENIU!',
   flCard:'-1 KARTA!',flCardN:'-{k} KART!',flGap:'LUKA!',flConfuse:'POMIESZANE!',flConflict:'KONFLIKT!',flCards:'+{n} KART',
   logDieb:'Akcjonariusz kradnie {k} kart!',logRiss:'Monopolista wyrwia cyfrę!',
   logWirbler:'Spekulant przekształca {k} kart!',
+  logSani:'Racionalizator usuwa {k} pola ?!',
+  logCurse:'Cyfra {d} jest przeklęta – w tym poziomie z bossem nie można jej położyć!',
+  logQuant:'Joker kwantowy: pole przeniesione w stan kwantowy!',
+  flCurse:'{d} PRZEKLĘTA!',
   logLine1:'Linia pełna! +{n} kart bonusowych',logLineN:'{k} linie pełne! +{n} kart bonusowych',
   logSudoku:'SUDOKU ROZWIĄZANE! +1000 punktów – nowa plansza',
   logDeadlock:'Zablokowany – uratuje cię już tylko wymiana!',
@@ -1432,6 +1481,7 @@ pl:{
   overTitle:'KONIEC GRY',overMeta:'Punkty: {p} · Poziom: {l} · Linie: {t}',
   overReason:'{r} – podejście kończy się tutaj.',reasonNoCards:'BRAK KART',reasonStuck:'ZABLOKOWANY',
   ttDigit:'Cyfra {d}',ttWild:'Dzika karta {a}|{b}',ttJoker:'Joker – dowolna cyfra',ttUnplayable:'brak legalnego pola',
+  ttQuant:'Joker kwantowy – zmienia wolne pole w pole ?',
   slotActive:' (aktywny)',btnAct:'Aktywuj',btnHtml:'HTML',btnDel:'Usuń',
   slotRuns:'{n} podejść',slotAch:'{a}/{t} osiągnięć',
   statRuns:'Rozegrane podejścia',statBoards:'Rozwiązane sudoku',statBest:'Najlepszy wynik',
@@ -1457,14 +1507,15 @@ pl:{
     'Po każdym umieszczeniu dobierasz jedną kartę, dopóki twój stół pozostaje pod limitem trudności (14/12/10); każdy pierwszy raz wypełniony wiersz, kolumna lub kwadrat daje dwie karty bonusowe, a każdy pierwszy raz wypełniony kwadrat dodatkowo 150 punktów.<br>'+
     'Gdy kilka umieszczeń z rzędu uzupełnia linie, combo rośnie: każda kolejna linia daje 50 punktów za stopień combo – pasek statusu pokazuje serię. Każda cyfra ma na planszy i kartach własny kolor, dzięki czemu brakujące cyfry widać od razu.<br>'+
     'Poziom z bossem pokonany bez przycisku wymiany nagradza 300 punktami i dwiema kartami bonusowymi; sześć z dziewięciu światów odblokowujesz trwale przez osiągnięcia.<br>'+
-    'Złote kropki oznaczają pola, gdzie pozostaje tylko jedna możliwa cyfra, czerwone kropki pola bez żadnej możliwości – tam czyha zakleszczenie. Po najechaniu na pole prawy brzeg pokazuje cyfry, których brakuje jego wierszowi, kolumnie i kwadratowi.<br>'+
+    'Kolorowe kropki pokazują, ile kart z ręki pasuje jeszcze do wolnego pola: żółta znaczy niewiele (trzy lub mniej), czerwona dokładnie jedną, czarna żadną – czarne pola może uratować tylko joker kwantowy. Po najechaniu na pole prawy brzeg pokazuje cyfry, których brakuje jego wierszowi, kolumnie i kwadratowi.<br>'+
+    'Joker kwantowy (Q, jako zaklęcie) zmienia dowolne wolne pole w pole ? w stanie kwantowym. Każdy boss na początku swojej rundy przeklina jedną cyfrę – do końca poziomu nie można jej położyć.<br>'+
     'Nigdy ta sama cyfra dwa razy w wierszu, kolumnie lub bloku.<br>'+
     'Dzikie karty (6|9, 1|7) liczą się jako jedna z dwóch cyfr, a joker jako każda.<br>'+
     'Przycisk wymiany w prawym górnym rogu raz na poziom wyrzuca wszystkie karty i dobiera sześć nowych.<br>'+
     'Klawiatura: strzałki przesuwają kursor, 1–9 wybiera pasującą kartę (wielokrotne naciśnięcie przełącza dalej), Enter lub spacja umieszcza na kursorze.<br>'+
     'Twój run zapisuje się automatycznie – w menu głównym możesz go kontynuować.',
   rulesHtml:'<h2>Zasady Numerino</h2>'+
-    '<p class="mSub">Numerino to Sudoku-roguelike: umieszczasz karty cyfr na planszy 9×9, wykonujesz zadania na planszy, która nigdy nie jest czyszczona, i w Death Runie odpierasz trzy rodzaje bossów. Cyfry to prości robotnicy – bossowie to zarząd: Akcjonariusz, Monopolista i Spekulant.</p>'+
+    '<p class="mSub">Numerino to Sudoku-roguelike: umieszczasz karty cyfr na planszy 9×9, wykonujesz zadania na planszy, która nigdy nie jest czyszczona, i w Death Runie odpierasz cztery rodzaje bossów. Cyfry to prości robotnicy – bossowie to zarząd: Akcjonariusz, Monopolista, Spekulant i Racionalizator.</p>'+
     '<details open><summary>Gra – zasady ogólne</summary><ul>'+
     '<li>Plansza 9×9. Ciemne pola z ? to pola jokerów: liczą się jako dowolna cyfra, pomagają wypełniać wiersze, kolumny i kwadraty, a nigdy nie trzeba ich samodzielnie wypełniać.</li>'+
     '<li>Twój stół kart mieści ograniczoną liczbę kart cyfr (1–9). Dotknij karty, a następnie wolnego pola.</li>'+
@@ -1485,10 +1536,12 @@ pl:{
     '<li>Punkty: 10 za umieszczenie, 100 za linię zadania, 150 za pierwszy wypełniony kwadrat i 250 × poziom za wykonanie zadania.</li>'+
     '</ul></details>'+
     '<details><summary>Bossowie – Death Run</summary><ul>'+
-    '<li>W Death Runie co trzeci poziom atakuje boss; trzy rodzaje rotują, a na wyższych poziomach uderzają coraz szybciej.</li>'+
+    '<li>W Death Runie co trzeci poziom atakuje boss; cztery rodzaje rotują, a na wyższych poziomach uderzają coraz szybciej.</li>'+
     '<li>Akcjonariusz: wraz z wyższymi poziomami kradnie coraz więcej kart z twojego stołu – również dzikie karty i jokery, ale nigdy twoją ostatnią kartę.</li>'+
     '<li>Monopolista: wyrwia już umieszczone cyfry z planszy i robi ci tym samym luki w sudoku – na wyższych poziomach kilka naraz.</li>'+
     '<li>Spekulant: przekształca karty na twoim stole w inne cyfry – wraz z wyższymi poziomami coraz więcej, od 9. poziomu także dzikie karty.</li>'+
+    '<li>Racionalizator: rozbiera pola ? i zamienia je z powrotem w zwykłe pola do wypełnienia – zabezpieczone linie wracają do otwartej pracy.</li>'+
+    '<li>Na początku każdej rundy bossa przeklęta jest dodatkowo jedna cyfra: do końca poziomu nie można jej nigdzie położyć.</li>'+
     '<li>Pola postępu pod nazwą bossa pokazują, kiedy uderzy. Poziom z bossem kończy się jak każdy inny, gdy tylko zadanie zostanie wykonane.</li>'+
     '<li>Nagroda za bossa: poziom z bossem pokonany bez przycisku wymiany daje 300 punktów i dwie karty bonusowe.</li>'+
     '</ul></details>'+
@@ -1557,29 +1610,35 @@ es:{
   stLevel:'NIVEL {n}',stGoal:'META {a}/{b} {t}',stGoal0:'META 0/0',
   stScore:'PUNTOS {n}',stCombo:'COMBO x{n}',stMode:'DEATH RUN',stRight:'CARTAS {n}',
   swapUsed:'Cambio: usado',swapLeft:'Cambio ({n}×)',
-  achLineN:'Aprendiz',achLineD:'Completa tu primera tarea.',
-  achZauberN:'Obrero cualificado',achZauberD:'Elige tu primer encantamiento.',
-  achWildN:'Suplente',achWildD:'Coloca una carta comodín (6|9 o 1|7).',
-  achJokerN:'Hombre orquesta',achJokerD:'Coloca el jóker como cualquier dígito.',
-  achBossN:'Comité de empresa',achBossD:'Completa tu primer nivel de jefe.',
-  achJaegerN:'Sindicalista',achJaegerD:'Completa los tres tipos de jefe en una sola partida.',
-  achSudokuN:'Jefe de turno',achSudokuD:'Rellena un tablero de Sudoku completo.',
-  achHochN:'Rey del destajo',achHochD:'Alcanza 5000 puntos en una partida.',
-  achMarathonN:'Organizador de huelga',achMarathonD:'Alcanza el nivel 15 en un Death Run.',
+  achLineN:'Aprendiz',achLineD:'Completa diez tareas en una sola partida.',
+  achZauberN:'Obrero cualificado',achZauberD:'Elige cinco encantamientos en una sola partida.',
+  achWildN:'Suplente',achWildD:'Coloca diez cartas comodín (6|9 o 1|7) en una sola partida.',
+  achJokerN:'Hombre orquesta',achJokerD:'Coloca cinco jókers como cualquier dígito en una sola partida.',
+  achBossN:'Comité de empresa',achBossD:'Completa tres niveles de jefe en una sola partida.',
+  achJaegerN:'Sindicalista',achJaegerD:'Completa los cuatro tipos de jefe en una sola partida.',
+  achSudokuN:'Jefe de turno',achSudokuD:'Rellena dos tableros de Sudoku completos en una sola partida.',
+  achHochN:'Rey del destajo',achHochD:'Alcanza 10000 puntos en una partida.',
+  achMarathonN:'Organizador de huelga',achMarathonD:'Alcanza el nivel 20 en un Death Run.',
   upW69n:'CARTA COMODÍN 6|9',upW69d:'Cuenta como 6 o 9',
   upW17n:'CARTA COMODÍN 1|7',upW17d:'Cuenta como 1 o 7',
   upJokern:'JÓKER',upJokerd:'Un dígito cualquiera, una vez',
+  upQuantn:'JÓKER CUÁNTICO',upQuantd:'Convierte una casilla libre en casilla ?',
   upSchubn:'REPOSICIÓN',upSchubd:'Tres cartas al instante',
   upKlonn:'CLON',upKlond1:'Una carta aleatoria',upKlond2:'se duplica',
   upTauschn:'CAMBIO+',upTauschd1:'Un segundo cambio',upTauschd2:'en cada nivel',
-  bossDieb:'ACCIONISTA',bossRiss:'MONOPOLISTA',bossWirbler:'ESPECULADOR',
+  bossDieb:'ACCIONISTA',bossRiss:'MONOPOLISTA',bossWirbler:'ESPECULADOR',bossSani:'RACIONALIZADOR',
   bossDiebD:'Roba {k} carta(s) cada {n} colocaciones',
   bossRissD:'Arranca {k} dígito(s) cada {n} colocaciones',
   bossWirblerD:'Transforma {k} cartas (comodines incluidos) cada {n} colocaciones',
+  bossSaniD:'Elimina {k} casilla(s) ? cada {n} colocaciones',
   bossWarn:'¡CUIDADO: EN LA PRÓXIMA COLOCACIÓN!',
   flCard:'¡-1 CARTA!',flCardN:'¡-{k} CARTAS!',flGap:'¡HUECO!',flConfuse:'¡CONFUNDIDO!',flConflict:'¡CONFLICTO!',flCards:'+{n} CARTAS',
   logDieb:'¡El accionista roba {k} carta(s)!',logRiss:'¡El monopolista arranca un dígito!',
   logWirbler:'¡El especulador transforma {k} cartas!',
+  logSani:'¡El racionalizador elimina {k} casilla(s) ?!',
+  logCurse:'¡El dígito {d} está maldito – no se puede colocar en este nivel de jefe!',
+  logQuant:'¡Jóker cuántico: casilla trasladada a estado cuántico!',
+  flCurse:'¡{d} MALDITO!',
   logLine1:'¡Línea completa! +{n} cartas de bonificación',logLineN:'{k} líneas completas: +{n} cartas de bonificación',
   logSudoku:'¡SUDOKU RESUELTO! +1000 puntos – nuevo tablero',
   logDeadlock:'Bloqueado: ¡solo el cambio puede salvarte!',
@@ -1589,6 +1648,7 @@ es:{
   overTitle:'FIN DE LA PARTIDA',overMeta:'Puntos: {p} · Nivel: {l} · Líneas: {t}',
   overReason:'{r}: la partida termina aquí.',reasonNoCards:'SIN CARTAS',reasonStuck:'BLOQUEADO',
   ttDigit:'Dígito {d}',ttWild:'Carta comodín {a}|{b}',ttJoker:'Jóker – cualquier dígito',ttUnplayable:'sin casilla legal',
+  ttQuant:'Jóker cuántico – convierte una casilla libre en casilla ?',
   slotActive:' (activa)',btnAct:'Activar',btnHtml:'HTML',btnDel:'Borrar',
   slotRuns:'{n} partidas',slotAch:'{a}/{t} logros',
   statRuns:'Partidas jugadas',statBoards:'Sudokus resueltos',statBest:'Mejor puntuación',
@@ -1614,14 +1674,15 @@ es:{
     'Tras cada colocación robas una carta mientras tu mesa siga por debajo del límite de tu dificultad (14/12/10); cada fila, columna o cuadrante completados por primera vez dan dos cartas de bonificación, y cada cuadrante completado por primera vez da además 150 puntos.<br>'+
     'Cuando varias colocaciones seguidas completan líneas, un combo crece: cada línea adicional da 50 puntos por cada grado de combo – la barra de estado muestra la serie. Cada dígito lleva su propio color en el tablero y en las cartas, así los dígitos que faltan se ven de inmediato.<br>'+
     'Un nivel de jefe vencido sin el botón de cambio recompensa con 300 puntos y dos cartas de bonificación; seis de los nueve mundos se desbloquean de forma permanente mediante logros.<br>'+
-    'Los puntos dorados señalan casillas donde solo queda un dígito posible, los puntos rojos casillas sin ninguna posibilidad – allí acecha un bloqueo. Al pasar sobre una casilla, el borde derecho muestra los dígitos que aún faltan en su fila, columna y cuadrante.<br>'+
+    'Los puntos de color muestran cuántas cartas de tu mano encajan aún en una casilla libre: amarillo significa pocas (tres o menos), rojo exactamente una, negro ninguna – las casillas negras solo puede salvarlas el jóker cuántico. Al pasar sobre una casilla, el borde derecho muestra los dígitos que aún faltan en su fila, columna y cuadrante.<br>'+
+    'El jóker cuántico (Q, como encantamiento) convierte cualquier casilla libre en una casilla ? en estado cuántico. Cada jefe maldice un dígito al comienzo de su ronda – no se puede colocar hasta el final del nivel.<br>'+
     'Nunca el mismo dígito dos veces por fila, columna o bloque.<br>'+
     'Los comodines (6|9, 1|7) cuentan como uno de sus dos dígitos; el jóker cuenta como cualquiera.<br>'+
     'El botón de cambio arriba a la derecha descarta todas las cartas una vez por nivel y roba seis nuevas.<br>'+
     'Teclado: las flechas mueven un cursor, 1–9 elige una carta que encaje (pulsa varias veces para alternar), Intro o barra espaciadora coloca en el cursor.<br>'+
     'Tu partida se guarda automáticamente – en el menú principal puedes continuarla.',
   rulesHtml:'<h2>Reglas de Numerino</h2>'+
-    '<p class="mSub">Numerino es un Sudoku roguelike: colocas cartas de dígitos en un tablero de 9×9, completas tareas en un tablero que nunca se borra y te defiendes de tres tipos de jefes en el Death Run. Los dígitos son obreros sencillos – los jefes son la dirección: el Accionista, el Monopolista y el Especulador.</p>'+
+    '<p class="mSub">Numerino es un Sudoku roguelike: colocas cartas de dígitos en un tablero de 9×9, completas tareas en un tablero que nunca se borra y te defiendes de cuatro tipos de jefes en el Death Run. Los dígitos son obreros sencillos – los jefes son la dirección: el Accionista, el Monopolista, el Especulador y el Racionalizador.</p>'+
     '<details open><summary>El juego – reglas generales</summary><ul>'+
     '<li>Tablero de 9×9. Las casillas oscuras con ? son casillas comodín: cuentan como cualquier dígito, ayudan a completar filas, columnas y cuadrantes, y nunca hay que rellenarlas.</li>'+
     '<li>Tu mesa de cartas guarda un número limitado de cartas de dígitos (1–9). Toca una carta y luego una casilla libre.</li>'+
@@ -1642,10 +1703,12 @@ es:{
     '<li>Puntos: 10 por colocación, 100 por línea de tarea, 150 por primer cuadrante completo y 250 × nivel al completar una tarea.</li>'+
     '</ul></details>'+
     '<details><summary>Jefes – el Death Run</summary><ul>'+
-    '<li>En el Death Run, cada tercer nivel ataca un jefe; los tres tipos rotan y golpean cada vez más rápido en niveles altos.</li>'+
+    '<li>En el Death Run, cada tercer nivel ataca un jefe; los cuatro tipos rotan y golpean cada vez más rápido en niveles altos.</li>'+
     '<li>Accionista: roba cada vez más cartas de tu mesa a medida que suben los niveles – también comodines y jókers, pero nunca tu última carta.</li>'+
     '<li>Monopolista: arranca del tablero dígitos ya colocados y abre así huecos en tu Sudoku – varios a la vez en niveles altos.</li>'+
     '<li>Especulador: transforma cartas de tu mesa en otros dígitos – cada vez más a medida que suben los niveles, y desde el nivel 9 también comodines.</li>'+
+    '<li>Racionalizador: desmonta casillas ? y las convierte de nuevo en casillas normales por rellenar – las líneas aseguradas vuelven a ser trabajo abierto.</li>'+
+    '<li>Al comienzo de cada ronda de jefe se maldice además un dígito: no se puede colocar en ninguna parte hasta el final del nivel.</li>'+
     '<li>Las casillas de progreso bajo el nombre del jefe muestran cuándo golpeará. Un nivel de jefe termina como cualquier otro en cuanto se completa la tarea.</li>'+
     '<li>Recompensa de jefe: un nivel de jefe vencido sin el botón de cambio da 300 puntos y dos cartas de bonificación.</li>'+
     '</ul></details>'+
@@ -1751,7 +1814,7 @@ function setLang(l){
   if(!$('saveOverlay').classList.contains('hidden'))renderSaveMenu();
 }
 /* ================= Spielstand ================= */
-/* Version: Alpha 0.16 – mit jeder Änderung hochzählen (Alpha 0.17, 0.18 …) */
+/* Version: Alpha 0.17 – mit jeder Änderung hochzählen (Alpha 0.18, 0.19 …) */
 function loadSave(){
   var fallback=null;
   try{fallback=JSON.parse(document.getElementById('saveSlot').textContent);}catch(e){}
@@ -1906,6 +1969,7 @@ var UP={
   w69:{icon:'6|9',cls:'drCatSpell',nk:'upW69n',dk:['upW69d']},
   w17:{icon:'1|7',cls:'drCatSpell',nk:'upW17n',dk:['upW17d']},
   joker:{icon:'*',cls:'drCatSpell',nk:'upJokern',dk:['upJokerd']},
+  quant:{icon:'Q',cls:'drCatSpell',nk:'upQuantn',dk:['upQuantd']},
   schub:{icon:'+',cls:'drCatSlot',nk:'upSchubn',dk:['upSchubd']},
   klon:{icon:'K',cls:'drCatMove',nk:'upKlonn',dk:['upKlond1','upKlond2']},
   tausch:{icon:'T',cls:'drCatSlot',nk:'upTauschn',dk:['upTauschd1','upTauschd2']}
@@ -1913,6 +1977,7 @@ var UP={
 var S={running:false,diff:2,level:1,task:null,totLines:0,score:0,boards:0,
   grid:[],inv:[],sel:-1,wildChoice:null,boss:null,bossKinds:{},swapUsed:false,swapMax:1,
   combo:0,comboMax:0,
+  upCount:0,wildCount:0,jokerCount:0,bossCount:0,
   pending:[],
   done:false,doneTimer:0,over:false,dragCell:null,
   floats:[],parts:[],shake:0,mx:-1,my:-1,time:0,log:[],
@@ -1941,13 +2006,21 @@ function openCount(cells){var n=0;for(var i=0;i<cells.length;i++){if(!S.grid[cel
 function cardDigits(card){
   if(card.kind==='n')return[card.d];
   if(card.kind==='w')return[card.a,card.b];
+  if(card.kind==='q')return[];
   return[1,2,3,4,5,6,7,8,9];
+}
+/* Gibt es noch ein vollständig freies Feld? Der Quantenjoker braucht nur das. */
+function anyOpenCell(){
+  for(var i=0;i<81;i++){var g=S.grid[i];if(!g.b&&!g.d)return true;}
+  return false;
 }
 /* Spielbarkeit: Gibt es für mindestens eine Ziffer der Karte noch ein legales
    Feld? Gedimmte Karten zeigen toten Nachschub sofort an (Usability:
    Sichtbarkeit des Systemstatus, Nielsen 1994). */
 function digitPlaceable(d){
   if(!S.grid.length)return true;
+  /* Verfluchte Ziffer: in der laufenden Boss-Runde nicht legbar */
+  if(S.boss&&S.boss.cursed===d)return false;
   for(var i=0;i<81;i++){
     var g=S.grid[i];
     if(g.b||g.d)continue;
@@ -1956,6 +2029,8 @@ function digitPlaceable(d){
   return false;
 }
 function cardPlaceable(card){
+  /* Der Quantenjoker passt auf jedes freie Feld – selbst auf tote Felder */
+  if(card.kind==='q')return S.grid.length?anyOpenCell():true;
   var ds=cardDigits(card),i;
   for(i=0;i<ds.length;i++)if(digitPlaceable(ds[i]))return true;
   return false;
@@ -2059,6 +2134,21 @@ function quickPlace(idx){
   if(!S.running||S.over||S.done||!S.grid.length)return;
   var card=S.inv[idx];
   if(!card)return;
+  /* Quantenjoker per Doppelklick: auf das Feld mit den wenigsten
+     Hand-Möglichkeiten setzen (schwarze Felder zuerst) */
+  if(card.kind==='q'){
+    var qb=null,iq;
+    for(iq=0;iq<81;iq++){
+      var gq=S.grid[iq];
+      if(gq.b||gq.d)continue;
+      var rq=Math.floor(iq/9),cq=iq%9,nq=handFitCount(rq,cq);
+      if(!qb||nq<qb.n)qb={r:rq,c:cq,n:nq};
+    }
+    if(!qb){sfx(120,0.1,'sawtooth');S.shake=3;return;}
+    S.sel=idx;S.wildChoice=null;
+    tryPlace(qb.r,qb.c);
+    return;
+  }
   var ds=cardDigits(card),pick=null,i;
   for(i=0;i<ds.length;i++){
     var bc=bestCellFor(ds[i]);
@@ -2140,6 +2230,24 @@ function bossAct(){
       sfx(160,0.3,'sawtooth',0.2,-100);
       addLog(tr('logRiss'),'#ff5555');
     }
+  }else if(k==='sani'){
+    /* Rationalisierer: baut ?-Felder ab und macht sie wieder zu normalen
+       Pflichtfeldern – gesicherte Linien kippen zurück in offene Arbeit */
+    var qb=[];
+    for(var j2=0;j2<81;j2++)if(S.grid[j2].b)qb.push(j2);
+    if(qb.length){
+      var qz=Math.min(1+Math.floor(S.level/15),qb.length);
+      for(var w2=0;w2<qz;w2++){
+        var qi=qb.splice(rnd(qb.length),1)[0];
+        S.grid[qi].b=false;
+        var qrc=cellRect(Math.floor(qi/9),qi%9);
+        for(var p2=0;p2<5;p2++)S.parts.push({x:qrc.x+9,y:qrc.y+9,
+          vx:(Math.random()-0.5)*60,vy:-Math.random()*60-20,life:0.4+Math.random()*0.4,col:'#9a6af0'});
+      }
+      S.shake=6;
+      sfx(240,0.25,'triangle',0.2,-120);
+      addLog(tr('logSani'),'#9a6af0');
+    }
   }else{
     /* Skaliert mit dem Level; ab Level 9 werden auch Wildkarten verwirbelt */
     var idxs=[];
@@ -2167,23 +2275,49 @@ function bossAct(){
 }
 function tryPlace(r,c){
   var card=S.inv[S.sel];
+  if(card&&card.kind==='q'){tryQuantum(r,c);return;}
   var d=(card.kind==='n')?card.d:S.wildChoice;
   if(!d){flashChoose();return;}
   var i=r*9+c,g=S.grid[i],rc=cellRect(r,c);
   if(g.b){sfx(120,0.1,'sawtooth');S.shake=3;return;}
   if(g.d){sfx(120,0.1,'sawtooth');return;}
+  /* Verfluchte Ziffer: der Boss untersagt sie für die laufende Runde */
+  if(S.boss&&S.boss.cursed===d){
+    sfx(150,0.15,'sawtooth',0.15);S.shake=4;
+    S.floats.push({t:trf('flCurse',{d:d}),x:rc.x,y:rc.y-10,col:'#9a6af0',life:1});
+    return;
+  }
   if(conflicts(r,c,d)){
     sfx(110,0.18,'sawtooth');S.shake=5;
     S.floats.push({t:tr('flConflict'),x:rc.x,y:rc.y-10,col:'#ff5555',life:1});
     return;
   }
   g.d=d;g.m=(card.kind!=='n');
-  if(card.kind==='w')unlock('wild');
-  if(card.kind==='j')unlock('joker');
+  if(card.kind==='w'){S.wildCount++;if(S.wildCount>=10)unlock('wild');}
+  if(card.kind==='j'){S.jokerCount++;if(S.jokerCount>=5)unlock('joker');}
   S.inv.splice(S.sel,1);S.sel=-1;S.wildChoice=null;
   S.score+=10;
-  if(S.score>=5000)unlock('hoch');
+  if(S.score>=10000)unlock('hoch');
   sfx(500,0.07);
+  afterPlace(r,c,rc);
+}
+/* Quantenjoker: verwandelt ein freies Feld in ein ?-Feld (Quantenzustand).
+   Das Feld zählt fortan als jede Ziffer – auch tote Felder bleiben so
+   spielbar, ohne einen Logikfehler zu erzeugen. */
+function tryQuantum(r,c){
+  var i=r*9+c,g=S.grid[i],rc=cellRect(r,c);
+  if(g.b||g.d){sfx(120,0.1,'sawtooth');S.shake=3;return;}
+  S.inv.splice(S.sel,1);S.sel=-1;S.wildChoice=null;
+  g.b=true;g.m=false;
+  S.score+=10;
+  if(S.score>=10000)unlock('hoch');
+  sfx(500,0.07);setTimeout(function(){sfx(760,0.1);},90);
+  addLog(tr('logQuant'),'#6ac8f0');
+  afterPlace(r,c,rc);
+}
+/* Gemeinsamer Abschluss jeder Platzierung: Linien- und Quadrat-Bonus, Combo,
+   Nachziehstapel, Sudoku-Prüfung, Boss-Timer und Sackgassen-Prüfung */
+function afterPlace(r,c,rc){
   /* Linien-Bonus: jede erstmals volle Reihe/Spalte/Quadrat gibt zwei Bonuskarten */
   var lb=0,boxPts=false;
   var lr=r,lc=9+c,lx=18+(Math.floor(r/3)*3+Math.floor(c/3));
@@ -2204,7 +2338,7 @@ function tryPlace(r,c){
     if(S.combo>S.comboMax)S.comboMax=S.combo;
     var cb=50*S.combo;
     S.score+=cb;
-    if(S.score>=5000)unlock('hoch');
+    if(S.score>=10000)unlock('hoch');
     if(S.combo>1){
       S.floats.push({t:trf('flCombo',{c:S.combo}),x:rc.x,y:rc.y-38,col:'#ffd23f',life:1});
       addLog(trf('logCombo',{c:S.combo,p:cb}),'#ffd23f');
@@ -2223,7 +2357,7 @@ function tryPlace(r,c){
   if(boardFull()){
     S.score+=1000;
     S.boards++;
-    unlock('sudoku');
+    if(S.boards>=2)unlock('sudoku');
     addLog(tr('logSudoku'),'#ffd23f');
     sfx(800,0.2);setTimeout(function(){sfx(1100,0.25);},200);
     setTimeout(function(){sfx(1400,0.3);},400);
@@ -2246,12 +2380,16 @@ function tryPlace(r,c){
 function canPlaceAny(){
   if(!S.inv.length)return false;
   for(var ci=0;ci<S.inv.length;ci++){
-    var ds=cardDigits(S.inv[ci]);
+    var cd=S.inv[ci];
+    /* Der Quantenjoker passt auf jedes freie Feld */
+    if(cd.kind==='q'){if(anyOpenCell())return true;continue;}
+    var ds=cardDigits(cd);
     for(var i=0;i<81;i++){
       var g=S.grid[i];
       if(g.b||g.d)continue;
       var r=Math.floor(i/9),c=i%9;
       for(var di=0;di<ds.length;di++){
+        if(S.boss&&S.boss.cursed===ds[di])continue;
         if(!conflicts(r,c,ds[di]))return true;
       }
     }
@@ -2282,7 +2420,8 @@ function swap(){
 var BOSSES=[
   {kind:'dieb',nk:'bossDieb',pal:0},
   {kind:'riss',nk:'bossRiss',pal:1},
-  {kind:'wirbler',nk:'bossWirbler',pal:2}
+  {kind:'wirbler',nk:'bossWirbler',pal:2},
+  {kind:'sani',nk:'bossSani',pal:3}
 ];
 function isBossLevel(l){return l%3===0;}
 function bossEvery(l){return Math.max(2,5-Math.floor(l/3)+DIFF[S.diff].boss);}
@@ -2295,16 +2434,18 @@ function startLevel(l){
   if(!S.grid.length)genGrid(l);
   if(isBossLevel(l)){
     var cyc=Math.floor(l/3);
-    var bi=(cyc-1)%3;
-    var big=Math.floor((cyc-1)/3);
+    var bi=(cyc-1)%4;
+    var big=Math.floor((cyc-1)/4);
     var bs=BOSSES[bi];
     var ev=bossEvery(l);
-    S.boss={kind:bs.kind,pal:bs.pal,every:ev,timer:0,
+    S.boss={kind:bs.kind,pal:bs.pal,every:ev,timer:0,cursed:1+rnd(9),
       name:tr(bs.nk)+(big===1?' II':big===2?' III':big>=3?' IV':''),
-      desc:trf(bs.kind==='dieb'?'bossDiebD':bs.kind==='riss'?'bossRissD':'bossWirblerD',
-        {n:ev,k:bs.kind==='dieb'?1+Math.floor(l/6):bs.kind==='riss'?1+Math.floor(l/12):2+Math.floor(l/6)})};
+      desc:trf(bs.kind==='dieb'?'bossDiebD':bs.kind==='riss'?'bossRissD':bs.kind==='sani'?'bossSaniD':'bossWirblerD',
+        {n:ev,k:bs.kind==='dieb'?1+Math.floor(l/6):bs.kind==='riss'?1+Math.floor(l/12):bs.kind==='sani'?1+Math.floor(l/15):2+Math.floor(l/6)})};
     sfx(180,0.3,'sawtooth',0.2,-60);
     addLog(trf('logBoss',{b:S.boss.name,d:S.boss.desc}),'#ff9a6a');
+    /* Der Boss verflucht eine Ziffer: sie bleibt in dieser Runde unlegbar */
+    addLog(trf('logCurse',{d:S.boss.cursed}),'#9a6af0');
   }
   addLog(trf('logLevel',{n:l,t:taskLabel(S.task)}),'#ffd23f');
   var cap=DIFF[S.diff].deck;
@@ -2327,7 +2468,10 @@ function levelDone(){
   S.done=true;S.doneTimer=0.9;
   var pts=250*S.level+100*S.task.count;
   S.score+=pts;S.totLines+=S.task.count;
-  unlock('line');
+  if(S.totLines>=10)unlock('line');
+  if(S.score>=10000)unlock('hoch');
+  if(S.level>=20)unlock('marathon');
+  if(S.boss){S.bossCount++;if(S.bossCount>=3)unlock('boss');}
   /* Boss-Belohnung: ein ohne Tausch bezwungenes Boss-Level gibt 300 Punkte
      und zwei Bonuskarten – Belohnung für Riskobereitschaft statt Tausch-Flucht */
   if(S.boss&&!S.swapUsed){
@@ -2352,7 +2496,6 @@ function openLevelModal(){
   $('levelSub').innerHTML=trf('nextTaskTxt',{t:taskLabel(nt)})+
     '<br>'+tr('supplyTxt')+': '+(pend.length?pend.join(' · '):tr('noSupply'))+
     '<br>'+tr('levelChoose');
-  unlock('zauber');
   for(var i=0;i<opts.length;i++){
     (function(key){
       var u=UP[key],el=document.createElement('button');
@@ -2372,13 +2515,15 @@ function applyUpgrade(key){
   var bk=S.boss?S.boss.kind:null;
   if(bk){
     S.bossKinds[bk]=1;
-    unlock('boss');
-    if(Object.keys(S.bossKinds).length>=3)unlock('jaeger');
+    if(Object.keys(S.bossKinds).length>=4)unlock('jaeger');
   }
   startLevel(l+1);
+  S.upCount++;
+  if(S.upCount>=5)unlock('zauber');
   if(key==='w69')S.inv.push({kind:'w',a:6,b:9});
   if(key==='w17')S.inv.push({kind:'w',a:1,b:7});
   if(key==='joker')S.inv.push({kind:'j'});
+  if(key==='quant')S.inv.push({kind:'q'});
   if(key==='schub')addCards(3);
   if(key==='tausch')S.swapMax++;
   if(key==='klon'){
@@ -2394,6 +2539,7 @@ function initRun(diff){
   S.score=0;S.inv=[];S.totLines=0;S.sel=-1;S.wildChoice=null;
   S.bossKinds={};S.swapMax=1;S.pending=[];
   S.combo=0;S.comboMax=0;
+  S.upCount=0;S.wildCount=0;S.jokerCount=0;S.bossCount=0;
   S.over=false;S.running=true;
   S.grid=[];
   S.floats=[];S.parts=[];S.shake=0;
@@ -2430,8 +2576,9 @@ function saveRun(){
       sol:S.sol,
       lineFlags:S.lineFlags.slice(),task:S.task,inv:S.inv,pending:S.pending,
       swapUsed:S.swapUsed?1:0,swapMax:S.swapMax,combo:S.combo,comboMax:S.comboMax,bossKinds:S.bossKinds,
+      upCount:S.upCount,wildCount:S.wildCount,jokerCount:S.jokerCount,bossCount:S.bossCount,
       done:S.done?1:0,
-      boss:S.boss?{kind:S.boss.kind,every:S.boss.every,timer:S.boss.timer}:null
+      boss:S.boss?{kind:S.boss.kind,every:S.boss.every,timer:S.boss.timer,cursed:S.boss.cursed||0}:null
     };
     persistSave();
   }catch(e){}
@@ -2455,6 +2602,7 @@ function loadRun(){
   S.sel=-1;S.wildChoice=null;
   S.swapUsed=!!r.swapUsed;S.swapMax=r.swapMax||1;
   S.combo=r.combo|0;S.comboMax=r.comboMax|0;
+  S.upCount=r.upCount|0;S.wildCount=r.wildCount|0;S.jokerCount=r.jokerCount|0;S.bossCount=r.bossCount|0;
   S.bossKinds=r.bossKinds||{};
   S.done=!!r.done;S.doneTimer=0.9;
   S.over=false;S.running=true;
@@ -2463,11 +2611,11 @@ function loadRun(){
     var bs=null;
     for(var i=0;i<BOSSES.length;i++)if(BOSSES[i].kind===r.boss.kind)bs=BOSSES[i];
     if(bs){
-      var cyc=Math.floor(S.level/3),big=Math.floor((cyc-1)/3);
-      S.boss={kind:bs.kind,pal:bs.pal,every:r.boss.every,timer:r.boss.timer||0,
+      var cyc=Math.floor(S.level/3),big=Math.floor((cyc-1)/4);
+      S.boss={kind:bs.kind,pal:bs.pal,every:r.boss.every,timer:r.boss.timer||0,cursed:r.boss.cursed||0,
         name:tr(bs.nk)+(big===1?' II':big===2?' III':big>=3?' IV':''),
-        desc:trf(bs.kind==='dieb'?'bossDiebD':bs.kind==='riss'?'bossRissD':'bossWirblerD',
-          {n:r.boss.every,k:bs.kind==='dieb'?1+Math.floor(S.level/6):bs.kind==='riss'?1+Math.floor(S.level/12):2+Math.floor(S.level/6)})};
+        desc:trf(bs.kind==='dieb'?'bossDiebD':bs.kind==='riss'?'bossRissD':bs.kind==='sani'?'bossSaniD':'bossWirblerD',
+          {n:r.boss.every,k:bs.kind==='dieb'?1+Math.floor(S.level/6):bs.kind==='riss'?1+Math.floor(S.level/12):bs.kind==='sani'?1+Math.floor(S.level/15):2+Math.floor(S.level/6)})};
     }else{S.boss=null;}
   }else{S.boss=null;}
   $('overOverlay').classList.add('hidden');
@@ -2513,6 +2661,7 @@ function drawCardCv(cvs,card){
   g.clearRect(0,0,28,35);
   if(card.kind==='n'){drawTxt(g,String(card.d),10,10,digitCol(card.d,true),2);}
   else if(card.kind==='w'){drawTxt(g,card.a+'|'+b2s(card.b),3,15,'#7a2fb8',2);}
+  else if(card.kind==='q'){drawTxt(g,'Q',10,10,'#2a6af0',2);}
   else{drawTxt(g,'*',10,10,'#a05a1d',2);}
 }
 function b2s(x){return String(x);}
@@ -2541,7 +2690,7 @@ function ghostKill(){
 function dropPlace(idx,r,c){
   var card=S.inv[idx];
   if(!card)return;
-  if(card.kind==='n'){S.sel=idx;S.wildChoice=null;tryPlace(r,c);return;}
+  if(card.kind==='n'||card.kind==='q'){S.sel=idx;S.wildChoice=null;tryPlace(r,c);return;}
   var ds=cardDigits(card);
   if(S.wildChoice&&ds.indexOf(S.wildChoice)>=0){S.sel=idx;tryPlace(r,c);return;}
   /* Wildkarte/Joker ohne passende Ziffer: auswählen und Auswahl-Panel öffnen */
@@ -2590,9 +2739,9 @@ function renderDeck(){
       var card=S.inv[idx];
       var playable=S.grid.length?cardPlaceable(card):true;
       var b=document.createElement('button');
-      b.className='zCard'+(card.kind==='w'?' kindW':card.kind==='j'?' kindJ':'')+
+      b.className='zCard'+(card.kind==='w'?' kindW':card.kind==='j'?' kindJ':card.kind==='q'?' kindQ':'')+
         (S.sel===idx?' selOpt':'')+(playable?'':' unplayable');
-      b.title=card.kind==='n'?trf('ttDigit',{d:card.d}):(card.kind==='w'?trf('ttWild',{a:card.a,b:card.b}):tr('ttJoker'))+
+      b.title=card.kind==='n'?trf('ttDigit',{d:card.d}):(card.kind==='w'?trf('ttWild',{a:card.a,b:card.b}):(card.kind==='q'?tr('ttQuant'):tr('ttJoker')))+
         (playable?'':' – '+tr('ttUnplayable'));
       var cvs=document.createElement('canvas');cvs.width=28;cvs.height=35;
       drawCardCv(cvs,card);
@@ -2619,15 +2768,18 @@ function renderChoose(){
   var panel=$('choosePanel'),row=$('chooseRow');
   if(S.sel<0||!S.running||S.over){panel.classList.add('hidden');return;}
   var card=S.inv[S.sel];
-  if(card.kind==='n'){panel.classList.add('hidden');return;}
+  if(card.kind==='n'||card.kind==='q'){panel.classList.add('hidden');return;}
   panel.classList.remove('hidden');
   row.innerHTML='';
   var ds=cardDigits(card);
   for(var i=0;i<ds.length;i++){
     (function(d){
       var b=document.createElement('button');
-      b.className='btn small czBtn'+(S.wildChoice===d?' selOpt':'');
+      /* Verfluchte Ziffer: Schaltfläche in dieser Boss-Runde gesperrt */
+      var cursed=S.boss&&S.boss.cursed===d;
+      b.className='btn small czBtn'+(S.wildChoice===d?' selOpt':'')+(cursed?' unplayable':'');
       b.textContent=d;
+      if(cursed){b.disabled=true;}
       b.addEventListener('click',function(){
         S.wildChoice=d;renderChoose();
       });
@@ -2790,19 +2942,53 @@ function markRed(i){
   ctx.globalAlpha=0.35;ctx.fillStyle=C.red;ctx.fillRect(rc.x,rc.y,CELL,CELL);ctx.globalAlpha=1;
 }
 /* ===== Kandidaten-Hinweise (Prio 1) ===== */
-/* Goldene Punkte: Felder mit genau einer noch möglichen Ziffer (Zwangsfelder),
-   rote Punkte: Felder ohne jede mögliche Ziffer – dort droht eine Sackgasse. */
+/* Wie viele verschiedene Ziffern deiner Hand dürfen auf dieses Feld?
+   Berücksichtigt Wildkarten, Joker und den Quantenjoker sowie den
+   Ziffern-Fluch der laufenden Boss-Runde. */
+function handFitCount(r,c){
+  var seen={},n=0,i,j,d;
+  for(i=0;i<S.inv.length;i++){
+    var cd=S.inv[i];
+    if(cd.kind==='n'||cd.kind==='w'){
+      var ds=cd.kind==='n'?[cd.d]:[cd.a,cd.b];
+      for(j=0;j<ds.length;j++){
+        d=ds[j];
+        if(seen[d])continue;
+        if(S.boss&&S.boss.cursed===d)continue;
+        if(!conflicts(r,c,d)){seen[d]=1;n++;}
+      }
+    }else if(cd.kind==='j'&&!seen[0]){
+      for(d=1;d<=9;d++){
+        if(!(S.boss&&S.boss.cursed===d)&&!conflicts(r,c,d)){seen[0]=1;n++;break;}
+      }
+    }else if(cd.kind==='q'&&!seen[0]){
+      seen[0]=1;n++;
+    }
+  }
+  return n;
+}
+/* Gelbe Punkte: nur noch wenige Hand-Karten passen (1-3).
+   Rote Punkte: genau eine Karte passt – letzter sinnvoller Zug.
+   Schwarze Quadrate: keine Hand-Karte passt – tote Felder, die nur der
+   Quantenjoker (Q) noch retten kann (Sichtbarkeit des Systemstatus,
+   Nielsen 1994). */
 function drawHints(){
   if(!S.running||S.over||!S.grid.length)return;
   for(var i=0;i<81;i++){
     var g=S.grid[i];
     if(g.b||g.d)continue;
-    var r=Math.floor(i/9),c=i%9,n=0;
-    for(var d=1;d<=9;d++){if(!conflicts(r,c,d))n++;}
-    if(n===0){var rc0=cellRect(r,c);ctx.fillStyle=C.red;
-      ctx.fillRect(rc0.x+CELL-4,rc0.y+1,3,3);}
-    else if(n===1){var rc1=cellRect(r,c);ctx.fillStyle=C.jokerQ;
-      ctx.fillRect(rc1.x+CELL-4,rc1.y+1,3,3);}
+    var r=Math.floor(i/9),c=i%9,n=handFitCount(r,c);
+    if(n>3)continue;
+    var rc=cellRect(r,c);
+    if(n===0){
+      ctx.fillStyle='#0a0a0a';
+      ctx.fillRect(rc.x+CELL-5,rc.y,4,4);
+      ctx.strokeStyle=C.white;
+      ctx.strokeRect(rc.x+CELL-5.5,rc.y-0.5,5,5);
+    }else{
+      ctx.fillStyle=(n===1)?C.red:C.jokerQ;
+      ctx.fillRect(rc.x+CELL-4,rc.y+1,3,3);
+    }
   }
 }
 /* Ziffern, die einer Linie noch fehlen (nur bereits platzierte zählen) */
@@ -2909,7 +3095,6 @@ function update(dt){
     S.doneTimer-=dt;
     if(S.doneTimer<=0){
       S.done=false;
-      if(S.level>=15)unlock('marathon');
       openLevelModal();
     }
   }
@@ -3024,6 +3209,8 @@ function uiBlocked(){
   return false;
 }
 function keySelect(d){
+  /* Verfluchte Ziffer: per Tastatur nicht wählbar */
+  if(S.boss&&S.boss.cursed===d){sfx(120,0.06,'sawtooth',0.1);return;}
   var idxs=[],i;
   for(i=0;i<S.inv.length;i++){
     var cd=S.inv[i];
