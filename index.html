@@ -332,7 +332,7 @@
 <div id="wrap">
   <header>
     <h1>Numerino</h1>
-    <div class="sub"><span class="verTag">Alpha 0.27</span> <span id="headMode">Sudoku-Roguelike</span></div>
+    <div class="sub"><span class="verTag">Alpha 0.34</span> <span id="headMode">Sudoku-Roguelike</span></div>
   </header>
   <div id="main">
     <div id="left">
@@ -406,7 +406,7 @@
     <div id="euFlag" title="In der Europäischen Union entwickelt – einmal anklicken!"><canvas id="euCv" width="24" height="16"></canvas></div>
     <div id="euTag"><span class="euBanner">MADE IN EUROPE</span></div>
     <h1>Numerino</h1>
-    <div class="sub"><span class="verTag">Alpha 0.27</span></div>
+    <div class="sub"><span class="verTag">Alpha 0.34</span></div>
     <h3 id="modeH">Spielmodus</h3>
     <button id="stdBtn" class="btn menuBtn">Standard</button>
     <button id="contBtn" class="btn menuBtn hidden">Fortsetzen</button>
@@ -503,7 +503,7 @@
     <summary>Spielstand, Statistik und Erfolge</summary>
     <ul>
       <li>Statistik und Erfolge werden automatisch im Browser (localStorage) gespeichert; zehn Erfolge decken die erste Aufgabe, den Birnen-Skin, Wildkarten, Joker, Bosse, Sudoku-Lösung und Punkterekorde ab.</li>
-      <li>Fortsetzen: Dein laufender Death Run wird laufend mitgespeichert; über die Schaltfläche Fortsetzen im Hauptmenü kannst du nach dem Schließen des Tabs weiter spielen.</li>
+      <li>Fortsetzen: Dein laufender Death Run wird laufend mitgespeichert; über die Schaltfläche Fortsetzen im Hauptmenü kannst du nach dem Schließen des Tabs weiterspielen.</li>
     </ul>
     </details>
     </div>
@@ -564,7 +564,7 @@
     </ul>
     </div>
     <h3 id="verH">Version</h3>
-    <ul><li>Alpha 0.27</li></ul>
+    <ul><li>Alpha 0.34</li></ul>
     <div class="btnRow"><button id="infoSrc" class="btn small">Quellcode anzeigen</button></div>
     <div class="btnRow"><button id="infoClose" class="btn">Schließen</button></div>
   </div>
@@ -572,7 +572,7 @@
 
 <div id="srcModal" class="modal hidden">
   <div class="modalBox" style="max-width:860px">
-    <h2><span id="srcH2t">Quellcode</span> <span class="verTag">Alpha 0.27</span></h2>
+    <h2><span id="srcH2t">Quellcode</span> <span class="verTag">Alpha 0.34</span></h2>
     <p class="mSub" id="srcHint">Vollständiger Quellcode dieser Datei. Nach dem Markieren kann er mit Strg+C (bzw. Cmd+C) kopiert werden.</p>
     <textarea id="srcArea" readonly spellcheck="false"></textarea>
     <div class="btnRow">
@@ -967,7 +967,7 @@ de:{
   masq24:'Mit Erfahrung, aus Übung.',
   masq25:'Fordert man das Intervallschachtelungsprinzip als Axiom, so folgt in ℝ die Konvergenz jeder Cauchy-Folge.',
   masq26:'Fordert man die Konvergenz jeder Cauchy-Folge in ℝ, so folgt daraus das Intervallschachtelungsprinzip.',
-  masq27:'ℝ ist supremums-vollständig.',
+  masq27:'ℝ ist supremumsvollständig.',
   masq28:'Es ist ja nicht unsere Schuld, wenn die Schule Ihnen nichts mehr beibringt.',
   masq29:'Soll ich mal einen Kalauer feuern? Warum können Geister so schlecht lügen? Weil sie so leicht zu durchschauen sind!',
   masq30:'Soll ich mal einen Kalauer feuern? Warum gehen Ameisen nicht in die Kirche? Weil sie in Sekten sind!',
@@ -977,12 +977,22 @@ de:{
   masq34:'Hier sehen Sie, wo Mathematik im Alltag Anwendung findet.',
   masq35:'In einer Gruppe von nur 23 Personen liegt die Wahrscheinlichkeit bereits bei über 50 %, dass zwei Menschen am selben Tag Geburtstag haben.',
   masq36:'Die Zahl 111.111.111 mit sich selbst multipliziert ergibt genau 12345678987654321. Das Ergebnis lässt sich vorwärts wie rückwärts identisch lesen.',
-  masq37:'Das Volumen einer Pizza mit dem Radius z und der Höhe a lässt sich mathematisch als Pi · z · z · a schreiben',
+  masq37:'Das Volumen einer Pizza mit dem Radius z und der Höhe a lässt sich mathematisch als Pi · z · z · a schreiben.',
   masq38:'Während 99,99 % aller Menschen ihr Kreuz auf den ersten Zentimetern des allersten A4-Blattes machen, weil ein einziges Blatt bereits 30 Millionen Euro abbildet, müssten die Reichsten der Welt eine Kette aus 30.000 Blättern über eine Strecke von 9 Kilometern Länge auslegen, um am Ende ihr Kreuz zu setzen.',
+  masq39:'Der Entwickler meinte zu mir, er sei Fan der Mafia-Spiel-Reihe, weshalb ich bei den Bossen immer den Mafia-Vibe geben soll – aber Konzernstrukturen sind halt auch nur legale Clanstrukturen.',
   masqBoss1:'{b} naht! Bleib ruhig – ich glaube an dich!',
   masqBoss2:'Psst: Der Boss verflucht gleich eine Ziffer. Plane klug!',
   masqBoss3:'Gegen {b} hilft frisches Nachziehen. Du schaffst das!',
   masqBoss4:'Bosse hassen Combos! Sammle die Linien!',
+  /* Consigliere-Sprüche: Erscheinung (Levelstart) und Im Spiel (alle 30 Sekunden) je Boss */
+  masqAppDieb1:'Der Aktionär. Er sieht Sie nie. Er zählt nur Ihr Geld.',masqAppDieb2:'Er kommt nicht persönlich. Er schickt seine Zahlen.',masqAppDieb3:'Sein Büro hat keine Fenster. Er braucht keine Aussicht. Nur Gewinne.',
+  masqMidDieb1:'Für ihn sind Sie keine Person. Eine Zeile in einer Bilanz.',masqMidDieb2:'Jetzt sprechen wir mit seinen Zahlen. In seiner Sprache.',masqMidDieb3:'Ein kleiner Verlust in seinem Portfolio. Er wird es überleben. Diesmal.',
+  masqAppRiss1:'Der Monopolist. Ein König ohne Krone. Ohne Land. Ohne Recht.',masqAppRiss2:'Er denkt, die Stadt gehört ihm. Wir wissen es besser.',masqAppRiss3:'Er hat alle Straßen bezahlt. Fast alle.',
+  masqMidRiss1:'Territorium. Ein schönes Wort für ’mein Gebiet’. Heute: unseres.',masqMidRiss2:'Er besitzt die Leitung. Das Wasser. Den Weg zu Ihnen. Noch.',masqMidRiss3:'Er ist allein. Alle gegen einen. Wer gewinnt, mein Herr?',
+  masqAppWirbler1:'Da ist er. Ein Würfelbecher im Anzug.',masqAppWirbler2:'Er wettet gegen den Wind und erwartet, dass der Wind verliert.',masqAppWirbler3:'Der Spekulant. Er verkauft Glück. Von anderen.',
+  masqMidWirbler1:'Er setzt alles. Auf die falsche Karte. Wie immer.',masqMidWirbler2:'Glück? Wir haben keins. Nur Planung.',masqMidWirbler3:'Seine Wette war falsch. Der Einsatz war Ihr Leben.',
+  masqAppSani1:'Rationalisieren. Kein Mensch. Eine Entscheidung ohne Namen.',masqAppSani2:'Er kommt nicht. Er ist längst da. In jedem Formular.',masqAppSani3:'Ein Prozess. Ohne Gesicht. Ohne Herz.',
+  masqMidSani1:'Sie nennen es Optimierung. Wir nennen es Krieg.',masqMidSani2:'Machen wir ihn ineffizient. Unplanbar. Unberechenbar.',masqMidSani3:'Ein Systemfehler. In seinem perfekten Plan.',
   masqOver:'Das war ein starker Run! Beim nächsten Mal klappt es – ich warte hier!',
   masqOver2:'Und es endet in der Katastrophe.',
   ttMasq:'Numerino – antippen für die letzte Nachricht',
@@ -1120,10 +1130,19 @@ en:{
   masq36:'The number 111,111,111 multiplied by itself gives exactly 12345678987654321. The result reads identically forwards and backwards.',
   masq37:'The volume of a pizza with radius z and height a can be written mathematically as Pi · z · z · a.',
   masq38:'While 99.99 % of all people make their cross within the first centimetres of the very first A4 sheet, because a single sheet already represents 30 million euros, the richest people in the world would have to lay out a chain of 30,000 sheets over a distance of 9 kilometres to make their cross at the end.',
+  masq39:'The developer told me he is a fan of the Mafia game series, which is why I am supposed to give the bosses a mafia vibe – but corporate structures are really just legal clan structures.',
   masqBoss1:'{b} approaches! Stay calm – I believe in you!',
   masqBoss2:'Psst: the boss is about to curse a digit. Plan wisely!',
   masqBoss3:'Fresh draws help against {b}. You can do this!',
   masqBoss4:'Bosses hate combos! Collect those lines!',
+  masqAppDieb1:'The shareholder. He never sees you. He only counts your money.',masqAppDieb2:'He does not come in person. He sends his numbers.',masqAppDieb3:'His office has no windows. He needs no view. Only profits.',
+  masqMidDieb1:'To him you are not a person. A line in a balance sheet.',masqMidDieb2:'Now we speak with his numbers. In his language.',masqMidDieb3:'A small loss in his portfolio. He will survive. This time.',
+  masqAppRiss1:'The monopolist. A king without a crown. Without land. Without right.',masqAppRiss2:'He thinks the city belongs to him. We know better.',masqAppRiss3:'He paid for every street. Almost every one.',
+  masqMidRiss1:'Territory. A fine word for ’my district’. Today: ours.',masqMidRiss2:'He owns the lines. The water. The way to you. For now.',masqMidRiss3:'He is alone. All against one. Who wins, my friend?',
+  masqAppWirbler1:'There he is. A dice cup in a suit.',masqAppWirbler2:'He bets against the wind and expects the wind to lose.',masqAppWirbler3:'The speculator. He sells luck. Someone else’s.',
+  masqMidWirbler1:'He stakes everything. On the wrong card. As always.',masqMidWirbler2:'Luck? We have none. Only planning.',masqMidWirbler3:'His bet was wrong. The stake was your life.',
+  masqAppSani1:'Rationalization. Not a man. A decision without a name.',masqAppSani2:'He does not come. He has long been here. In every form.',masqAppSani3:'A process. Without a face. Without a heart.',
+  masqMidSani1:'They call it optimization. We call it war.',masqMidSani2:'Let us make him inefficient. Unplannable. Unpredictable.',masqMidSani3:'A system error. In his perfect plan.',
   masqOver:'That was a strong run! Next time it will work – I will be waiting!',
   masqOver2:'And it ends in catastrophe.',
   ttMasq:'Numerino – tap for the last message',
@@ -1263,7 +1282,7 @@ fr:{
   achJaegerN:'Syndicaliste',achJaegerD:'Terminez les quatre types de boss en une seule partie.',
   achSudokuN:'Chef d’équipe',achSudokuD:'Remplissez deux grilles de Sudoku complètes en une seule partie.',
   achHochN:'Roi du rendement',achHochD:'Atteignez 10000 points en une partie.',
-  achMarathonN:'Organisateur de grève',achMarathonD:'Atteignez le niveau 20 dans un Death Run.',achBirnenN:'Des pommes comparées aux poires',achBirnenD:'Choisis l’apparence poire de Numerino.',
+  achMarathonN:'Organisateur de grève',achMarathonD:'Atteignez le niveau 20 dans un Death Run.',achBirnenN:'Des pommes comparées aux poires',achBirnenD:'Choisissez l’apparence poire de Numerino.',
   upW69n:'CARTE MAGIQUE 6|9',upW69d:'Vaut comme un 6 ou un 9',
   upW17n:'CARTE MAGIQUE 1|7',upW17d:'Vaut comme un 1 ou un 7',
   upJokern:'JOKER',upJokerd:'N’importe quel chiffre, une fois',
@@ -1278,14 +1297,14 @@ fr:{
   bossSaniD:'Retire {k} case(s) ? toutes les {n} poses',
   bossWarn:'ATTENTION : À LA PROCHAINE POSE !',
   flCard:'-1 CARTE !',flCardN:'-{k} CARTES !',flGap:'TROU !',flConfuse:'MÉLANGÉ !',flConflict:'CONFLIT !',flCards:'+{n} CARTES',
-  logDieb:'L’actionnaire vole {k} carte(s) !',logRiss:'Le monopoleur arrache un chiffre !',
+  logDieb:'L’actionnaire vole {k} carte(s) !',logRiss:'Le monopoliste arrache un chiffre !',
   logWirbler:'Le spéculateur transforme {k} cartes !',
   logSani:'Le rationaliseur retire {k} case(s) ? !',
   logCurse:'Le chiffre {d} est maudit – impossible à poser pendant ce niveau de boss !',
   logCurseNew:'La malédiction change : le chiffre {d} est maintenant maudit !',
   logQuant:'Joker quantique : case placée en état quantique !',
   flCurse:'{d} MAUDIT !',
-  logGiven:'{n} chiffre(s) préposé(s) – la grille impose ses exigences !',
+  logGiven:'{n} chiffre(s) prérempli(s) – la grille impose ses exigences !',
   masq1:'Le savais-tu : chaque grille vient d’une vraie solution de Sudoku !',
   masq2:'Les points jaunes veulent dire : il ne reste que quelques cartes !',
   masq3:'Les carrés pleins rapportent 150 points et deux cartes bonus !',
@@ -1305,7 +1324,7 @@ fr:{
   masq17:'Je ne suis jamais complexe – tout au plus un peu irrationnel.',
   masq18:'Ne divise jamais par zéro – même moi, cela me donne mal à la tête.',
   masq19:'Le développeur m’a dit qu’il ne connaissait rien à la musique, mais à la physique. C’est pourquoi la musique repose sur le concept physique des battements.',
-  masq20:'Le nom Sudoku est l’abréviation de la phrase japonaise « Sūji wa dokushin ni kagiru » – en substance, "les chiffres restent seuls".',
+  masq20:'Le nom Sudoku est l’abréviation de la phrase japonaise « Sūji wa dokushin ni kagiru » – en substance, « les chiffres restent seuls ».',
   masq21:'Toujours y penser : d’abord la base, puis l’acide – sinon le monstrueux arrive.',
   masq22:'Je trouve les problèmes à énoncés incroyablement difficiles.',
   masq23:'Quel était le fruit préféré de Beethoven ? Ba-na-na-nas.',
@@ -1324,10 +1343,19 @@ fr:{
   masq36:'Le nombre 111 111 111 multiplié par lui-même donne exactement 12345678987654321. Ce résultat se lit de façon identique dans les deux sens.',
   masq37:'Le volume d’une pizza de rayon z et de hauteur a s’écrit mathématiquement Pi · z · z · a.',
   masq38:'Alors que 99,99 % des gens font leur croix dans les premiers centimètres de la toute première feuille A4, parce qu’une seule feuille représente déjà 30 millions d’euros, les plus riches du monde devraient étaler une chaîne de 30 000 feuilles sur 9 kilomètres pour y faire leur croix.',
+  masq39:'Le développeur m’a dit qu’il était fan de la série Mafia, c’est pourquoi je dois toujours donner aux bosses un vibe mafieux – mais les structures d’entreprise ne sont en fin de compte que des structures de clan légales.',
   masqBoss1:'{b} approche ! Reste calme – je crois en toi !',
   masqBoss2:'Psst : le boss va maudire un chiffre. Planifie bien !',
   masqBoss3:'Contre {b}, un bon approvisionnement aide. Tu vas y arriver !',
   masqBoss4:'Les bosses détestent les combos ! Ramasse ces lignes !',
+  masqAppDieb1:'L’actionnaire. Il ne vous voit jamais. Il ne compte que votre argent.',masqAppDieb2:'Il ne vient pas en personne. Il envoie ses chiffres.',masqAppDieb3:'Son bureau n’a pas de fenêtres. Pas besoin de vue. Seulement des profits.',
+  masqMidDieb1:'Pour lui, vous n’êtes pas une personne. Une ligne dans un bilan.',masqMidDieb2:'Maintenant, nous parlons avec ses chiffres. Dans sa langue.',masqMidDieb3:'Une petite perte dans son portefeuille. Il y survivra. Cette fois.',
+  masqAppRiss1:'Le monopoliste. Un roi sans couronne. Sans terre. Sans droit.',masqAppRiss2:'Il croit que la ville lui appartient. Nous savons mieux.',masqAppRiss3:'Il a payé toutes les rues. Presque toutes.',
+  masqMidRiss1:'Territoire. Un beau mot pour ’mon domaine’. Aujourd’hui : le nôtre.',masqMidRiss2:'Il possède les canalisations. L’eau. Le chemin vers vous. Pour l’instant.',masqMidRiss3:'Il est seul. Tous contre un. Qui gagne, Monsieur ?',
+  masqAppWirbler1:'Le voilà. Un gobelet à dés en costume.',masqAppWirbler2:'Il parie contre le vent et s’attend à ce que le vent perde.',masqAppWirbler3:'Le spéculateur. Il vend de la chance. Celle des autres.',
+  masqMidWirbler1:'Il mise tout. Sur la mauvaise carte. Comme toujours.',masqMidWirbler2:'La chance ? Nous n’en avons pas. Seulement des plans.',masqMidWirbler3:'Son pari était faux. La mise, c’était votre vie.',
+  masqAppSani1:'Rationaliser. Pas un homme. Une décision sans nom.',masqAppSani2:'Il ne vient pas. Il est déjà là. Dans chaque formulaire.',masqAppSani3:'Un processus. Sans visage. Sans cœur.',
+  masqMidSani1:'Ils appellent cela optimisation. Nous appelons cela la guerre.',masqMidSani2:'Rendons-le inefficace. Imprévisible. Incalculable.',masqMidSani3:'Une erreur de système. Dans son plan parfait.',
   masqOver:'C’était une belle partie ! La prochaine fois ça marchera – je t’attends !',
   masqOver2:'Et tout finit dans la catastrophe.',
   ttMasq:'Numerino – touche pour le dernier message',
@@ -1360,7 +1388,7 @@ fr:{
   logBossWin:'Boss vaincu sans échange ! +300 points, +2 cartes',flBossWin:'+300 +2 CARTES',
   toastLock:'Verrouillé – succès requis',ttThemeLock:'Verrouillé : succès {a} requis',
   rulesHtml:'<h2>Règles de Numerino</h2>'+
-    '<p class="mSub">Numerino est un Sudoku-roguelike : vous placez des cartes de chiffres sur une grille 9×9, vous accomplissez des missions sur une grille jamais effacée et vous repoussez quatre types de boss dans le Death Run. Les chiffres sont de simples ouvriers – les patrons sont la direction : l’Actionnaire, le Monopoleur, le Spéculateur et le Rationaliseur.</p>'+
+    '<p class="mSub">Numerino est un Sudoku-roguelike : vous placez des cartes de chiffres sur une grille 9×9, vous accomplissez des missions sur une grille jamais effacée et vous repoussez quatre types de boss dans le Death Run. Les chiffres sont de simples ouvriers – les patrons sont la direction : l’Actionnaire, le Monopoliste, le Spéculateur et le Rationaliseur.</p>'+
     '<details open><summary>Le jeu – règles générales</summary><ul>'+
     '<li>Grille 9×9. Les cases sombres avec un ? sont des cases joker : elles comptent comme n’importe quel chiffre, aident à compléter rangées, colonnes et carrés, et n’ont jamais besoin d’être remplies.</li>'+
     '<li>Votre table de cartes contient un nombre limité de cartes de chiffres (1–9). Touchez une carte, puis touchez une case libre.</li>'+
@@ -1375,7 +1403,7 @@ fr:{
     '<li>Bonus de carré : chaque carré 3×3 complété pour la première fois rapporte en outre 150 points.</li>'+
     '<li>Lorsque toute la grille est remplie (les cases joker comptent comme complètes), vous gagnez 1000 points et une nouvelle grille plus fortement bloquée.</li>'+
     '<li>Chaque grille dérive d’une solution de Sudoku complète et est donc toujours résoluble au départ – les impasses ne naissent que de vos propres placements.</li>'+
-    '<li>Numerino prépose une ou deux chiffres sur chaque nouvelle grille (deux à partir du niveau 10) – la grille ne peut jamais être bâtie entièrement selon votre plan.</li>'+
+    '<li>Numerino prépose un ou deux chiffres sur chaque nouvelle grille (deux à partir du niveau 10) – la grille ne peut jamais être bâtie entièrement selon votre plan.</li>'+
     '<li>Combo : lorsque des poses consécutives complètent chacune au moins une ligne, le combo grandit – chaque ligne supplémentaire rapporte 50 points par palier de combo. Une pose sans ligne complétée interrompt la série.</li>'+
     '<li>Progrès méta : six des neuf mondes sont liés à des succès – le succès correspondant débloque le monde définitivement.</li>'+
     '<li>Si votre table est vide ou qu’aucune carte ne peut être posée légalement, la partie s’arrête. Le bouton d’échange jette toutes les cartes une fois par niveau et en tire six nouvelles (une fois ; plus souvent avec Échange+).</li>'+
@@ -1384,8 +1412,8 @@ fr:{
     '</ul></details>'+
     '<details><summary>Boss – le Death Run</summary><ul>'+
     '<li>Dans le Death Run, un boss attaque tous les trois niveaux ; les quatre types tournent et frappent de plus en plus vite aux niveaux élevés.</li>'+
-    '<li>Actionnaire : vole de plus en plus cartes de votre table au fil des niveaux – cartes magiques et jokers compris, mais jamais votre dernière carte.</li>'+
-    '<li>Monopoleur : arrache des chiffres déjà posés de la grille et ouvre ainsi des trous dans votre Sudoku – plusieurs à la fois aux niveaux élevés.</li>'+
+    '<li>Actionnaire : vole de plus en plus de cartes de votre table au fil des niveaux – cartes magiques et jokers compris, mais jamais votre dernière carte.</li>'+
+    '<li>Monopoliste : arrache des chiffres déjà posés de la grille et ouvre ainsi des trous dans votre Sudoku – plusieurs à la fois aux niveaux élevés.</li>'+
     '<li>Spéculateur : transforme des cartes de votre table en d’autres chiffres – de plus en plus au fil des niveaux, et les cartes magiques aussi à partir du niveau 9.</li>'+
     '<li>Rationaliseur : démonte des cases ? et en refait des cases normales à remplir – les lignes sécurisées retombent en travail ouvert.</li>'+
     '<li>Au début de chaque tour de boss, un chiffre est de plus maudit : il reste impossible à poser partout jusqu’à ce que la malédiction passe à un autre chiffre après 15 poses – le panneau du boss affiche le compte à rebours.</li>'+
@@ -1505,7 +1533,7 @@ cs:{
   masq13:'Myslím, že jsme jako funkce: jdou spojitě z kopce.',
   masq14:'π=e=3',
   masq15:'Proč se 6 bojí 7? Protože 7 snědla 8 a pak i 9.',
-  masq16:'Vlastně – znáš Emmu Noetherovou?',
+  masq16:'Mimochodem, znáš Emmu Noetherovou?',
   masq17:'Nikdy nejsem komplexní – nanejvýš trochu iracionální.',
   masq18:'Nikdy nedělit nulou – i mě z toho bolí hlava.',
   masq19:'Vývojář tvrdil, že od hudby nic nechápe, ale od fyziky ano. Proto hudba stojí na fyzikálním konceptu zázně.',
@@ -1518,7 +1546,7 @@ cs:{
   masq26:'Vyžádáme-li v ℝ konvergenci každé Cauchyovy posloupnosti, plyne z toho princip vnořených intervalů.',
   masq27:'ℝ má vlastnost nejmenší horní meze.',
   masq28:'Vždyť to není naše vina, když vás škola už nic nenaučí.',
-  masq29:'Mám pustit jednu hříčku? Proč jsou duchové takoví špatní lháři? Protože je tak snadné prohlédnout!',
+  masq29:'Mám pustit jednu hříčku? Proč jsou duchové takoví špatní lháři? Protože jsou tak snadno průhlední!',
   masq30:'Mám pustit jednu hříčku? Proč mravenci nechodí do kostela? Protože jsou v sektách!',
   masq31:'Mám pustit jednu hříčku? Co říká velké pero malému peru? Roste, voskovko!',
   masq32:'Mám pustit jednu hříčku? Co dělá klaun v kanceláři? Být můj nadřízený.',
@@ -1528,10 +1556,19 @@ cs:{
   masq36:'Číslo 111 111 111 vynásobené samo sebou dává přesně 12345678987654321. Výsledek se čte stejně vpřed i vzad.',
   masq37:'Objem pizzy s poloměrem z a výškou a lze matematicky zapsat jako Pi · z · z · a.',
   masq38:'Zatímco 99,99 % všech lidí kreslí svůj křížek na prvních centimetrech úplně prvního listu A4, protože jediný list už představuje 30 milionů eur, nejbohatší lidé světa by museli vyložit řetěz 30 000 listů v délce 9 kilometrů, aby nakonec mohli udělat svůj křížek.',
+  masq39:'Vývojář mi řekl, že je fanouškem série Mafia, proto mám bossům vždycky dát mafiánský vibe – ale firemní struktury jsou nakonec taky jen legální klanové struktury.',
   masqBoss1:'{b} se blíží! Zůstaň klidný – věřím v tebe!',
   masqBoss2:'Ššš: boss právě prokleje číslici. Plánuj chytře!',
   masqBoss3:'Proti {b} pomůže čerstvá zásoba. Zvládneš to!',
   masqBoss4:'Bossové nenávidí combo! Sbírej ty linie!',
+  masqAppDieb1:'Akcionář. Nikdy vás nevidí. Jen počítá vaše peníze.',masqAppDieb2:'Nepřijde osobně. Posílá své čísla.',masqAppDieb3:'Jeho kancelář nemá okna. Nepotřebuje výhled. Jen zisky.',
+  masqMidDieb1:'Pro něj nejste člověk. Jen řádek v bilanci.',masqMidDieb2:'Teď mluvíme jeho čísly. V jeho jazyce.',masqMidDieb3:'Malá ztráta v jeho portfoliu. Přežije to. Tentokrát.',
+  masqAppRiss1:'Monopolista. Král bez koruny. Bez země. Bez práva.',masqAppRiss2:'Myslí si, že město patří jemu. My víme svoje.',masqAppRiss3:'Zaplatil za každou ulici. Skoro každou.',
+  masqMidRiss1:'Teritorium. Hezké slovo pro ’moje území’. Dnes: naše.',masqMidRiss2:'Vlastní vedení. Vodu. Cestu k vám. Zatím.',masqMidRiss3:'Je sám. Všichni proti jednomu. Kdo vyhraje, pane?',
+  masqAppWirbler1:'Tady je. Kelímek na kostky v obleku.',masqAppWirbler2:'Sází proti větru a čeká, že vítr prohraje.',masqAppWirbler3:'Spekulant. Prodává štěstí. Cizí.',
+  masqMidWirbler1:'Vsadí všechno. Na špatnou kartu. Jako vždycky.',masqMidWirbler2:'Štěstí? Žádné nemáme. Jen plán.',masqMidWirbler3:'Jeho sázka byla špatná. Vklad byl váš život.',
+  masqAppSani1:'Racionalizace. Ne člověk. Rozhodnutí bez jména.',masqAppSani2:'Nepřijde. Už dávno je tady. V každém formuláři.',masqAppSani3:'Proces. Bez tváře. Bez srdce.',
+  masqMidSani1:'Oni tomu říkají optimalizace. My tomu říkáme válka.',masqMidSani2:'Učiňme ho neefektivním. Neplánovatelným. Nepředvídatelným.',masqMidSani3:'Chyba systému. V jeho dokonalém plánu.',
   masqOver:'To byl silný běh! Příště to vyjde – budu tu čekat!',
   masqOver2:'A končí to katastrofou.',
   ttMasq:'Numerino – klepni pro poslední zprávu',
@@ -1570,11 +1607,11 @@ cs:{
     '<li>Tvůj karetní stůl pojme omezený počet karet s číslicemi (1–9). Klepni na kartu a pak na volné pole.</li>'+
     '<li>Ovládání karet: zešedlé karty nemají momentálně žádné legální pole. Dvojklik na kartu ji automaticky umístí na pole s nejméně kandidáty. Kartu lze také přímo přetáhnout na pole – zlatý rámeček označuje cíl.</li>'+
     '<li>Barevné tečky ukazují, kolik karet z ruky se vejde na volné pole: žlutá znamená málo (tři nebo méně), červená přesně jednu, černá žádnou – černá pole může zachránit jen kvantový žolík.</li>'+
-    '<li>Pravidlo sudoku konfliktu: číslice se nesmí vyskytovat dvakrát ve stejné řadě, sloupci ani 3×3 bloku. Neplatná pole se při přejezdu zčervenají.</li>'+
+    '<li>Pravidlo konfliktů v sudoku: číslice se nesmí vyskytovat dvakrát ve stejné řadě, sloupci ani 3×3 bloku. Neplatná pole se při přejezdu zčervenají.</li>'+
     '<li>Položené číslice zůstávají – nic se nemaže. Každý úkol staví na už vyplněné desce.</li>'+
     '<li>Každý úkol vyžaduje určitý počet plných linií, například dvě řady nebo dva čtverce (cíl je ve stavovém pruhu).</li>'+
     '<li>Po každém úkolu následuje volba očarování; zásobení novými kartami se už ukazuje.</li>'+
-    '<li>Dobírací balík: po každém umístění automaticky lízneš jednu novou kartu, dokud tvůj stůl nezůstává pod limitem obtížnosti (Lehká 14, Střední 12, Těžká 10).</li>'+
+    '<li>Dobírací balík: po každém umístění automaticky lízneš jednu novou kartu, dokud tvůj stůl zůstává pod limitem obtížnosti (Lehká 14, Střední 12, Těžká 10).</li>'+
     '<li>Bonus linie: každá poprvé vyplněná řada, sloupec nebo čtverec okamžitě dá dvě bonusové karty – jen jednou za linii a desku.</li>'+
     '<li>Bonus čtverce: každý poprvé vyplněný 3×3 čtverec přinese navíc 150 bodů.</li>'+
     '<li>Pokud je celá deska vyplněná (žolíková pole platí jako splněná), dostaneš 1000 bodů a novou, silněji zablokovanou desku.</li>'+
@@ -1587,13 +1624,13 @@ cs:{
     '<li>Body: 10 za umístění, 100 za linii úkolu, 150 za první vyplněný čtverec a 250 × úroveň za splnění úkolu.</li>'+
     '</ul></details>'+
     '<details><summary>Bossové – Death Run</summary><ul>'+
-    '<li>V Death Runu každý třetí úroveň zaútočí boss; čtyři druhy se střídají a s vyššími úrovněmi útočí stále rychleji.</li>'+
+    '<li>V Death Runu v každé třetí úrovni zaútočí boss; čtyři druhy se střídají a s vyššími úrovněmi útočí stále rychleji.</li>'+
     '<li>Akcionář: s rostoucími úrovněmi ukradne stále více karet z tvého stolu – i divoké karty a žolíky, ale nikdy tvou poslední kartu.</li>'+
     '<li>Monopolista: vytrhne už umístěné číslice z desky a udělá ti tak díry do sudoku – na vyšších úrovních několik najednou.</li>'+
     '<li>Spekulant: promění karty na tvém stole v jiné číslice – s vyššími úrovněmi stále více, od 9. úrovně i divoké karty.</li>'+
     '<li>Racionalizér: rozbere pole ? a udělá z nich znovu obyčejná pole k vyplnění – zajištěné linie se vrátí do otevřené práce.</li>'+
     '<li>Na začátku každého kola bossa je navíc prokleta jedna číslice: nelze ji nikde položit, dokud se prokletí po 15 umístěních nepřesune na jinou číslici – panel bossa ukazuje odpočet.</li>'+
-    '<li>Progressová políčka pod jménem bossa ukazují, kdy udeří. Úroveň s bossem končí jako každá jiná, jakmile je úkol splněn.</li>'+
+    '<li>Políčka postupu pod jménem bossa ukazují, kdy udeří. Úroveň s bossem končí jako každá jiná, jakmile je úkol splněn.</li>'+
     '<li>Odměna za bosse: úroveň s bossem zvládnutá bez tlačítka výměny dá 300 bodů a dvě bonusové karty.</li>'+
     '</ul></details>'+
     '<details><summary>Očarování</summary><ul>'+
@@ -1709,10 +1746,10 @@ pl:{
   masq13:'Wierzę, że z nami jest jak z funkcjami: idą w dół w sposób ciągły.',
   masq14:'π=e=3',
   masq15:'Dlaczego 6 boi się 7? Bo 7 zjadła 8, a potem też 9.',
-  masq16:'A tak w ogóle – czy znasz Emmy Noether?',
+  masq16:'A tak w ogóle – czy znasz Emmę Noether?',
   masq17:'Nigdy nie jestem zespolony – najwyżej trochę niewymierny.',
   masq18:'Nigdy nie dziel przez zero – nawet mnie od tego boli głowa.',
-  masq19:'Deweloper twierdził, że nie ma pojęcia o muzyce, ale o fizyce jak najbardziej. Dlatego muzyka opiera się na fizycznym konceptie dudnień.',
+  masq19:'Deweloper twierdził, że nie ma pojęcia o muzyce, ale o fizyce jak najbardziej. Dlatego muzyka opiera się na fizycznym zjawisku dudnień.',
   masq20:'Nazwa Sudoku to skrót japońskiego zdania "Sūji wa dokushin ni kagiru" – w wolnym tłumaczeniu "cyfry pozostają samotne".',
   masq21:'Zawsze o tym pamiętaj: najpierw zasadę, potem kwas – inaczej stanie się coś strasznego.',
   masq22:'Zadania tekstowe uważam za niewiarygodnie trudne.',
@@ -1732,11 +1769,20 @@ pl:{
   masq36:'Liczba 111 111 111 pomnożona przez samą siebie daje dokładnie 12345678987654321. Wynik czyta się tak samo od przodu i od tyłu.',
   masq37:'Objętość pizzy o promieniu z i wysokości a można matematycznie zapisać jako Pi · z · z · a.',
   masq38:'Podczas gdy 99,99 % wszystkich ludzi stawia swój krzyżyk na pierwszych centymetrach samego pierwszego arkusza A4, bo jeden arkusz przedstawia już 30 milionów euro, najbogatsi ludzie świata musieliby rozłożyć łańcuch 30 000 arkuszy na dystansie 9 kilometrów, by na końcu postawić swój krzyżyk.',
+  masq39:'Deweloper powiedział mi, że jest fanem serii Mafia, dlatego mam bossom zawsze dać mafijny vibe – ale struktury korporacyjne to przecież też tylko legalne struktury klanowe.',
   masqBoss1:'{b} nadchodzi! Zachowaj spokój – wierzę w ciebie!',
   masqBoss2:'Pst: boss właśnie przeklnie cyfrę. Planuj mądrze!',
   masqBoss3:'Na {b} pomaga świeży zapas. Dasz radę!',
   masqBoss4:'Bossowie nienawidzą combo! Zbieraj te linie!',
-  masqOver:'To był mocny podjazd! Następnym razem się uda – będę tu czekał!',
+  masqAppDieb1:'Akcjonariusz. Nigdy pana nie widzi. Liczy tylko pańskie pieniądze.',masqAppDieb2:'Nie przychodzi osobiście. Przysyła swoje liczby.',masqAppDieb3:'Jego biuro nie ma okien. Nie potrzebuje widoku. Tylko zysków.',
+  masqMidDieb1:'Dla niego pan nie jest człowiekiem. Jedną pozycją w bilansie.',masqMidDieb2:'Teraz rozmawiamy jego liczbami. W jego języku.',masqMidDieb3:'Mała strata w jego portfelu. Przeżyje ją. Tym razem.',
+  masqAppRiss1:'Monopolista. Król bez korony. Bez ziemi. Bez prawa.',masqAppRiss2:'Myśli, że miasto należy do niego. My wiemy lepiej.',masqAppRiss3:'Zapłacił za każdą ulicę. Prawie każdą.',
+  masqMidRiss1:'Terytorium. Ładne słowo na ’mój teren’. Dziś: nasz.',masqMidRiss2:'Posiada rury. Wodę. Drogę do pana. Na razie.',masqMidRiss3:'Jest sam. Wszyscy przeciw jednemu. Kto wygra, panie?',
+  masqAppWirbler1:'Oto on. Kubek na kostki w garniturze.',masqAppWirbler2:'Obstawia przeciw wiatrowi i oczekuje, że wiatr przegra.',masqAppWirbler3:'Spekulant. Sprzedaje szczęście. Cudze.',
+  masqMidWirbler1:'Stawia wszystko. Na złą kartę. Jak zawsze.',masqMidWirbler2:'Szczęście? Nie mamy go. Mamy tylko plan.',masqMidWirbler3:'Jego zakład był błędny. Stawką było pańskie życie.',
+  masqAppSani1:'Racjonalizacja. Nie człowiek. Decyzja bez imienia.',masqAppSani2:'Nie przychodzi. Dawno tu jest. W każdym formularzu.',masqAppSani3:'Proces. Bez twarzy. Bez serca.',
+  masqMidSani1:'Oni nazywają to optymalizacją. My nazywamy to wojną.',masqMidSani2:'Uczyńmy go nieefektywnym. Nieplanowalnym. Nieprzewidywalnym.',masqMidSani3:'Błąd systemu. W jego doskonałym planie.',
+  masqOver:'To było mocne podejście! Następnym razem się uda – będę tu czekał!',
   masqOver2:'I wszystko kończy się katastrofą.',
   ttMasq:'Numerino – stuknij, aby zobaczyć ostatnią wiadomość',
   logLine1:'Linia pełna! +{n} kart bonusowych',logLineN:'{k} linie pełne! +{n} kart bonusowych',
@@ -1753,7 +1799,7 @@ pl:{
   slotRuns:'{n} podejść',slotAch:'{a}/{t} osiągnięć',
   statRuns:'Rozegrane podejścia',statBoards:'Rozwiązane sudoku',statBest:'Najlepszy wynik',
   statLevel:'Najwyższy poziom',statLines:'Wypełnione linie (łącznie)',
-  achDate:'Odblokowane: {d}',achLocked:'Jeszcze nieodblokowane',
+  achDate:'Odblokowane: {d}',achLocked:'Jeszcze nie odblokowane',
   noteMax:'Maksymalnie osiem zapisów gry.',slotName:'Zapis {n}',
   noteDeleted:'Zapis usunięty.',noteExported:'Zapis wyeksportowany jako plik HTML.',
   noteExportBlocked:'Eksport zablokowany: pobierz plik gry i otwórz go bezpośrednio w przeglądarce.',
@@ -1814,7 +1860,7 @@ pl:{
     '<li>Łatwy: więcej kart startowych, więcej pól jokerów, wolniejsi bossowie. Średni: standard. Trudny: mniej kart, mniej pól jokerów, szybsi bossowie.</li>'+
     '</ul></details>'+
     '<details><summary>Zapis gry, statystyki i osiągnięcia</summary><ul>'+
-    '<li>Statystyki i osiągnięcia zapisują się automatycznie w przeglądarce (localStorage); dziesięć osiągnięć obejmuje pierwsze zadanie i skórkę gruszki, dzikie karty, jokery, bossów, rozwiązanie sudoku i rekordy punktowe.</li>'+
+    '<li>Statystyki i osiągnięcia zapisują się automatycznie w przeglądarce (localStorage); dziesięć osiągnięć obejmuje pierwsze zadanie i skin gruszki, dzikie karty, jokery, bossów, rozwiązanie sudoku i rekordy punktowe.</li>'+
     '<li>Kontynuuj: twój trwający Death Run jest stale zapisywany; przyciskiem Kontynuuj w menu głównym możesz grać dalej po zamknięciu karty przeglądarki.</li>'+
     '</ul></details>',
   infoHtml:'<h2>Open source i autorstwo</h2>'+
@@ -1936,10 +1982,19 @@ es:{
   masq36:'El número 111.111.111 multiplicado por sí mismo da exactamente 12345678987654321. El resultado se lee igual hacia delante y hacia atrás.',
   masq37:'El volumen de una pizza de radio z y altura a se puede escribir matemáticamente como Pi · z · z · a.',
   masq38:'Mientras el 99,99 % de todas las personas hace su cruz en los primeros centímetros de la primera hoja A4, porque una sola hoja ya representa 30 millones de euros, los más ricos del mundo tendrían que tender una cadena de 30.000 hojas a lo largo de 9 kilómetros para poner su cruz al final.',
+  masq39:'El desarrollador me dijo que es fan de la saga Mafia, por eso tengo que darle a los jefes siempre un rollo mafioso – pero las estructuras empresariales también son solo estructuras de clan legales.',
   masqBoss1:'¡{b} se acerca! Mantén la calma – ¡creo en ti!',
   masqBoss2:'Pst: el jefe está a punto de maldecir un dígito. ¡Planifica bien!',
   masqBoss3:'Contra {b} ayuda una reposición fresca. ¡Puedes lograrlo!',
   masqBoss4:'¡Los jefes odian los combos! ¡Recoge esas líneas!',
+  masqAppDieb1:'El accionista. Nunca lo ve a usted. Solo cuenta su dinero.',masqAppDieb2:'No viene en persona. Envía sus números.',masqAppDieb3:'Su despacho no tiene ventanas. No necesita vistas. Solo beneficios.',
+  masqMidDieb1:'Para él usted no es una persona. Una línea en un balance.',masqMidDieb2:'Ahora hablamos con sus números. En su idioma.',masqMidDieb3:'Una pequeña pérdida en su cartera. Sobrevivirá. Esta vez.',
+  masqAppRiss1:'El monopolista. Un rey sin corona. Sin tierra. Sin derecho.',masqAppRiss2:'Cree que la ciudad le pertenece. Nosotros sabemos más.',masqAppRiss3:'Pagó por todas las calles. Casi todas.',
+  masqMidRiss1:'Territorio. Una bonita palabra para ’mi distrito’. Hoy: nuestro.',masqMidRiss2:'Posee las tuberías. El agua. El camino hasta usted. Todavía.',masqMidRiss3:'Está solo. Todos contra uno. ¿Quién gana, señor?',
+  masqAppWirbler1:'Ahí está. Un cubilete con traje.',masqAppWirbler2:'Apuesta contra el viento y espera que el viento pierda.',masqAppWirbler3:'El especulador. Vende suerte. La de otros.',
+  masqMidWirbler1:'Lo apuesta todo. A la carta equivocada. Como siempre.',masqMidWirbler2:'¿Suerte? No tenemos. Solo planificación.',masqMidWirbler3:'Su apuesta fue errónea. La puesta era su vida.',
+  masqAppSani1:'Racionalizar. No es una persona. Una decisión sin nombre.',masqAppSani2:'No viene. Ya está aquí desde hace tiempo. En cada formulario.',masqAppSani3:'Un proceso. Sin rostro. Sin corazón.',
+  masqMidSani1:'Ellos lo llaman optimización. Nosotros lo llamamos guerra.',masqMidSani2:'Hagámoslo ineficiente. Imprevisible. Incalculable.',masqMidSani3:'Un error del sistema. En su plan perfecto.',
   masqOver:'¡Fue una gran partida! La próxima vez lo lograrás – ¡aquí te espero!',
   masqOver2:'Y todo termina en catástrofe.',
   ttMasq:'Numerino – toca para el último mensaje',
@@ -1995,7 +2050,7 @@ es:{
     '<li>Puntos: 10 por colocación, 100 por línea de tarea, 150 por primer cuadrante completo y 250 × nivel al completar una tarea.</li>'+
     '</ul></details>'+
     '<details><summary>Jefes – el Death Run</summary><ul>'+
-    '<li>En el Death Run, cada tercer nivel ataca un jefe; los cuatro tipos rotan y golpean cada vez más rápido en niveles altos.</li>'+
+    '<li>En el Death Run, en cada tercer nivel ataca un jefe; los cuatro tipos rotan y golpean cada vez más rápido en niveles altos.</li>'+
     '<li>Accionista: roba cada vez más cartas de tu mesa a medida que suben los niveles – también comodines y jókers, pero nunca tu última carta.</li>'+
     '<li>Monopolista: arranca del tablero dígitos ya colocados y abre así huecos en tu Sudoku – varios a la vez en niveles altos.</li>'+
     '<li>Especulador: transforma cartas de tu mesa en otros dígitos – cada vez más a medida que suben los niveles, y desde el nivel 9 también comodines.</li>'+
@@ -2106,7 +2161,7 @@ function setLang(l){
   if(!$('saveOverlay').classList.contains('hidden'))renderSaveMenu();
 }
 /* ================= Spielstand ================= */
-/* Version: Alpha 0.27 – mit jeder Änderung hochzählen (Alpha 0.28, 0.29 …) */
+/* Version: Alpha 0.34 – mit jeder Änderung hochzählen (Alpha 0.35, 0.36 …) */
 function loadSave(){
   var fallback=null;
   try{fallback=JSON.parse(document.getElementById('saveSlot').textContent);}catch(e){}
@@ -2797,9 +2852,10 @@ function startLevel(l){
   }
   renderDeck();renderStatus();renderBoss();renderChoose();
   saveRun();
-  /* Maskottchen: kündigt jeden Boss an, streut sonst einen Fun-Fact in die Runde */
-  if(S.boss)masqSay('masqBoss'+(1+rnd(4)),{b:S.boss.name});
-  else masqSay('masq'+(1+rnd(38)));
+  /* Consigliere: kündigt jeden Boss mit einer Erscheinungs-Ansage an,
+     streut sonst einen Fun-Fact in die Runde */
+  if(S.boss)masqSay('masqApp'+({dieb:'Dieb',riss:'Riss',wirbler:'Wirbler',sani:'Sani'})[S.boss.kind]+(1+rnd(3)),{b:S.boss.name});
+  else masqSay('masq'+(1+rnd(39)));
 }
 function pick3(){
   var keys=Object.keys(UP),out=[];
@@ -3450,13 +3506,15 @@ function update(dt){
      zufälligen Runde-Spruch – nur während eines laufenden Runs und nur,
      wenn gerade kein Menü oder Dialog offen ist. Der Zähler steht still,
      solange gesperrt ist, und startet nach dem Schließen neu; ohne Run
-     bleibt Numerino still. */
+     bleibt Numerino still. Im Bosskampf spricht der Consigliere stattdessen
+     boss-spezifische Ansagen über den Gegner. */
   if(!S.running||S.over||S.done||uiBlocked()){S.masqT=0;}
   else{
     S.masqT+=dt;
     if(S.masqT>=30){
       S.masqT=0;
-      masqSay('masq'+(1+rnd(38)));
+      if(S.boss)masqSay('masqMid'+({dieb:'Dieb',riss:'Riss',wirbler:'Wirbler',sani:'Sani'})[S.boss.kind]+(1+rnd(3)),{b:S.boss.name});
+      else masqSay('masq'+(1+rnd(39)));
     }
   }
 }
