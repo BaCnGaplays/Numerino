@@ -332,7 +332,7 @@
 <div id="wrap">
   <header>
     <h1>Numerino</h1>
-    <div class="sub"><span class="verTag">Alpha 0.34</span> <span id="headMode">Sudoku-Roguelike</span></div>
+    <div class="sub"><span class="verTag">Alpha 0.35</span> <span id="headMode">Sudoku-Roguelike</span></div>
   </header>
   <div id="main">
     <div id="left">
@@ -406,7 +406,7 @@
     <div id="euFlag" title="In der Europäischen Union entwickelt – einmal anklicken!"><canvas id="euCv" width="24" height="16"></canvas></div>
     <div id="euTag"><span class="euBanner">MADE IN EUROPE</span></div>
     <h1>Numerino</h1>
-    <div class="sub"><span class="verTag">Alpha 0.34</span></div>
+    <div class="sub"><span class="verTag">Alpha 0.35</span></div>
     <h3 id="modeH">Spielmodus</h3>
     <button id="stdBtn" class="btn menuBtn">Standard</button>
     <button id="contBtn" class="btn menuBtn hidden">Fortsetzen</button>
@@ -564,7 +564,7 @@
     </ul>
     </div>
     <h3 id="verH">Version</h3>
-    <ul><li>Alpha 0.34</li></ul>
+    <ul><li>Alpha 0.35</li></ul>
     <div class="btnRow"><button id="infoSrc" class="btn small">Quellcode anzeigen</button></div>
     <div class="btnRow"><button id="infoClose" class="btn">Schließen</button></div>
   </div>
@@ -572,7 +572,7 @@
 
 <div id="srcModal" class="modal hidden">
   <div class="modalBox" style="max-width:860px">
-    <h2><span id="srcH2t">Quellcode</span> <span class="verTag">Alpha 0.34</span></h2>
+    <h2><span id="srcH2t">Quellcode</span> <span class="verTag">Alpha 0.35</span></h2>
     <p class="mSub" id="srcHint">Vollständiger Quellcode dieser Datei. Nach dem Markieren kann er mit Strg+C (bzw. Cmd+C) kopiert werden.</p>
     <textarea id="srcArea" readonly spellcheck="false"></textarea>
     <div class="btnRow">
@@ -621,6 +621,7 @@
     <div id="skinOpts" class="setOpts full">
       <button class="btn small setSkin" data-skin="apfel"><canvas class="sknPrev" width="14" height="14"></canvas><span class="sknName">Apfel</span></button>
       <button class="btn small setSkin" data-skin="birne"><canvas class="sknPrev" width="14" height="14"></canvas><span class="sknName">Birne</span></button>
+      <button class="btn small setSkin" data-skin="mafia"><canvas class="sknPrev" width="14" height="14"></canvas><span class="sknName">Arbeitermafia</span></button>
     </div>
     <div class="btnRow"><button id="worldBack" class="btn small">Zurück</button></div>
   </div>
@@ -721,11 +722,32 @@ var MASQROWS_BIRNE=[
 '...DDDDDDDD...'
 ];
 var MASQPAL_BIRNE={S:'#8a5a2a',L:'#3aa04a',H:'#c4d43e',D:'#8a9a20',W:'#ffffff',K:'#101018',B:'#f0a0a0'};
+/* Arbeitermafia-Skin: Schiebermütze (M), Gesicht (F), Nadelstreifen-Anzug
+   (S/P), weißes Hemd mit roter Krawatte (W/R), Zigarre (C), Wangen (B),
+   Füße (D) – der Consigliere-Look passt zu den Boss-Sprüchen */
+var MASQROWS_MAFIA=[
+'....MMMMMM....',
+'..MMMMMMMMMM..',
+'.MMMMMMMMMMMM.',
+'..FFFFFFFFFF..',
+'.FFWWFFFFWWFF.',
+'.FFWKFFFFKWFF.',
+'.FFBBFFFFBBFF.',
+'..FFFFKKCCCC..',
+'..SPSWWWWSPS..',
+'.SSPSWRRWSPSS.',
+'.SSPSWRRWSPSS.',
+'..SPSWWWWSPS..',
+'..DDDD..DDDD..',
+'..............'
+];
+var MASQPAL_MAFIA={M:'#4a4a58',F:'#f2c9a0',S:'#34344a',P:'#6a6a84',W:'#ffffff',R:'#c03030',C:'#8a5a2a',K:'#101018',B:'#f0a0a0',D:'#232328'};
 /* Skins des Maskottchens: Der gewählte Skin wird dauerhaft in
    SAVE.settings.skin gespeichert; die Auswahl liegt im Menü Skins und Welten */
 var MASQSKINS={
   apfel:{rows:MASQROWS,pal:MASQPAL,name:'skinApfel'},
-  birne:{rows:MASQROWS_BIRNE,pal:MASQPAL_BIRNE,name:'skinBirne'}
+  birne:{rows:MASQROWS_BIRNE,pal:MASQPAL_BIRNE,name:'skinBirne'},
+  mafia:{rows:MASQROWS_MAFIA,pal:MASQPAL_MAFIA,name:'skinMafia'}
 };
 function masqSkin(){return MASQSKINS[SAVE.settings.skin]||MASQSKINS.apfel;}
 function drawMasq(){drawSprite($('masqCv').getContext('2d'),masqSkin().rows,masqSkin().pal,0,0,1);}
@@ -1015,7 +1037,7 @@ de:{
   noteDeleted:'Spielstand gelöscht.',noteExported:'Spielstand als HTML-Datei exportiert.',
   noteExportBlocked:'Export blockiert: Lade die Spieldatei herunter und öffne sie direkt im Browser.',
   resetArmedLbl:'Wirklich alle zurücksetzen?',noteReset:'Alle Spielstände wurden zurückgesetzt.',
-  mWorldBtn:'Skins und Welten',worldH:'Skins und Welten',worldSub:'Brettthemen und Numerino-Skins',skinH3:'Numerino-Skins',skinApfel:'Apfel',skinBirne:'Birne',
+  mWorldBtn:'Skins und Welten',worldH:'Skins und Welten',worldSub:'Brettthemen und Numerino-Skins',skinH3:'Numerino-Skins',skinApfel:'Apfel',skinBirne:'Birne',skinMafia:'Arbeitermafia',
   worldH3:'Brettthemen',themeOrig:'Original',themeMono:'Monochrom',themePapier:'Papier',
   themeEdel:'Edel',themeWinter:'Winter',themeHimmel:'Himmel',themeHerbst:'Herbst',
   themeKirsch:'Kirschblüte',themeWeltraum:'Weltraum',
@@ -1165,7 +1187,7 @@ en:{
   noteDeleted:'Save slot deleted.',noteExported:'Save exported as an HTML file.',
   noteExportBlocked:'Export blocked: download the game file and open it directly in your browser.',
   resetArmedLbl:'Really reset everything?',noteReset:'All save slots have been reset.',
-  mWorldBtn:'Skins & Worlds',worldH:'Skins & Worlds',worldSub:'Board themes and Numerino skins',skinH3:'Numerino skins',skinApfel:'Apple',skinBirne:'Pear',
+  mWorldBtn:'Skins & Worlds',worldH:'Skins & Worlds',worldSub:'Board themes and Numerino skins',skinH3:'Numerino skins',skinApfel:'Apple',skinBirne:'Pear',skinMafia:'Worker Mafia',
   worldH3:'Board themes',themeOrig:'Original',themeMono:'Monochrome',themePapier:'Paper',
   themeEdel:'Noble',themeWinter:'Winter',themeHimmel:'Sky',themeHerbst:'Autumn',
   themeKirsch:'Cherry blossom',themeWeltraum:'Space',
@@ -1378,7 +1400,7 @@ fr:{
   noteDeleted:'Sauvegarde supprimée.',noteExported:'Sauvegarde exportée en fichier HTML.',
   noteExportBlocked:'Exportation bloquée : téléchargez le fichier du jeu et ouvrez-le directement dans le navigateur.',
   resetArmedLbl:'Tout réinitialiser, vraiment ?',noteReset:'Tous les emplacements ont été réinitialisés.',
-  mWorldBtn:'Skins et mondes',worldH:'Skins et mondes',worldSub:'Thèmes de plateau et skins de Numerino',skinH3:'Skins de Numerino',skinApfel:'Pomme',skinBirne:'Poire',
+  mWorldBtn:'Skins et mondes',worldH:'Skins et mondes',worldSub:'Thèmes de plateau et skins de Numerino',skinH3:'Skins de Numerino',skinApfel:'Pomme',skinBirne:'Poire',skinMafia:'Mafia ouvrière',
   worldH3:'Thèmes de plateau',themeOrig:'Original',themeMono:'Monochrome',themePapier:'Papier',
   themeEdel:'Noble',themeWinter:'Hiver',themeHimmel:'Ciel',themeHerbst:'Automne',
   themeKirsch:'Fleur de cerisier',themeWeltraum:'Espace',
@@ -1591,7 +1613,7 @@ cs:{
   noteDeleted:'Uložení smazáno.',noteExported:'Uložení exportováno jako soubor HTML.',
   noteExportBlocked:'Export blokován: stáhni herní soubor a otevři ho přímo v prohlížeči.',
   resetArmedLbl:'Opravdu resetovat vše?',noteReset:'Všechna uložení byla resetována.',
-  mWorldBtn:'Skiny a světy',worldH:'Skiny a světy',worldSub:'Témata desky a skiny Numerina',skinH3:'Skiny Numerina',skinApfel:'Jablko',skinBirne:'Hruška',
+  mWorldBtn:'Skiny a světy',worldH:'Skiny a světy',worldSub:'Témata desky a skiny Numerina',skinH3:'Skiny Numerina',skinApfel:'Jablko',skinBirne:'Hruška',skinMafia:'Dělnická mafie',
   worldH3:'Témata desky',themeOrig:'Originál',themeMono:'Monochrom',themePapier:'Papír',
   themeEdel:'Elegantní',themeWinter:'Zima',themeHimmel:'Nebe',themeHerbst:'Podzim',
   themeKirsch:'Sakura',themeWeltraum:'Vesmír',
@@ -1804,7 +1826,7 @@ pl:{
   noteDeleted:'Zapis usunięty.',noteExported:'Zapis wyeksportowany jako plik HTML.',
   noteExportBlocked:'Eksport zablokowany: pobierz plik gry i otwórz go bezpośrednio w przeglądarce.',
   resetArmedLbl:'Naprawdę zresetować wszystko?',noteReset:'Wszystkie zapisy zostały zresetowane.',
-  mWorldBtn:'Skiny i światy',worldH:'Skiny i światy',worldSub:'Motywy planszy i skiny Numerino',skinH3:'Skiny Numerino',skinApfel:'Jabłko',skinBirne:'Gruszka',
+  mWorldBtn:'Skiny i światy',worldH:'Skiny i światy',worldSub:'Motywy planszy i skiny Numerino',skinH3:'Skiny Numerino',skinApfel:'Jabłko',skinBirne:'Gruszka',skinMafia:'Mafia robotnicza',
   worldH3:'Motywy planszy',themeOrig:'Oryginał',themeMono:'Monochromatyczny',themePapier:'Papier',
   themeEdel:'Szlachetny',themeWinter:'Zima',themeHimmel:'Niebo',themeHerbst:'Jesień',
   themeKirsch:'Kwiat wiśni',themeWeltraum:'Kosmos',
@@ -2017,7 +2039,7 @@ es:{
   noteDeleted:'Partida guardada eliminada.',noteExported:'Partida exportada como archivo HTML.',
   noteExportBlocked:'Exportación bloqueada: descarga el archivo del juego y ábrelo directamente en el navegador.',
   resetArmedLbl:'¿Restablecer todo de verdad?',noteReset:'Se han restablecido todas las partidas guardadas.',
-  mWorldBtn:'Skins y mundos',worldH:'Skins y mundos',worldSub:'Temas de tablero y skins de Numerino',skinH3:'Skins de Numerino',skinApfel:'Manzana',skinBirne:'Pera',
+  mWorldBtn:'Skins y mundos',worldH:'Skins y mundos',worldSub:'Temas de tablero y skins de Numerino',skinH3:'Skins de Numerino',skinApfel:'Manzana',skinBirne:'Pera',skinMafia:'Mafia obrera',
   worldH3:'Temas de tablero',themeOrig:'Original',themeMono:'Monocromo',themePapier:'Papel',
   themeEdel:'Noble',themeWinter:'Invierno',themeHimmel:'Cielo',themeHerbst:'Otoño',
   themeKirsch:'Flor de cerezo',themeWeltraum:'Espacio',
@@ -2161,7 +2183,7 @@ function setLang(l){
   if(!$('saveOverlay').classList.contains('hidden'))renderSaveMenu();
 }
 /* ================= Spielstand ================= */
-/* Version: Alpha 0.34 – mit jeder Änderung hochzählen (Alpha 0.35, 0.36 …) */
+/* Version: Alpha 0.35 – mit jeder Änderung hochzählen (Alpha 0.36, 0.37 …) */
 function loadSave(){
   var fallback=null;
   try{fallback=JSON.parse(document.getElementById('saveSlot').textContent);}catch(e){}
