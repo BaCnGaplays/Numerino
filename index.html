@@ -335,7 +335,7 @@
 <div id="wrap">
   <header>
     <h1>Numerino</h1>
-    <div class="sub"><span class="verTag">Alpha 0.46</span> <span id="headMode">Sudoku-Roguelike</span></div>
+    <div class="sub"><span class="verTag">Alpha 0.47</span> <span id="headMode">Sudoku-Roguelike</span></div>
   </header>
   <div id="main">
     <div id="left">
@@ -409,11 +409,11 @@
     <div id="euFlag" title="In der Europäischen Union entwickelt – einmal anklicken!"><canvas id="euCv" width="24" height="16"></canvas></div>
     <div id="euTag"><span class="euBanner">MADE IN EUROPE</span></div>
     <h1>Numerino</h1>
-    <div class="sub"><span class="verTag">Alpha 0.46</span></div>
+    <div class="sub"><span class="verTag">Alpha 0.47</span></div>
     <h3 id="modeH">Spielmodus</h3>
+    <button id="minimusBtn" class="btn menuBtn">Minimus</button>
     <button id="stdBtn" class="btn menuBtn">Standard</button>
     <button id="matrixBtn" class="btn menuBtn">Matrix</button>
-    <button id="minimusBtn" class="btn menuBtn">Minimus</button>
     <button id="contBtn" class="btn menuBtn hidden">Fortsetzen</button>
     <div id="diffRow" class="hidden">
       <div id="diffCap">Schwierigkeit wählen</div>
@@ -457,11 +457,11 @@
       <li>Farbige Punkte zeigen, wie viele Hand-Karten auf ein freies Feld passen: Gelb heißt wenige (drei oder weniger), Rot genau eine, Schwarz keine – nur der Quantenjoker kann schwarze Felder noch retten.</li>
       <li>Sudoku-Konfliktregel: Eine Ziffer darf nie doppelt in derselben Reihe, Spalte oder demselben 3×3-Block liegen. Ungültige Felder werden beim Überfahren rot markiert.</li>
       <li>Matrix-Modus: ein 16×16-Brett mit den Ziffern 1–9 und A–G in 4×4-Blöcken – gleiche Regeln, gleiche Bosse, größeres Sudoku. Der Modus wird im Hauptmenü gewählt und wirkt auf den nächsten Run.</li>
-      <li>Minimus-Modus: ein 4×4-Brett mit den Ziffern 1–4 in 2×2-Blöcken – die Brettgrößen folgen den Quadratzahlen 4, 9 und 16. Gleiche Regeln, gleiche Bosse, aber nur 16 Felder: schnelle Runden, knappe Aufgaben – und Bosse, die auf kleinem Brett doppelt wehtun. Der Modus wird im Hauptmenü gewählt und wirkt auf den nächsten Run.</li>
+      <li>Minimus-Modus: ein 4×4-Brett mit den Ziffern 1–4 in 2×2-Blöcken – die Brettgrößen folgen den Quadratzahlen 4, 9 und 16. Jede Aufgabe verlangt genau ein neues vollständiges Quadrat, der Kartentisch hält höchstens sechs Karten, und der Modus kennt nur eine Schwierigkeit (Mittel) – schnelle Runden mit knapper Hand. Der Modus wird im Hauptmenü gewählt und wirkt auf den nächsten Run.</li>
       <li>Platzierte Ziffern bleiben liegen – nichts wird gelöscht. Jede Aufgabe baut auf dem bereits gefüllten Brett auf.</li>
       <li>Jede Aufgabe verlangt eine Anzahl voller Linien, etwa zwei Reihen oder zwei Quadrate (Ziel in der Statusleiste).</li>
       <li>Nach jeder Aufgabe folgt die Verzauberungswahl; der Nachschub an neuen Karten wird dir dabei bereits angezeigt.</li>
-      <li>Nachziehstapel: Nach jeder Platzierung ziehst du automatisch eine neue Karte nach, solange dein Kartentisch die Obergrenze deiner Schwierigkeit (Leicht 14, Mittel 12, Schwer 10) noch nicht erreicht hat.</li>
+      <li>Nachziehstapel: Nach jeder Platzierung ziehst du automatisch eine neue Karte nach, solange dein Kartentisch die Obergrenze deiner Schwierigkeit (Leicht 14, Mittel 12, Schwer 10) noch nicht erreicht hat. Zudem gilt je Modus eine absolute Kartengrenze (Standard 24, Matrix 40, Minimus 6); Bonuskarten darüber hinaus werden in 50 Punkte umgewandelt.</li>
       <li>Linien-Bonus: Jede erstmals vollständig gefüllte Reihe, Spalte oder jedes Quadrat schüttet sofort zwei Bonuskarten aus – je Linie und Brett nur einmal.</li>
       <li>Quadrat-Bonus: Jedes erstmals vollständig gefüllte 3×3-Quadrat bringt zusätzlich 150 Punkte.</li>
       <li>Ist das gesamte Brett gefüllt (Joker-Felder zählen als erfüllt), gibt es 1000 Punkte und ein neues, stärker verblocktes Brett.</li>
@@ -584,7 +584,7 @@
     </ul>
     </div>
     <h3 id="verH">Version</h3>
-    <ul><li>Alpha 0.46</li></ul>
+    <ul><li>Alpha 0.47</li></ul>
     <div class="btnRow"><button id="infoSrc" class="btn small">Quellcode anzeigen</button></div>
     <div class="btnRow"><button id="infoClose" class="btn">Schließen</button></div>
   </div>
@@ -592,7 +592,7 @@
 
 <div id="srcModal" class="modal hidden">
   <div class="modalBox" style="max-width:860px">
-    <h2><span id="srcH2t">Quellcode</span> <span class="verTag">Alpha 0.46</span></h2>
+    <h2><span id="srcH2t">Quellcode</span> <span class="verTag">Alpha 0.47</span></h2>
     <p class="mSub" id="srcHint">Vollständiger Quellcode dieser Datei. Nach dem Markieren kann er mit Strg+C (bzw. Cmd+C) kopiert werden.</p>
     <textarea id="srcArea" readonly spellcheck="false"></textarea>
     <div class="btnRow">
@@ -1159,7 +1159,7 @@ de:{
   hStats:'Statistik (aktiver Spielstand)',hAch:'Erfolge (aktiver Spielstand)',saveBackLbl:'Zurück',
   infoSrcLbl:'Quellcode anzeigen',verH:'Version',toastAch:'Erfolg freigeschaltet',
   taskRows:'REIHEN',taskCols:'SPALTEN',taskBoxes:'QUADRATE',
-  taskRowsN:'Reihen',taskColsN:'Spalten',taskBoxesN:'Quadrate',
+  taskRowsN:'Reihen',taskColsN:'Spalten',taskBoxesN:'Quadrate',taskBoxesOne:'Quadrat',
   stLevel:'LEVEL {n}',stGoal:'ZIEL {a}/{b} {t}',stGoal0:'ZIEL 0/0',
   stScore:'PUNKTE {n}',stCombo:'COMBO x{n}',stMode:'DEATH RUN',stRight:'KARTEN {n}',
   stCurse:'Ziffer {d} verflucht – wechselt nach {n} Platzierungen',
@@ -1372,7 +1372,7 @@ en:{
   hStats:'Statistics (active save)',hAch:'Achievements (active save)',saveBackLbl:'Back',
   infoSrcLbl:'Show source code',verH:'Version',toastAch:'Achievement unlocked',
   taskRows:'ROWS',taskCols:'COLUMNS',taskBoxes:'BOXES',
-  taskRowsN:'rows',taskColsN:'columns',taskBoxesN:'boxes',
+  taskRowsN:'rows',taskColsN:'columns',taskBoxesN:'boxes',taskBoxesOne:'box',
   stLevel:'LEVEL {n}',stGoal:'GOAL {a}/{b} {t}',stGoal0:'GOAL 0/0',
   stScore:'POINTS {n}',stCombo:'COMBO x{n}',stMode:'DEATH RUN',stRight:'CARDS {n}',
   stCurse:'Digit {d} cursed – changes after {n} placements',
@@ -1559,11 +1559,11 @@ en:{
     '<li>Coloured dots show how many of your hand cards fit a free cell: yellow means few (three or fewer), red exactly one, black none – only the quantum joker can still save black cells.</li>'+
     '<li>Sudoku conflict rule: a digit must never appear twice in the same row, column or 3×3 box. Invalid cells are marked red when you hover over them.</li>'+
     '<li>Matrix mode: a 16×16 board with the digits 1–9 and A–G in 4×4 boxes – same rules, same bosses, a larger Sudoku. The mode is chosen in the main menu and applies to the next run.</li>'+
-    '<li>Minimus mode: a 4×4 board with the digits 1–4 in 2×2 boxes – the board sizes follow the square numbers 4, 9 and 16. Same rules, same bosses, but only 16 fields: fast rounds, tight tasks – and bosses that hurt twice as much on a small board. The mode is chosen in the main menu and applies to the next run.</li>'+
+    '<li>Minimus mode: a 4×4 board with the digits 1–4 in 2×2 boxes – the board sizes follow the square numbers 4, 9 and 16. Every task demands exactly one new complete box, the card table holds at most six cards, and the mode has only one difficulty (Medium) – fast rounds with a tight hand. The mode is chosen in the main menu and applies to the next run.</li>'+
     '<li>Placed digits stay in place – nothing is ever removed. Every task builds on the already filled board.</li>'+
     '<li>Each task asks for a number of completed lines, for example two rows or two boxes (the goal is shown in the status bar).</li>'+
     '<li>After each task follows the enchantment choice; the supply of new cards is already shown there.</li>'+
-    '<li>Draw pile: after every placement you automatically draw one new card, as long as your card table stays below the limit of your difficulty (Easy 14, Medium 12, Hard 10).</li>'+
+    '<li>Draw pile: after every placement you automatically draw one new card, as long as your card table stays below the limit of your difficulty (Easy 14, Medium 12, Hard 10). In addition, each mode has an absolute card limit (Standard 24, Matrix 40, Minimus 6); bonus cards beyond it are converted into 50 points.</li>'+
     '<li>Line bonus: every row, column or box completed for the first time immediately yields two bonus cards – once per line and board.</li>'+
     '<li>Box bonus: every 3×3 box completed for the first time additionally gives 150 points.</li>'+
     '<li>When the entire board is filled (joker cells count as completed), you earn 1000 points and a new, more heavily blocked board.</li>'+
@@ -1651,7 +1651,7 @@ fr:{
   hStats:'Statistiques (sauvegarde active)',hAch:'Succès (sauvegarde active)',saveBackLbl:'Retour',
   infoSrcLbl:'Afficher le code source',verH:'Version',toastAch:'Succès débloqué',
   taskRows:'RANGÉES',taskCols:'COLONNES',taskBoxes:'CARRÉS',
-  taskRowsN:'rangées',taskColsN:'colonnes',taskBoxesN:'carrés',
+  taskRowsN:'rangées',taskColsN:'colonnes',taskBoxesN:'carrés',taskBoxesOne:'carré',
   stLevel:'NIVEAU {n}',stGoal:'OBJECTIF {a}/{b} {t}',stGoal0:'OBJECTIF 0/0',
   stScore:'POINTS {n}',stCombo:'COMBO x{n}',stMode:'DEATH RUN',stRight:'CARTES {n}',
   stCurse:'Chiffre {d} maudit – change après {n} poses',
@@ -1838,11 +1838,11 @@ fr:{
     '<li>Les points colorés indiquent combien de cartes de votre main s’adaptent à une case libre : jaune signifie peu (trois ou moins), rouge exactement une, noir aucune – seul le joker quantique peut encore sauver les cases noires.</li>'+
     '<li>Règle de conflit du Sudoku : un chiffre ne doit jamais apparaître deux fois dans la même rangée, colonne ou le même bloc 3×3. Les cases invalides se marquent en rouge au survol.</li>'+
     '<li>Mode Matrix : une grille 16×16 avec les chiffres 1–9 et A–G en blocs 4×4 – mêmes règles, mêmes boss, un Sudoku plus grand. Le mode se choisit dans le menu principal et s’applique à la prochaine partie.</li>'+
-    '<li>Mode Minimus : une grille 4×4 avec les chiffres 1–4 en blocs 2×2 – les tailles de grille suivent les nombres carrés 4, 9 et 16. Mêmes règles, mêmes boss, mais seulement 16 champs : des manches rapides, des objectifs serrés – et des boss qui font deux fois plus mal sur une petite grille. Le mode se choisit dans le menu principal et s’applique à la prochaine partie.</li>'+
+    '<li>Mode Minimus : une grille 4×4 avec les chiffres 1–4 en blocs 2×2 – les tailles de grille suivent les nombres carrés 4, 9 et 16. Chaque tâche exige exactement un nouveau bloc complet, la table tient au maximum six cartes, et le mode n’a qu’une seule difficulté (Moyen) – des manches rapides avec une main serrée. Le mode se choisit dans le menu principal et s’applique à la prochaine partie.</li>'+
     '<li>Les chiffres posés restent en place – rien n’est jamais effacé. Chaque mission s’appuie sur la grille déjà remplie.</li>'+
     '<li>Chaque mission demande un certain nombre de lignes complètes, par exemple deux rangées ou deux carrés (l’objectif figure dans la barre d’état).</li>'+
     '<li>Après chaque mission vient le choix d’un enchantement ; la réserve de nouvelles cartes y est déjà affichée.</li>'+
-    '<li>Pioche : après chaque pose, vous piochez automatiquement une nouvelle carte, tant que votre table reste sous la limite de votre difficulté (Facile 14, Moyen 12, Difficile 10).</li>'+
+    '<li>Pioche : après chaque pose, vous piochez automatiquement une nouvelle carte, tant que votre table reste sous la limite de votre difficulté (Facile 14, Moyen 12, Difficile 10). En outre, chaque mode a une limite absolue de cartes (Standard 24, Matrix 40, Minimus 6) ; les cartes bonus au-delà sont converties en 50 points.</li>'+
     '<li>Bonus de ligne : chaque rangée, colonne ou carré complété pour la première fois rapporte immédiatement deux cartes bonus – une seule fois par ligne et par grille.</li>'+
     '<li>Bonus de carré : chaque carré 3×3 complété pour la première fois rapporte en outre 150 points.</li>'+
     '<li>Lorsque toute la grille est remplie (les cases joker comptent comme complètes), vous gagnez 1000 points et une nouvelle grille plus fortement bloquée.</li>'+
@@ -1930,7 +1930,7 @@ cs:{
   hStats:'Statistiky (aktivní uložení)',hAch:'Úspěchy (aktivní uložení)',saveBackLbl:'Zpět',
   infoSrcLbl:'Zobrazit zdrojový kód',verH:'Verze',toastAch:'Úspěch odemčen',
   taskRows:'ŘADY',taskCols:'SLOUPCE',taskBoxes:'ČTVERCE',
-  taskRowsN:'řady',taskColsN:'sloupce',taskBoxesN:'čtverce',
+  taskRowsN:'řady',taskColsN:'sloupce',taskBoxesN:'čtverce',taskBoxesOne:'čtverec',
   stLevel:'ÚROVEŇ {n}',stGoal:'CÍL {a}/{b} {t}',stGoal0:'CÍL 0/0',
   stScore:'BODY {n}',stCombo:'COMBO x{n}',stMode:'DEATH RUN',stRight:'KARTY {n}',
   stCurse:'Číslice {d} prokleta – mění se po {n} umístěních',
@@ -2117,11 +2117,11 @@ cs:{
     '<li>Barevné tečky ukazují, kolik karet z ruky se vejde na volné pole: žlutá znamená málo (tři nebo méně), červená přesně jednu, černá žádnou – černá pole může zachránit jen kvantový žolík.</li>'+
     '<li>Pravidlo konfliktů v sudoku: číslice se nesmí vyskytovat dvakrát ve stejné řadě, sloupci ani 3×3 bloku. Neplatná pole se při přejezdu zčervenají.</li>'+
     '<li>Režim Matrix: deska 16×16 s číslicemi 1–9 a A–G ve blocích 4×4 – stejná pravidla, stejní bossové, větší sudoku. Režim se volí v hlavním menu a platí pro další běh.</li>'+
-    '<li>Režim Minimus: deska 4×4 s číslicemi 1–4 ve blocích 2×2 – velikosti desky sledují druhé mocniny 4, 9 a 16. Stejná pravidla, stejní bossové, ale jen 16 polí: rychlá kola, napjaté úkoly – a bossové, kteří na malé desce bolí dvojnásob. Režim se volí v hlavním menu a platí pro další běh.</li>'+
+    '<li>Režim Minimus: deska 4×4 s číslicemi 1–4 ve blocích 2×2 – velikosti desky sledují druhé mocniny 4, 9 a 16. Každý úkol vyžaduje přesně jeden nový úplný blok, stůl drží nejvýš šest karet a režim má jen jednu obtížnost (Střední) – rychlá kola s napjatou rukou. Režim se volí v hlavním menu a platí pro další běh.</li>'+
     '<li>Položené číslice zůstávají – nic se nemaže. Každý úkol staví na už vyplněné desce.</li>'+
     '<li>Každý úkol vyžaduje určitý počet plných linií, například dvě řady nebo dva čtverce (cíl je ve stavovém pruhu).</li>'+
     '<li>Po každém úkolu následuje volba očarování; zásobení novými kartami se už ukazuje.</li>'+
-    '<li>Dobírací balík: po každém umístění automaticky lízneš jednu novou kartu, dokud tvůj stůl zůstává pod limitem obtížnosti (Lehká 14, Střední 12, Těžká 10).</li>'+
+    '<li>Dobírací balík: po každém umístění automaticky lízneš jednu novou kartu, dokud tvůj stůl zůstává pod limitem obtížnosti (Lehká 14, Střední 12, Těžká 10). Kromě toho má každý režim absolutní limit karet (Standard 24, Matrix 40, Minimus 6); bonusové karty nad tento limit se mění na 50 bodů.</li>'+
     '<li>Bonus linie: každá poprvé vyplněná řada, sloupec nebo čtverec okamžitě dá dvě bonusové karty – jen jednou za linii a desku.</li>'+
     '<li>Bonus čtverce: každý poprvé vyplněný 3×3 čtverec přinese navíc 150 bodů.</li>'+
     '<li>Pokud je celá deska vyplněná (žolíková pole platí jako splněná), dostaneš 1000 bodů a novou, silněji zablokovanou desku.</li>'+
@@ -2209,7 +2209,7 @@ pl:{
   hStats:'Statystyki (aktywny zapis)',hAch:'Osiągnięcia (aktywny zapis)',saveBackLbl:'Wstecz',
   infoSrcLbl:'Pokaż kod źródłowy',verH:'Wersja',toastAch:'Osiągnięcie odblokowane',
   taskRows:'WIERSZE',taskCols:'KOLUMNY',taskBoxes:'KWADRATY',
-  taskRowsN:'wiersze',taskColsN:'kolumny',taskBoxesN:'kwadraty',
+  taskRowsN:'wiersze',taskColsN:'kolumny',taskBoxesN:'kwadraty',taskBoxesOne:'kwadrat',
   stLevel:'POZIOM {n}',stGoal:'CEL {a}/{b} {t}',stGoal0:'CEL 0/0',
   stScore:'PUNKTY {n}',stCombo:'COMBO x{n}',stMode:'DEATH RUN',stRight:'KARTY {n}',
   stCurse:'Cyfra {d} przeklęta – zmienia się po {n} umieszczeniach',
@@ -2396,11 +2396,11 @@ pl:{
     '<li>Kolorowe kropki pokazują, ile kart z ręki pasuje do wolnego pola: żółta znaczy niewiele (trzy lub mniej), czerwona dokładnie jedną, czarna żadną – czarne pola może uratować tylko joker kwantowy.</li>'+
     '<li>Zasada konfliktu sudoku: cyfra nigdy nie może wystąpić dwa razy w tym samym wierszu, kolumnie ani bloku 3×3. Nieprawidłowe pola przy najechaniu zaznaczają się na czerwono.</li>'+
     '<li>Tryb Matrix: plansza 16×16 z cyframi 1–9 i A–G w blokach 4×4 – te same zasady, ci sami bossowie, większe sudoku. Tryb wybiera się w menu głównym i obowiązuje w kolejnym podejściu.</li>'+
-    '<li>Tryb Minimus: plansza 4×4 z cyframi 1–4 w blokach 2×2 – rozmiary planszy podążają za kwadratami liczb 4, 9 i 16. Te same zasady, ci sami bossowie, ale tylko 16 pól: szybkie rundy, ciasne zadania – i bossowie, którzy na małej planszy bolą podwójnie. Tryb wybiera się w menu głównym i obowiązuje w kolejnym podejściu.</li>'+
+    '<li>Tryb Minimus: plansza 4×4 z cyframi 1–4 w blokach 2×2 – rozmiary planszy podążają za kwadratami liczb 4, 9 i 16. Każde zadanie wymaga dokładnie jednego nowego pełnego bloku, stół mieści najwyżej sześć kart, a tryb ma tylko jedną trudność (Średnią) – szybkie rundy z ciasną ręką. Tryb wybiera się w menu głównym i obowiązuje w kolejnym podejściu.</li>'+
     '<li>Umieszczone cyfry zostają na miejscu – nic nie jest usuwane. Każde zadanie buduje na już wypełnionej planszy.</li>'+
     '<li>Każde zadanie wymaga pewnej liczby pełnych linii, na przykład dwóch wierszy albo dwóch kwadratów (cel widnieje na pasku statusu).</li>'+
     '<li>Po każdym zadaniu następuje wybór zaklęcia; zapas nowych kart jest już wtedy pokazany.</li>'+
-    '<li>Talia dobierania: po każdym umieszczeniu automatycznie dobierasz jedną nową kartę, dopóki twój stół pozostaje pod limitem trudności (Łatwy 14, Średni 12, Trudny 10).</li>'+
+    '<li>Talia dobierania: po każdym umieszczeniu automatycznie dobierasz jedną nową kartę, dopóki twój stół pozostaje pod limitem trudności (Łatwy 14, Średni 12, Trudny 10). Ponadto każdy tryb ma absolutny limit kart (Standard 24, Matrix 40, Minimus 6); karty bonusowe powyżej niego zamieniają się w 50 punktów.</li>'+
     '<li>Bonus za linię: każdy pierwszy raz wypełniony wiersz, kolumna lub kwadrat daje natychmiast dwie karty bonusowe – tylko raz na linię i planszę.</li>'+
     '<li>Bonus za kwadrat: każdy pierwszy raz wypełniony kwadrat 3×3 daje dodatkowo 150 punktów.</li>'+
     '<li>Gdy cała plansza jest wypełniona (pola jokerów liczą się jako wypełnione), otrzymujesz 1000 punktów i nową, mocniej zablokowaną planszę.</li>'+
@@ -2488,7 +2488,7 @@ es:{
   hStats:'Estadísticas (partida activa)',hAch:'Logros (partida activa)',saveBackLbl:'Volver',
   infoSrcLbl:'Ver código fuente',verH:'Versión',toastAch:'Logro desbloqueado',
   taskRows:'FILAS',taskCols:'COLUMNAS',taskBoxes:'CUADRANTES',
-  taskRowsN:'filas',taskColsN:'columnas',taskBoxesN:'cuadrantes',
+  taskRowsN:'filas',taskColsN:'columnas',taskBoxesN:'cuadrantes',taskBoxesOne:'cuadrante',
   stLevel:'NIVEL {n}',stGoal:'META {a}/{b} {t}',stGoal0:'META 0/0',
   stScore:'PUNTOS {n}',stCombo:'COMBO x{n}',stMode:'DEATH RUN',stRight:'CARTAS {n}',
   stCurse:'Dígito {d} maldito – cambia tras {n} colocaciones',
@@ -2675,11 +2675,11 @@ es:{
     '<li>Los puntos de color muestran cuántas cartas de tu mano encajan en una casilla libre: amarillo significa pocas (tres o menos), rojo exactamente una, negro ninguna – las casillas negras solo puede salvarlas el jóker cuántico.</li>'+
     '<li>Regla de conflicto del Sudoku: un dígito no debe aparecer nunca dos veces en la misma fila, columna o bloque 3×3. Las casillas inválidas se marcan en rojo al pasar por encima.</li>'+
     '<li>Modo Matrix: un tablero de 16×16 con los dígitos 1–9 y A–G en bloques de 4×4 – mismas reglas, mismos jefes, un Sudoku más grande. El modo se elige en el menú principal y se aplica a la siguiente partida.</li>'+
-    '<li>Modo Minimus: un tablero de 4×4 con los dígitos 1–4 en bloques de 2×2 – los tamaños de tablero siguen los cuadrados 4, 9 y 16. Mismas reglas, mismos jefes, pero solo 16 casillas: rondas rápidas, tareas ajustadas – y jefes que en un tablero pequeño duelen el doble. El modo se elige en el menú principal y se aplica a la siguiente partida.</li>'+
+    '<li>Modo Minimus: un tablero de 4×4 con los dígitos 1–4 en bloques de 2×2 – los tamaños de tablero siguen los cuadrados 4, 9 y 16. Cada tarea exige exactamente un bloque nuevo completo, la mesa mantiene como máximo seis cartas, y el modo tiene una sola dificultad (Media) – rondas rápidas con una mano ajustada. El modo se elige en el menú principal y se aplica a la siguiente partida.</li>'+
     '<li>Los dígitos colocados permanecen – no se borra nada. Cada tarea se construye sobre el tablero ya rellenado.</li>'+
     '<li>Cada tarea exige un número de líneas completas, por ejemplo dos filas o dos cuadrantes (el objetivo aparece en la barra de estado).</li>'+
     '<li>Tras cada tarea sigue la elección de un encantamiento; la reposición de cartas nuevas ya se muestra entonces.</li>'+
-    '<li>Mazo de robo: tras cada colocación robas automáticamente una carta nueva, siempre que tu mesa siga por debajo del límite de tu dificultad (Fácil 14, Medio 12, Difícil 10).</li>'+
+    '<li>Mazo de robo: tras cada colocación robas automáticamente una carta nueva, siempre que tu mesa siga por debajo del límite de tu dificultad (Fácil 14, Medio 12, Difícil 10). Además, cada modo tiene un límite absoluto de cartas (Estándar 24, Matrix 40, Minimus 6); las cartas de bonificación por encima se convierten en 50 puntos.</li>'+
     '<li>Bonus de línea: cada fila, columna o cuadrante completado por primera vez da de inmediato dos cartas de bonificación – una vez por línea y tablero.</li>'+
     '<li>Bonus de cuadrante: cada cuadrante 3×3 completado por primera vez da además 150 puntos.</li>'+
     '<li>Cuando todo el tablero está relleno (las casillas comodín cuentan como completas), ganas 1000 puntos y un tablero nuevo con más bloqueos.</li>'+
@@ -2807,7 +2807,7 @@ function setLang(l){
   if(!$('saveOverlay').classList.contains('hidden'))renderSaveMenu();
 }
 /* ================= Spielstand ================= */
-/* Version: Alpha 0.46 – mit jeder Änderung hochzählen (Alpha 0.47, 0.48 …) */
+/* Version: Alpha 0.47 – mit jeder Änderung hochzählen (Alpha 0.48, 0.49 …) */
 function loadSave(){
   var fallback=null;
   try{fallback=JSON.parse(document.getElementById('saveSlot').textContent);}catch(e){}
@@ -2989,6 +2989,13 @@ var DIFF={
   2:{deck:12,block:0,boss:0},
   3:{deck:10,block:-2,boss:-1}
 };
+/* Absolute Kartengrenze je Modus, unabhaengig vom Schwierigkeitsgrad:
+   Minimus 6, Standard 24, Matrix 40. Bonus- und Nachschubkarten enden an
+   dieser Grenze; ueberzaehlige Bonuskarten werden in 50 Punkte umgewandelt
+   (siehe addCards). Der Nachziehstapel nutzt das Minimum aus Schwierigkeits-
+   Deck und Modusgrenze (deckLim). */
+var DECKCAP={minimus:6,std:24,matrix:40};
+function deckLim(){return Math.min(DIFF[S.diff].deck,DECKCAP[S.mode]||32);}
 /* Namen und Beschreibungen der Verzauberungen liegen in den Sprachtabellen
    (Schlüssel upXxxN / upXxxD); hier stehen nur Icon, Klasse und Schlüssel. */
 var UP={
@@ -3082,8 +3089,9 @@ function cardPlaceable(card){
   return false;
 }
 function addCards(n){
+  var cap=DECKCAP[S.mode]||32;
   for(var i=0;i<n;i++){
-    if(S.inv.length>=32){S.score+=50;}
+    if(S.inv.length>=cap){S.score+=50;}
     else{S.inv.push({kind:'n',d:1+rnd(N)});}
   }
 }
@@ -3277,12 +3285,22 @@ function progressForType(type){
   return n;
 }
 function nextTask(l){
+  /* Minimus: jede Aufgabe verlangt genau ein neues vollstaendiges Quadrat
+     (2x2-Block); bereits volle Quadrate zaehlen mit, damit keine Aufgabe
+     schon zu Levelbeginn erfuellt ist. Standard und Matrix behalten die
+     rotierenden Linien-Aufgaben. */
+  if(S.mode==='minimus'){
+    return{type:'boxes',count:Math.max(1,progressForType('boxes')+1)};
+  }
   var t={type:TASKTYPES[(l-1)%3],count:Math.min(2+Math.floor((l-1)/3),6)};
   var cur=progressForType(t.type);
   if(cur>=t.count)t.count=cur+1;
   return t;
 }
-function taskLabel(t){return t.count+' '+tr(TASKNAME[t.type]);}
+function taskLabel(t){
+  if(t.count===1&&t.type==='boxes')return '1 '+tr('taskBoxesOne');
+  return t.count+' '+tr(TASKNAME[t.type]);
+}
 function boardFull(){
   if(!S.grid.length)return false;
   for(var i=0;i<N*N;i++){var g=S.grid[i];if(!g.b&&!g.d)return false;}
@@ -3475,8 +3493,8 @@ function afterPlace(r,c,rc){
     addLog(tr('logBox'),'#ffd23f');
   }
   /* Nachziehstapel: nach jeder Platzierung eine neue Karte, solange der Tisch
-     die Deck-Obergrenze der Schwierigkeit noch nicht erreicht hat */
-  if(S.inv.length<DIFF[S.diff].deck)addCards(1);
+     unter dem wirksamen Limit aus Schwierigkeits-Deck und Modusgrenze bleibt */
+  if(S.inv.length<deckLim())addCards(1);
   /* Sudoku gelöst: Bonuspunkte, neues Brett, Aufgabe gilt als erfüllt */
   if(boardFull()){
     S.score+=1000;
@@ -3592,7 +3610,7 @@ function startLevel(l){
     if(bs.kind==='lobbyist'){var nl2=bossLockCells(S.mode==='minimus'?2:5);addLog(trf('logLobby',{k:nl2}),'#c8a44a');}
   }
   addLog(trf('logLevel',{n:l,t:taskLabel(S.task)}),'#ffd23f');
-  var cap=DIFF[S.diff].deck;
+  var cap=deckLim();
   while(S.inv.length<cap){
     if(S.pending.length)S.inv.push({kind:'n',d:S.pending.shift()});
     else S.inv.push({kind:'n',d:1+rnd(N)});
@@ -3648,7 +3666,7 @@ function openLevelModal(){
   box.innerHTML='';
   $('levelDone').textContent=trf('levelDoneTxt',{n:S.level,p:S.score});
   var nt=nextTask(S.level+1);
-  var cap=DIFF[S.diff].deck,need=Math.max(0,cap-S.inv.length),pend=[];
+  var cap=deckLim(),need=Math.max(0,cap-S.inv.length),pend=[];
   for(var i=0;i<need;i++)pend.push(1+rnd(N));
   S.pending=pend;
   $('levelSub').innerHTML=trf('nextTaskTxt',{t:taskLabel(nt)})+
@@ -4350,6 +4368,11 @@ function chooseMode(m){
   SAVE.settings.mode=m;
   persistSave();
   updateModeBtns();
+  /* Minimus kennt nur eine Schwierigkeit (Mittel) – Leicht und Schwer
+     bleiben den Modi Standard und Matrix vorbehalten */
+  qsa('.diffBtn').forEach(function(b){
+    b.classList.toggle('hidden',m==='minimus'&&b.getAttribute('data-diff')!=='2');
+  });
   $('diffRow').classList.remove('hidden');
   markDiff();
   sfx(600,0.04);
