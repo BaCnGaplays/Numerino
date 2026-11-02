@@ -335,7 +335,7 @@
 <div id="wrap">
   <header>
     <h1>Numerino</h1>
-    <div class="sub"><span class="verTag">Alpha 0.43</span> <span id="headMode">Sudoku-Roguelike</span></div>
+    <div class="sub"><span class="verTag">Alpha 0.44</span> <span id="headMode">Sudoku-Roguelike</span></div>
   </header>
   <div id="main">
     <div id="left">
@@ -409,7 +409,7 @@
     <div id="euFlag" title="In der Europäischen Union entwickelt – einmal anklicken!"><canvas id="euCv" width="24" height="16"></canvas></div>
     <div id="euTag"><span class="euBanner">MADE IN EUROPE</span></div>
     <h1>Numerino</h1>
-    <div class="sub"><span class="verTag">Alpha 0.43</span></div>
+    <div class="sub"><span class="verTag">Alpha 0.44</span></div>
     <h3 id="modeH">Spielmodus</h3>
     <button id="stdBtn" class="btn menuBtn">Standard</button>
     <button id="matrixBtn" class="btn menuBtn">Matrix</button>
@@ -581,7 +581,7 @@
     </ul>
     </div>
     <h3 id="verH">Version</h3>
-    <ul><li>Alpha 0.43</li></ul>
+    <ul><li>Alpha 0.44</li></ul>
     <div class="btnRow"><button id="infoSrc" class="btn small">Quellcode anzeigen</button></div>
     <div class="btnRow"><button id="infoClose" class="btn">Schließen</button></div>
   </div>
@@ -589,7 +589,7 @@
 
 <div id="srcModal" class="modal hidden">
   <div class="modalBox" style="max-width:860px">
-    <h2><span id="srcH2t">Quellcode</span> <span class="verTag">Alpha 0.43</span></h2>
+    <h2><span id="srcH2t">Quellcode</span> <span class="verTag">Alpha 0.44</span></h2>
     <p class="mSub" id="srcHint">Vollständiger Quellcode dieser Datei. Nach dem Markieren kann er mit Strg+C (bzw. Cmd+C) kopiert werden.</p>
     <textarea id="srcArea" readonly spellcheck="false"></textarea>
     <div class="btnRow">
@@ -2763,7 +2763,7 @@ function setLang(l){
   if(!$('saveOverlay').classList.contains('hidden'))renderSaveMenu();
 }
 /* ================= Spielstand ================= */
-/* Version: Alpha 0.43 – mit jeder Änderung hochzählen (Alpha 0.44, 0.45 …) */
+/* Version: Alpha 0.44 – mit jeder Änderung hochzählen (Alpha 0.45, 0.46 …) */
 function loadSave(){
   var fallback=null;
   try{fallback=JSON.parse(document.getElementById('saveSlot').textContent);}catch(e){}
@@ -2851,10 +2851,12 @@ function unlock(id){
   updateSkinBtns();
 }
 /* ================= Zustand ================= */
-/* Brettkonstanten: Zellen im Normalmodus 20 Pixel (vorher 18), im Matrix-
-   Modus 11 (vorher 10) – die Bretter füllen die Spielfläche effizienter,
-   der Hinweisstreifen rechts bleibt unverändert breit. */
-var W=320,H=340,GX=73,GY=82,CELL=20,GSZ=191;
+/* Brettkonstanten: Zellen im Normalmodus 22 Pixel, im Matrix-Modus 13 –
+   die ungenutzten Ränder links und oben wurden deutlich verkleinert, damit
+   die Bretter die Spielfläche ausfüllen und 16×16 auf dem Handy lesbar
+   bleibt; der Hinweisstreifen rechts behält seine Breite; unter dem
+   Matrix-Brett bleibt Platz für das Verzauberungs- und Boss-Panel. */
+var W=320,H=340,GX=40,GY=54,CELL=22,GSZ=209;
 var C={gridbg:'#142818',board:'#10241a',cell:'#20362a',cellAlt:'#244030',line:'#3a5c48',sep:'#5a9070',
   bright:'#8ac2a0',digit:'#e8f2ec',magic:'#6ee7c8',gold:'#ffd23f',red:'#ff5555',
   dim:'#6a8c78',white:'#ffffff',block:'#4a3040',blockbg:'#1a1424',jokerIn:'#2a1c30',jokerQ:'#ffd23f'};
@@ -2946,7 +2948,7 @@ var S={running:false,diff:2,level:1,task:null,totLines:0,score:0,boards:0,
    Hexadezimal-Layout mit den Ziffern 1–9 und A–G (4×4-Blöcke) – gleiche
    Regeln, gleiche Bosse, größeres Brett. Alle Brettabmessungen, Ziffern-
    mengen und Blockgrößen werden aus dem Modus abgeleitet. */
-var MODES={std:{n:9,bx:3,cell:20,gx:73,gy:82},matrix:{n:16,bx:4,cell:11,gx:72,gy:82}};
+var MODES={std:{n:9,bx:3,cell:22,gx:40,gy:54},matrix:{n:16,bx:4,cell:13,gx:24,gy:40}};
 var N=9,BX=3;
 function M(){return MODES[S.mode]||MODES.std;}
 function applyMode(){
