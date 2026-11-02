@@ -335,7 +335,7 @@
 <div id="wrap">
   <header>
     <h1>Numerino</h1>
-    <div class="sub"><span class="verTag">Alpha 0.45</span> <span id="headMode">Sudoku-Roguelike</span></div>
+    <div class="sub"><span class="verTag">Alpha 0.46</span> <span id="headMode">Sudoku-Roguelike</span></div>
   </header>
   <div id="main">
     <div id="left">
@@ -409,10 +409,11 @@
     <div id="euFlag" title="In der Europäischen Union entwickelt – einmal anklicken!"><canvas id="euCv" width="24" height="16"></canvas></div>
     <div id="euTag"><span class="euBanner">MADE IN EUROPE</span></div>
     <h1>Numerino</h1>
-    <div class="sub"><span class="verTag">Alpha 0.45</span></div>
+    <div class="sub"><span class="verTag">Alpha 0.46</span></div>
     <h3 id="modeH">Spielmodus</h3>
     <button id="stdBtn" class="btn menuBtn">Standard</button>
     <button id="matrixBtn" class="btn menuBtn">Matrix</button>
+    <button id="minimusBtn" class="btn menuBtn">Minimus</button>
     <button id="contBtn" class="btn menuBtn hidden">Fortsetzen</button>
     <div id="diffRow" class="hidden">
       <div id="diffCap">Schwierigkeit wählen</div>
@@ -456,6 +457,7 @@
       <li>Farbige Punkte zeigen, wie viele Hand-Karten auf ein freies Feld passen: Gelb heißt wenige (drei oder weniger), Rot genau eine, Schwarz keine – nur der Quantenjoker kann schwarze Felder noch retten.</li>
       <li>Sudoku-Konfliktregel: Eine Ziffer darf nie doppelt in derselben Reihe, Spalte oder demselben 3×3-Block liegen. Ungültige Felder werden beim Überfahren rot markiert.</li>
       <li>Matrix-Modus: ein 16×16-Brett mit den Ziffern 1–9 und A–G in 4×4-Blöcken – gleiche Regeln, gleiche Bosse, größeres Sudoku. Der Modus wird im Hauptmenü gewählt und wirkt auf den nächsten Run.</li>
+      <li>Minimus-Modus: ein 4×4-Brett mit den Ziffern 1–4 in 2×2-Blöcken – die Brettgrößen folgen den Quadratzahlen 4, 9 und 16. Gleiche Regeln, gleiche Bosse, aber nur 16 Felder: schnelle Runden, knappe Aufgaben – und Bosse, die auf kleinem Brett doppelt wehtun. Der Modus wird im Hauptmenü gewählt und wirkt auf den nächsten Run.</li>
       <li>Platzierte Ziffern bleiben liegen – nichts wird gelöscht. Jede Aufgabe baut auf dem bereits gefüllten Brett auf.</li>
       <li>Jede Aufgabe verlangt eine Anzahl voller Linien, etwa zwei Reihen oder zwei Quadrate (Ziel in der Statusleiste).</li>
       <li>Nach jeder Aufgabe folgt die Verzauberungswahl; der Nachschub an neuen Karten wird dir dabei bereits angezeigt.</li>
@@ -582,7 +584,7 @@
     </ul>
     </div>
     <h3 id="verH">Version</h3>
-    <ul><li>Alpha 0.45</li></ul>
+    <ul><li>Alpha 0.46</li></ul>
     <div class="btnRow"><button id="infoSrc" class="btn small">Quellcode anzeigen</button></div>
     <div class="btnRow"><button id="infoClose" class="btn">Schließen</button></div>
   </div>
@@ -590,7 +592,7 @@
 
 <div id="srcModal" class="modal hidden">
   <div class="modalBox" style="max-width:860px">
-    <h2><span id="srcH2t">Quellcode</span> <span class="verTag">Alpha 0.45</span></h2>
+    <h2><span id="srcH2t">Quellcode</span> <span class="verTag">Alpha 0.46</span></h2>
     <p class="mSub" id="srcHint">Vollständiger Quellcode dieser Datei. Nach dem Markieren kann er mit Strg+C (bzw. Cmd+C) kopiert werden.</p>
     <textarea id="srcArea" readonly spellcheck="false"></textarea>
     <div class="btnRow">
@@ -1133,7 +1135,7 @@ de:{
   promoSub:'Räumliches Brettspiel der Reihe',promoTt:'Tetromino im Browser öffnen',
   promoHideTt:'Banner ausblenden – erscheint beim nächsten Spielstart wieder',
   euFlagTt:'In der Europäischen Union entwickelt – einmal anklicken!',
-  modeH:'Spielmodus',learnH:'Lernen',miscH:'Sonstiges',stdBtn:'Standard',matrixBtn:'Matrix',
+  modeH:'Spielmodus',learnH:'Lernen',miscH:'Sonstiges',stdBtn:'Standard',matrixBtn:'Matrix',minimusBtn:'Minimus',
   diffCap:'Schwierigkeit wählen',diff1:'Leicht',diff2:'Mittel',diff3:'Schwer',
   mRulesBtn:'Anleitung & Regeln',mSaveBtn:'Spielstand, Statistik & Erfolge',
   mSetBtn:'Einstellungen',mInfoBtn:'Open Source & Urheberschaft',menuBack:'Zurück zum Spiel (Esc)',
@@ -1346,7 +1348,7 @@ en:{
   promoSub:'Spatial board game of the series',promoTt:'Open Tetromino in the browser',
   promoHideTt:'Hide the banner – it returns at the next game start',
   euFlagTt:'Developed in the European Union – click once!',
-  modeH:'Game mode',learnH:'Learn',miscH:'Miscellaneous',stdBtn:'Standard',matrixBtn:'Matrix',
+  modeH:'Game mode',learnH:'Learn',miscH:'Miscellaneous',stdBtn:'Standard',matrixBtn:'Matrix',minimusBtn:'Minimus',
   diffCap:'Choose a difficulty',diff1:'Easy',diff2:'Medium',diff3:'Hard',
   mRulesBtn:'Instructions & rules',mSaveBtn:'Save game, statistics & achievements',
   mSetBtn:'Settings',mInfoBtn:'Open source & authorship',menuBack:'Back to the game (Esc)',
@@ -1557,6 +1559,7 @@ en:{
     '<li>Coloured dots show how many of your hand cards fit a free cell: yellow means few (three or fewer), red exactly one, black none – only the quantum joker can still save black cells.</li>'+
     '<li>Sudoku conflict rule: a digit must never appear twice in the same row, column or 3×3 box. Invalid cells are marked red when you hover over them.</li>'+
     '<li>Matrix mode: a 16×16 board with the digits 1–9 and A–G in 4×4 boxes – same rules, same bosses, a larger Sudoku. The mode is chosen in the main menu and applies to the next run.</li>'+
+    '<li>Minimus mode: a 4×4 board with the digits 1–4 in 2×2 boxes – the board sizes follow the square numbers 4, 9 and 16. Same rules, same bosses, but only 16 fields: fast rounds, tight tasks – and bosses that hurt twice as much on a small board. The mode is chosen in the main menu and applies to the next run.</li>'+
     '<li>Placed digits stay in place – nothing is ever removed. Every task builds on the already filled board.</li>'+
     '<li>Each task asks for a number of completed lines, for example two rows or two boxes (the goal is shown in the status bar).</li>'+
     '<li>After each task follows the enchantment choice; the supply of new cards is already shown there.</li>'+
@@ -1624,7 +1627,7 @@ fr:{
   promoSub:'Jeu de plateau spatial de la série',promoTt:'Ouvrir Tetromino dans le navigateur',
   promoHideTt:'Masquer la bannière – elle revient au prochain démarrage du jeu',
   euFlagTt:'Développé dans l’Union européenne – cliquez une fois !',
-  modeH:'Mode de jeu',learnH:'Apprendre',miscH:'Divers',stdBtn:'Standard',matrixBtn:'Matrix',
+  modeH:'Mode de jeu',learnH:'Apprendre',miscH:'Divers',stdBtn:'Standard',matrixBtn:'Matrix',minimusBtn:'Minimus',
   diffCap:'Choisissez une difficulté',diff1:'Facile',diff2:'Moyen',diff3:'Difficile',
   mRulesBtn:'Instructions et règles',mSaveBtn:'Sauvegarde, statistiques et succès',
   mSetBtn:'Paramètres',mInfoBtn:'Open source et paternité',menuBack:'Retour au jeu (Échap)',
@@ -1835,6 +1838,7 @@ fr:{
     '<li>Les points colorés indiquent combien de cartes de votre main s’adaptent à une case libre : jaune signifie peu (trois ou moins), rouge exactement une, noir aucune – seul le joker quantique peut encore sauver les cases noires.</li>'+
     '<li>Règle de conflit du Sudoku : un chiffre ne doit jamais apparaître deux fois dans la même rangée, colonne ou le même bloc 3×3. Les cases invalides se marquent en rouge au survol.</li>'+
     '<li>Mode Matrix : une grille 16×16 avec les chiffres 1–9 et A–G en blocs 4×4 – mêmes règles, mêmes boss, un Sudoku plus grand. Le mode se choisit dans le menu principal et s’applique à la prochaine partie.</li>'+
+    '<li>Mode Minimus : une grille 4×4 avec les chiffres 1–4 en blocs 2×2 – les tailles de grille suivent les nombres carrés 4, 9 et 16. Mêmes règles, mêmes boss, mais seulement 16 champs : des manches rapides, des objectifs serrés – et des boss qui font deux fois plus mal sur une petite grille. Le mode se choisit dans le menu principal et s’applique à la prochaine partie.</li>'+
     '<li>Les chiffres posés restent en place – rien n’est jamais effacé. Chaque mission s’appuie sur la grille déjà remplie.</li>'+
     '<li>Chaque mission demande un certain nombre de lignes complètes, par exemple deux rangées ou deux carrés (l’objectif figure dans la barre d’état).</li>'+
     '<li>Après chaque mission vient le choix d’un enchantement ; la réserve de nouvelles cartes y est déjà affichée.</li>'+
@@ -1902,7 +1906,7 @@ cs:{
   promoSub:'Prostorová desková hra ze série',promoTt:'Otevřít Tetromino v prohlížeči',
   promoHideTt:'Skrýt banner – vrátí se při příštím spuštění hry',
   euFlagTt:'Vyvinuto v Evropské unii – klikni jednou!',
-  modeH:'Herní režim',learnH:'Učení',miscH:'Ostatní',stdBtn:'Standard',matrixBtn:'Matrix',
+  modeH:'Herní režim',learnH:'Učení',miscH:'Ostatní',stdBtn:'Standard',matrixBtn:'Matrix',minimusBtn:'Minimus',
   diffCap:'Vyber obtížnost',diff1:'Lehká',diff2:'Střední',diff3:'Těžká',
   mRulesBtn:'Návod a pravidla',mSaveBtn:'Uložení, statistiky a úspěchy',
   mSetBtn:'Nastavení',mInfoBtn:'Open source a autorství',menuBack:'Zpět do hry (Esc)',
@@ -2113,6 +2117,7 @@ cs:{
     '<li>Barevné tečky ukazují, kolik karet z ruky se vejde na volné pole: žlutá znamená málo (tři nebo méně), červená přesně jednu, černá žádnou – černá pole může zachránit jen kvantový žolík.</li>'+
     '<li>Pravidlo konfliktů v sudoku: číslice se nesmí vyskytovat dvakrát ve stejné řadě, sloupci ani 3×3 bloku. Neplatná pole se při přejezdu zčervenají.</li>'+
     '<li>Režim Matrix: deska 16×16 s číslicemi 1–9 a A–G ve blocích 4×4 – stejná pravidla, stejní bossové, větší sudoku. Režim se volí v hlavním menu a platí pro další běh.</li>'+
+    '<li>Režim Minimus: deska 4×4 s číslicemi 1–4 ve blocích 2×2 – velikosti desky sledují druhé mocniny 4, 9 a 16. Stejná pravidla, stejní bossové, ale jen 16 polí: rychlá kola, napjaté úkoly – a bossové, kteří na malé desce bolí dvojnásob. Režim se volí v hlavním menu a platí pro další běh.</li>'+
     '<li>Položené číslice zůstávají – nic se nemaže. Každý úkol staví na už vyplněné desce.</li>'+
     '<li>Každý úkol vyžaduje určitý počet plných linií, například dvě řady nebo dva čtverce (cíl je ve stavovém pruhu).</li>'+
     '<li>Po každém úkolu následuje volba očarování; zásobení novými kartami se už ukazuje.</li>'+
@@ -2180,7 +2185,7 @@ pl:{
   promoSub:'Przestrzenna gra planszowa z serii',promoTt:'Otwórz Tetromino w przeglądarce',
   promoHideTt:'Ukryj baner – pojawi się ponownie przy następnym starcie gry',
   euFlagTt:'Stworzone w Unii Europejskiej – kliknij raz!',
-  modeH:'Tryb gry',learnH:'Nauka',miscH:'Inne',stdBtn:'Standard',matrixBtn:'Matrix',
+  modeH:'Tryb gry',learnH:'Nauka',miscH:'Inne',stdBtn:'Standard',matrixBtn:'Matrix',minimusBtn:'Minimus',
   diffCap:'Wybierz poziom trudności',diff1:'Łatwy',diff2:'Średni',diff3:'Trudny',
   mRulesBtn:'Instrukcja i zasady',mSaveBtn:'Zapis gry, statystyki i osiągnięcia',
   mSetBtn:'Ustawienia',mInfoBtn:'Open source i autorstwo',menuBack:'Powrót do gry (Esc)',
@@ -2391,6 +2396,7 @@ pl:{
     '<li>Kolorowe kropki pokazują, ile kart z ręki pasuje do wolnego pola: żółta znaczy niewiele (trzy lub mniej), czerwona dokładnie jedną, czarna żadną – czarne pola może uratować tylko joker kwantowy.</li>'+
     '<li>Zasada konfliktu sudoku: cyfra nigdy nie może wystąpić dwa razy w tym samym wierszu, kolumnie ani bloku 3×3. Nieprawidłowe pola przy najechaniu zaznaczają się na czerwono.</li>'+
     '<li>Tryb Matrix: plansza 16×16 z cyframi 1–9 i A–G w blokach 4×4 – te same zasady, ci sami bossowie, większe sudoku. Tryb wybiera się w menu głównym i obowiązuje w kolejnym podejściu.</li>'+
+    '<li>Tryb Minimus: plansza 4×4 z cyframi 1–4 w blokach 2×2 – rozmiary planszy podążają za kwadratami liczb 4, 9 i 16. Te same zasady, ci sami bossowie, ale tylko 16 pól: szybkie rundy, ciasne zadania – i bossowie, którzy na małej planszy bolą podwójnie. Tryb wybiera się w menu głównym i obowiązuje w kolejnym podejściu.</li>'+
     '<li>Umieszczone cyfry zostają na miejscu – nic nie jest usuwane. Każde zadanie buduje na już wypełnionej planszy.</li>'+
     '<li>Każde zadanie wymaga pewnej liczby pełnych linii, na przykład dwóch wierszy albo dwóch kwadratów (cel widnieje na pasku statusu).</li>'+
     '<li>Po każdym zadaniu następuje wybór zaklęcia; zapas nowych kart jest już wtedy pokazany.</li>'+
@@ -2458,7 +2464,7 @@ es:{
   promoSub:'Juego de tablero espacial de la serie',promoTt:'Abrir Tetromino en el navegador',
   promoHideTt:'Ocultar el banner: reaparece al iniciar la próxima partida',
   euFlagTt:'Desarrollado en la Unión Europea: ¡haz clic una vez!',
-  modeH:'Modo de juego',learnH:'Aprender',miscH:'Otros',stdBtn:'Estándar',matrixBtn:'Matrix',
+  modeH:'Modo de juego',learnH:'Aprender',miscH:'Otros',stdBtn:'Estándar',matrixBtn:'Matrix',minimusBtn:'Minimus',
   diffCap:'Elige una dificultad',diff1:'Fácil',diff2:'Medio',diff3:'Difícil',
   mRulesBtn:'Instrucciones y reglas',mSaveBtn:'Partida guardada, estadísticas y logros',
   mSetBtn:'Ajustes',mInfoBtn:'Código abierto y autoría',menuBack:'Volver al juego (Esc)',
@@ -2669,6 +2675,7 @@ es:{
     '<li>Los puntos de color muestran cuántas cartas de tu mano encajan en una casilla libre: amarillo significa pocas (tres o menos), rojo exactamente una, negro ninguna – las casillas negras solo puede salvarlas el jóker cuántico.</li>'+
     '<li>Regla de conflicto del Sudoku: un dígito no debe aparecer nunca dos veces en la misma fila, columna o bloque 3×3. Las casillas inválidas se marcan en rojo al pasar por encima.</li>'+
     '<li>Modo Matrix: un tablero de 16×16 con los dígitos 1–9 y A–G en bloques de 4×4 – mismas reglas, mismos jefes, un Sudoku más grande. El modo se elige en el menú principal y se aplica a la siguiente partida.</li>'+
+    '<li>Modo Minimus: un tablero de 4×4 con los dígitos 1–4 en bloques de 2×2 – los tamaños de tablero siguen los cuadrados 4, 9 y 16. Mismas reglas, mismos jefes, pero solo 16 casillas: rondas rápidas, tareas ajustadas – y jefes que en un tablero pequeño duelen el doble. El modo se elige en el menú principal y se aplica a la siguiente partida.</li>'+
     '<li>Los dígitos colocados permanecen – no se borra nada. Cada tarea se construye sobre el tablero ya rellenado.</li>'+
     '<li>Cada tarea exige un número de líneas completas, por ejemplo dos filas o dos cuadrantes (el objetivo aparece en la barra de estado).</li>'+
     '<li>Tras cada tarea sigue la elección de un encantamiento; la reposición de cartas nuevas ya se muestra entonces.</li>'+
@@ -2737,7 +2744,7 @@ function applyLang(){
   var k,el;
   document.documentElement.setAttribute('lang',lang);
   var M={
-    headMode:'headMode',menuBtn:'menuBtnTxt',stdBtn:'stdBtn',matrixBtn:'matrixBtn',diffCap:'diffCap',
+    headMode:'headMode',menuBtn:'menuBtnTxt',stdBtn:'stdBtn',matrixBtn:'matrixBtn',minimusBtn:'minimusBtn',diffCap:'diffCap',
     modeH:'modeH',learnH:'learnH',miscH:'miscH',
     mRulesBtn:'mRulesBtn',mSaveBtn:'mSaveBtn',mSetBtn:'mSetBtn',mInfoBtn:'mInfoBtn',
     menuBack:'menuBack',overRetry:'overRetry',overMenuBtn:'overMenu',
@@ -2800,7 +2807,7 @@ function setLang(l){
   if(!$('saveOverlay').classList.contains('hidden'))renderSaveMenu();
 }
 /* ================= Spielstand ================= */
-/* Version: Alpha 0.45 – mit jeder Änderung hochzählen (Alpha 0.46, 0.47 …) */
+/* Version: Alpha 0.46 – mit jeder Änderung hochzählen (Alpha 0.47, 0.48 …) */
 function loadSave(){
   var fallback=null;
   try{fallback=JSON.parse(document.getElementById('saveSlot').textContent);}catch(e){}
@@ -3005,9 +3012,11 @@ var S={running:false,diff:2,level:1,task:null,totLines:0,score:0,boards:0,
 /* ================= Spielmodi ================= */
 /* Standard: klassisches 9×9-Sudoku mit 3×3-Blöcken. Matrix: 16×16-Brett im
    Hexadezimal-Layout mit den Ziffern 1–9 und A–G (4×4-Blöcke) – gleiche
-   Regeln, gleiche Bosse, größeres Brett. Alle Brettabmessungen, Ziffern-
-   mengen und Blockgrößen werden aus dem Modus abgeleitet. */
-var MODES={std:{n:9,bx:3,cell:22,gx:40,gy:54},matrix:{n:16,bx:4,cell:13,gx:24,gy:40}};
+   Regeln, gleiche Bosse, größeres Brett. Minimus: 4×4-Brett mit den Ziffern
+   1–4 in 2×2-Blöcken – die Brettgrößen folgen den Quadratzahlen 4, 9 und 16.
+   Alle Brettabmessungen, Ziffernmengen und Blockgrößen werden aus dem Modus
+   abgeleitet. */
+var MODES={std:{n:9,bx:3,cell:22,gx:40,gy:54},matrix:{n:16,bx:4,cell:13,gx:24,gy:40},minimus:{n:4,bx:2,cell:48,gx:61,gy:54}};
 var N=9,BX=3;
 function M(){return MODES[S.mode]||MODES.std;}
 function applyMode(){
@@ -3032,8 +3041,9 @@ function digitCol(d,onCard){
 }
 function cellRect(r,c){return{x:GX+1+c*(CELL+1),y:GY+1+r*(CELL+1),w:CELL,h:CELL};}
 /* Position und Skalierung einer Ziffer innerhalb ihrer Zelle – im
-   Matrix-Modus sind die Felder kleiner, die Glyphen skalieren mit */
-function dgtOff(){var sc=(CELL>=16)?2:1;return{x:Math.floor((CELL-3*sc)/2),y:Math.floor((CELL-5*sc)/2),sc:sc};}
+   Matrix-Modus sind die Felder kleiner, im Minimus-Modus deutlich größer;
+   die Glyphen skalieren mit */
+function dgtOff(){var sc=(CELL>=36)?6:(CELL>=16)?2:1;return{x:Math.floor((CELL-3*sc)/2),y:Math.floor((CELL-5*sc)/2),sc:sc};}
 function rowCells(r){var a=[];for(var c=0;c<N;c++)a.push(r*N+c);return a;}
 function colCells(c){var a=[];for(var r=0;r<N;r++)a.push(r*N+c);return a;}
 function boxIdx(b){var R=Math.floor(b/BX)*BX,C0=(b%BX)*BX,a=[];
@@ -3152,15 +3162,19 @@ function genGrid(l){
   S.sol=sol;
   S.grid=[];
   for(var i=0;i<N*N;i++)S.grid.push({b:false,d:0,m:false,l:false});
-  var d=DIFF[S.diff],target=Math.min(6+l*2+d.block,30),placed=0,guard=0;
+  var d=DIFF[S.diff],minOpen=5,target=Math.min(6+l*2+d.block,30),placed=0,guard=0;
+  /* Minimus: 16 Felder statt 81 – deutlich weniger Sperrungen, und jede
+     Reihe, Spalte und jeder Block behält genug offene Felder, damit alle
+     Linien weiterhin vollendbar bleiben. */
+  if(S.mode==='minimus'){minOpen=3;target=Math.min(2+Math.floor(l/2)+d.block,6);}
   while(placed<target&&guard<800){
     guard++;
     var idx=rnd(N*N),r=Math.floor(idx/N),c=idx%N;
     if(S.grid[idx].b)continue;
     var b=Math.floor(r/BX)*BX+Math.floor(c/BX);
-    if(openCount(rowCells(r))<5)continue;
-    if(openCount(colCells(c))<5)continue;
-    if(openCount(boxIdx(b))<5)continue;
+    if(openCount(rowCells(r))<minOpen)continue;
+    if(openCount(colCells(c))<minOpen)continue;
+    if(openCount(boxIdx(b))<minOpen)continue;
     S.grid[idx].b=true;placed++;
   }
   /* Vorgabeziffern: das Brett schreibt selbst ein bis zwei Ziffern aus
@@ -3569,13 +3583,13 @@ function startLevel(l){
     S.boss={kind:bs.kind,pal:bs.pal,every:ev,timer:0,cursed:1+rnd(N),curseCount:0,
       name:tr(bs.nk)+(big===1?' II':big===2?' III':big>=3?' IV':''),
       desc:trf(bs.kind==='dieb'?'bossDiebD':bs.kind==='riss'?'bossRissD':bs.kind==='sani'?'bossSaniD':bs.kind==='lobbyist'?'bossLobbyistD':'bossWirblerD',
-        {n:ev,k:bs.kind==='dieb'?1+Math.floor(l/6):bs.kind==='riss'?1+Math.floor(l/12):bs.kind==='sani'?1+Math.floor(l/15):bs.kind==='lobbyist'?5:2+Math.floor(l/6)})};
+        {n:ev,k:bs.kind==='dieb'?1+Math.floor(l/6):bs.kind==='riss'?1+Math.floor(l/12):bs.kind==='sani'?1+Math.floor(l/15):bs.kind==='lobbyist'?(S.mode==='minimus'?2:5):2+Math.floor(l/6)})};
     sfx(180,0.3,'sawtooth',0.2,-60);
     addLog(trf('logBoss',{b:S.boss.name,d:S.boss.desc}),'#ff9a6a');
     /* Der Boss verflucht eine Ziffer: sie bleibt in dieser Runde unlegbar */
     addLog(trf('logCurse',{d:b2s(S.boss.cursed)}),'#9a6af0');
     /* Lobbyist: riegelt bei seinem Erscheinen fünf Felder ab */
-    if(bs.kind==='lobbyist'){var nl2=bossLockCells(5);addLog(trf('logLobby',{k:nl2}),'#c8a44a');}
+    if(bs.kind==='lobbyist'){var nl2=bossLockCells(S.mode==='minimus'?2:5);addLog(trf('logLobby',{k:nl2}),'#c8a44a');}
   }
   addLog(trf('logLevel',{n:l,t:taskLabel(S.task)}),'#ffd23f');
   var cap=DIFF[S.diff].deck;
@@ -3591,9 +3605,13 @@ function startLevel(l){
   else masqSay('masq'+(1+rnd(76)));
 }
 function pick3(){
-  /* Die Wildkarte 9|B gibt es nur im Matrix-Modus (B = 11); im Standard-
-     modus bleibt sie aus der Auswahl herausgefiltert. */
-  var keys=Object.keys(UP).filter(function(k){return k!=='w9B'||S.mode==='matrix';}),out=[];
+  /* Die Wildkarte 9|B gibt es nur im Matrix-Modus (B = 11); die Wildkarten
+     6|9 und 1|7 brauchen Ziffern bis 9 und entfallen im Minimus-Modus. */
+  var keys=Object.keys(UP).filter(function(k){
+    if(k==='w9B')return S.mode==='matrix';
+    if((k==='w69'||k==='w17')&&N<9)return false;
+    return true;
+  }),out=[];
   while(out.length<3&&keys.length){
     var i=rnd(keys.length);
     out.push(keys.splice(i,1)[0]);
@@ -3765,7 +3783,7 @@ function loadRun(){
       S.boss={kind:bs.kind,pal:bs.pal,every:r.boss.every,timer:r.boss.timer||0,cursed:r.boss.cursed||0,curseCount:r.boss.curseCount||0,
         name:tr(bs.nk)+(big===1?' II':big===2?' III':big>=3?' IV':''),
         desc:trf(bs.kind==='dieb'?'bossDiebD':bs.kind==='riss'?'bossRissD':bs.kind==='sani'?'bossSaniD':bs.kind==='lobbyist'?'bossLobbyistD':'bossWirblerD',
-          {n:r.boss.every,k:bs.kind==='dieb'?1+Math.floor(S.level/6):bs.kind==='riss'?1+Math.floor(S.level/12):bs.kind==='sani'?1+Math.floor(S.level/15):bs.kind==='lobbyist'?5:2+Math.floor(S.level/6)})};
+          {n:r.boss.every,k:bs.kind==='dieb'?1+Math.floor(S.level/6):bs.kind==='riss'?1+Math.floor(S.level/12):bs.kind==='sani'?1+Math.floor(S.level/15):bs.kind==='lobbyist'?(S.mode==='minimus'?2:5):2+Math.floor(S.level/6)})};
     }else{S.boss=null;}
   }else{S.boss=null;}
   $('overOverlay').classList.add('hidden');
@@ -3799,7 +3817,7 @@ function renderStatus(){
   }else{$('stGoal').textContent=tr('stGoal0');}
   $('stScore').textContent=trf('stScore',{n:S.score});
   $('stCombo').textContent=(S.combo>1)?trf('stCombo',{n:S.combo}):'';
-  $('stMode').textContent=(S.mode==='matrix')?'MATRIX':tr('stMode');
+  $('stMode').textContent=(S.mode==='matrix')?'MATRIX':(S.mode==='minimus')?'MINIMUS':tr('stMode');
   $('stRight').textContent=trf('stRight',{n:S.inv.length});
   var sb=$('swapBtn');
   if(!S.running){sb.disabled=true;}
@@ -4320,11 +4338,13 @@ function openMenu(){
 function closeMenu(){$('menuOverlay').classList.add('hidden');}
 $('menuBtn').addEventListener('click',openMenu);
 $('menuBack').addEventListener('click',closeMenu);
-/* Moduswahl: Standard (9×9) oder Matrix (16×16, Ziffern 1–G). Die Wahl
-   wirkt auf den nächsten Death Run; die Schwierigkeitswahl folgt danach. */
+/* Moduswahl: Standard (9×9), Matrix (16×16, Ziffern 1–G) oder Minimus
+   (4×4, Ziffern 1–4). Die Wahl wirkt auf den nächsten Death Run; die
+   Schwierigkeitswahl folgt danach. */
 function updateModeBtns(){
-  $('stdBtn').classList.toggle('selOpt',SAVE.settings.mode!=='matrix');
+  $('stdBtn').classList.toggle('selOpt',SAVE.settings.mode==='std');
   $('matrixBtn').classList.toggle('selOpt',SAVE.settings.mode==='matrix');
+  $('minimusBtn').classList.toggle('selOpt',SAVE.settings.mode==='minimus');
 }
 function chooseMode(m){
   SAVE.settings.mode=m;
@@ -4336,6 +4356,7 @@ function chooseMode(m){
 }
 $('stdBtn').addEventListener('click',function(){chooseMode('std');});
 $('matrixBtn').addEventListener('click',function(){chooseMode('matrix');});
+$('minimusBtn').addEventListener('click',function(){chooseMode('minimus');});
 Array.prototype.forEach.call(document.querySelectorAll('.diffBtn'),function(b){
   b.addEventListener('click',function(){
     /* Klick auf eine Schwierigkeit startet die Runde (wie in Tetromino) */
