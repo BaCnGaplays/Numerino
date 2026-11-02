@@ -188,6 +188,9 @@
   #srcArea{width:100%;height:46vh;background:#0c1b14;color:#b8e0c8;border:2px solid #3d7a5c;
     font-family:inherit;font-size:10px;padding:8px;white-space:pre;resize:vertical}
   #setVol,#setMusVol{accent-color:#ffd23f;width:180px}
+  #setTalk{background-color:var(--btn);color:#fff;border:2px solid var(--btn-edge);
+    background-image:repeating-linear-gradient(0deg,rgba(0,0,0,.12) 0 1px,transparent 1px 3px);
+    padding:4px 6px;font-family:inherit;font-size:11px;letter-spacing:1px;cursor:pointer}
   .statRow{font-size:11px;color:#c8e8d4;margin:3px 0;text-align:left;letter-spacing:1px}
   .achRow{display:flex;align-items:flex-start;gap:8px;margin:6px 0;padding:6px;text-align:left;
     border:2px solid #3fbf3f;background:#102820}
@@ -328,11 +331,11 @@
 </style>
 </head>
 <body>
-<script id="saveSlot" type="application/json">{"v":2,"active":0,"settings":{"snd":true,"scan":true,"vol":100,"light":false,"musVol":100,"theme":"orig","skin":"apfel","mode":"std"},"slots":[{"id":1,"name":"Spielstand 1","updated":"","stats":{"runs":0,"wins":0,"bestScore":0,"bestLevel":0,"linesTotal":0,"boards":0},"ach":{}}]}</script>
+<script id="saveSlot" type="application/json">{"v":2,"active":0,"settings":{"snd":true,"scan":true,"vol":100,"light":false,"musVol":100,"theme":"orig","skin":"apfel","mode":"std","talk":30},"slots":[{"id":1,"name":"Spielstand 1","updated":"","stats":{"runs":0,"wins":0,"bestScore":0,"bestLevel":0,"linesTotal":0,"boards":0},"ach":{}}]}</script>
 <div id="wrap">
   <header>
     <h1>Numerino</h1>
-    <div class="sub"><span class="verTag">Alpha 0.39</span> <span id="headMode">Sudoku-Roguelike</span></div>
+    <div class="sub"><span class="verTag">Alpha 0.40</span> <span id="headMode">Sudoku-Roguelike</span></div>
   </header>
   <div id="main">
     <div id="left">
@@ -406,7 +409,7 @@
     <div id="euFlag" title="In der Europäischen Union entwickelt – einmal anklicken!"><canvas id="euCv" width="24" height="16"></canvas></div>
     <div id="euTag"><span class="euBanner">MADE IN EUROPE</span></div>
     <h1>Numerino</h1>
-    <div class="sub"><span class="verTag">Alpha 0.39</span></div>
+    <div class="sub"><span class="verTag">Alpha 0.40</span></div>
     <h3 id="modeH">Spielmodus</h3>
     <button id="stdBtn" class="btn menuBtn">Standard</button>
     <button id="matrixBtn" class="btn menuBtn">Matrix</button>
@@ -538,6 +541,17 @@
       <div class="setRow"><span class="setLbl" id="setLblMus">Musik</span><button id="setMus" class="btn small">Musik: aus</button></div>
       <div class="setRow"><span class="setLbl" id="setLblMusVol">Musik-Lautstärke</span><input type="range" id="setMusVol" min="0" max="100" value="100"></div>
     </div>
+    <h3 id="setHNum" class="setSecH" data-sec="secNum">Numerino</h3>
+    <div id="secNum">
+      <div class="setRow"><span class="setLbl" id="setLblTalk">Sprech-Takt</span>
+        <select id="setTalk">
+          <option value="10">alle 10 Sekunden</option>
+          <option value="30">alle 30 Sekunden</option>
+          <option value="60">jede Minute</option>
+          <option value="120">alle 2 Minuten</option>
+          <option value="300">alle 5 Minuten</option>
+        </select></div>
+    </div>
     <div class="btnRow"><button id="setClose" class="btn">Schließen</button></div>
   </div>
 </div>
@@ -567,7 +581,7 @@
     </ul>
     </div>
     <h3 id="verH">Version</h3>
-    <ul><li>Alpha 0.39</li></ul>
+    <ul><li>Alpha 0.40</li></ul>
     <div class="btnRow"><button id="infoSrc" class="btn small">Quellcode anzeigen</button></div>
     <div class="btnRow"><button id="infoClose" class="btn">Schließen</button></div>
   </div>
@@ -575,7 +589,7 @@
 
 <div id="srcModal" class="modal hidden">
   <div class="modalBox" style="max-width:860px">
-    <h2><span id="srcH2t">Quellcode</span> <span class="verTag">Alpha 0.39</span></h2>
+    <h2><span id="srcH2t">Quellcode</span> <span class="verTag">Alpha 0.40</span></h2>
     <p class="mSub" id="srcHint">Vollständiger Quellcode dieser Datei. Nach dem Markieren kann er mit Strg+C (bzw. Cmd+C) kopiert werden.</p>
     <textarea id="srcArea" readonly spellcheck="false"></textarea>
     <div class="btnRow">
@@ -1124,6 +1138,8 @@ de:{
   lblSound:'Sound',muteOn:'Ton: an',muteOff:'Ton: aus',
   lblVol:'Effekte',lblMus:'Musik',musOnLbl:'Musik: an',musOffLbl:'Musik: aus',
   lblMusVol:'Musik-Lautstärke',lblLang:'Sprache',
+  lblTalk:'Sprech-Takt',setHNum:'Numerino',
+  talk10:'alle 10 Sekunden',talk30:'alle 30 Sekunden',talk60:'jede Minute',talk120:'alle 2 Minuten',talk300:'alle 5 Minuten',
   srcTitle:'Quellcode',
   srcHint:'Vollständiger Quellcode dieser Datei. Nach dem Markieren kann er mit Strg+C (bzw. Cmd+C) kopiert werden.',
   srcSelAllLbl:'Alles markieren',
@@ -1226,7 +1242,7 @@ de:{
   masqBoss2:'Psst: Der Boss verflucht gleich eine Ziffer. Plane klug!',
   masqBoss3:'Gegen {b} hilft frisches Nachziehen. Du schaffst das!',
   masqBoss4:'Bosse hassen Combos! Sammle die Linien!',
-  /* Consigliere-Sprüche: Erscheinung (Levelstart) und Im Spiel (alle 30 Sekunden) je Boss */
+  /* Consigliere-Sprüche: Erscheinung (Levelstart) und Im Spiel (im eingestellten Takt, Standard 30 Sekunden) je Boss */
   masqAppDieb1:'Der Aktionär. Er sieht Sie nie. Er zählt nur Ihr Geld.',masqAppDieb2:'Er kommt nicht persönlich. Er schickt seine Zahlen.',masqAppDieb3:'Sein Büro hat keine Fenster. Er braucht keine Aussicht. Nur Gewinne.',
   masqMidDieb1:'Für ihn sind Sie keine Person. Eine Zeile in einer Bilanz.',masqMidDieb2:'Jetzt sprechen wir mit seinen Zahlen. In seiner Sprache.',masqMidDieb3:'Ein kleiner Verlust in seinem Portfolio. Er wird es überleben. Diesmal.',
   masqAppRiss1:'Der Monopolist. Ein König ohne Krone. Ohne Land. Ohne Recht.',masqAppRiss2:'Er denkt, die Stadt gehört ihm. Wir wissen es besser.',masqAppRiss3:'Er hat alle Straßen bezahlt. Fast alle.',
@@ -1306,6 +1322,8 @@ en:{
   lblSound:'Sound',muteOn:'Sound: on',muteOff:'Sound: off',
   lblVol:'Effects',lblMus:'Music',musOnLbl:'Music: on',musOffLbl:'Music: off',
   lblMusVol:'Music volume',lblLang:'Language',
+  lblTalk:'Talk interval',setHNum:'Numerino',
+  talk10:'every 10 seconds',talk30:'every 30 seconds',talk60:'every minute',talk120:'every 2 minutes',talk300:'every 5 minutes',
   srcTitle:'Source code',
   srcHint:'The complete source code of this file. After selecting it, you can copy it with Ctrl+C (or Cmd+C).',
   srcSelAllLbl:'Select all',
@@ -1552,6 +1570,8 @@ fr:{
   lblSound:'Son',muteOn:'Son : activé',muteOff:'Son : désactivé',
   lblVol:'Effets',lblMus:'Musique',musOnLbl:'Musique : activée',musOffLbl:'Musique : désactivée',
   lblMusVol:'Volume de la musique',lblLang:'Langue',
+  lblTalk:'Intervalle de paroles',setHNum:'Numerino',
+  talk10:'toutes les 10 secondes',talk30:'toutes les 30 secondes',talk60:'chaque minute',talk120:'toutes les 2 minutes',talk300:'toutes les 5 minutes',
   srcTitle:'Code source',
   srcHint:'Code source complet de ce fichier. Après l’avoir sélectionné, vous pouvez le copier avec Ctrl+C (ou Cmd+C).',
   srcSelAllLbl:'Tout sélectionner',
@@ -1798,6 +1818,8 @@ cs:{
   lblSound:'Zvuk',muteOn:'Zvuk: zapnuto',muteOff:'Zvuk: vypnuto',
   lblVol:'Efekty',lblMus:'Hudba',musOnLbl:'Hudba: zapnuto',musOffLbl:'Hudba: vypnuto',
   lblMusVol:'Hlasitost hudby',lblLang:'Jazyk',
+  lblTalk:'Interval řeči',setHNum:'Numerino',
+  talk10:'každých 10 sekund',talk30:'každých 30 sekund',talk60:'každou minutu',talk120:'každé 2 minuty',talk300:'každých 5 minut',
   srcTitle:'Zdrojový kód',
   srcHint:'Úplný zdrojový kód tohoto souboru. Po označení ho zkopíruješ pomocí Ctrl+C (nebo Cmd+C).',
   srcSelAllLbl:'Vybrat vše',
@@ -2044,6 +2066,8 @@ pl:{
   lblSound:'Dźwięk',muteOn:'Dźwięk: wł.',muteOff:'Dźwięk: wył.',
   lblVol:'Efekty',lblMus:'Muzyka',musOnLbl:'Muzyka: wł.',musOffLbl:'Muzyka: wył.',
   lblMusVol:'Głośność muzyki',lblLang:'Język',
+  lblTalk:'Częstotliwość wypowiedzi',setHNum:'Numerino',
+  talk10:'co 10 sekund',talk30:'co 30 sekund',talk60:'co minutę',talk120:'co 2 minuty',talk300:'co 5 minut',
   srcTitle:'Kod źródłowy',
   srcHint:'Pełny kod źródłowy tego pliku. Po zaznaczeniu można go skopiować za pomocą Ctrl+C (lub Cmd+C).',
   srcSelAllLbl:'Zaznacz wszystko',
@@ -2290,6 +2314,8 @@ es:{
   lblSound:'Sonido',muteOn:'Sonido: activado',muteOff:'Sonido: desactivado',
   lblVol:'Efectos',lblMus:'Música',musOnLbl:'Música: activada',musOffLbl:'Música: desactivada',
   lblMusVol:'Volumen de la música',lblLang:'Idioma',
+  lblTalk:'Intervalo de mensajes',setHNum:'Numerino',
+  talk10:'cada 10 segundos',talk30:'cada 30 segundos',talk60:'cada minuto',talk120:'cada 2 minutos',talk300:'cada 5 minutos',
   srcTitle:'Código fuente',
   srcHint:'Código fuente completo de este archivo. Tras seleccionarlo, puedes copiarlo con Ctrl+C (o Cmd+C).',
   srcSelAllLbl:'Seleccionar todo',
@@ -2531,7 +2557,7 @@ function applyLang(){
     deckCap:'deckCap',deckHint:'deckHint',chooseLbl:'chooseLbl',
     levelH:'levelH',setH2:'setH2',setHGrafik:'setHGrafik',setHSound:'setHSound',
     setLblFs:'lblFs',setLblLight:'lblLight',setLblSound:'lblSound',setLblVol:'lblVol',
-    setLblMus:'lblMus',setLblMusVol:'lblMusVol',setLblLang:'lblLang',
+    setLblMus:'lblMus',setLblMusVol:'lblMusVol',setLblLang:'lblLang',setLblTalk:'lblTalk',setHNum:'setHNum',
     setClose:'closeLbl',rulesClose:'closeLbl',infoClose:'closeLbl',
     infoSrc:'infoSrcLbl',srcH2t:'srcTitle',srcSelAll:'srcSelAllLbl',srcClose:'closeLbl',
     saveH1:'saveH1',saveSub:'saveSubTxt',hSlots:'hSlots',slotNew:'slotNewLbl',
@@ -2541,6 +2567,8 @@ function applyLang(){
     contBtn:'btnCont'
   };
   for(k in M){el=$(k);if(el)el.textContent=tr(M[k]);}
+  /* Spruch-Takt: Optionsbeschriftungen des Dropdowns in der aktiven Sprache */
+  qsa('#setTalk option').forEach(function(o){o.textContent=tr('talk'+o.value);});
   /* Überschriften mit ein-/ausklappbarem Span: nur den Textknoten tauschen */
   function setHead(id,key){
     el=$(id);
@@ -2585,7 +2613,7 @@ function setLang(l){
   if(!$('saveOverlay').classList.contains('hidden'))renderSaveMenu();
 }
 /* ================= Spielstand ================= */
-/* Version: Alpha 0.39 – mit jeder Änderung hochzählen (Alpha 0.40, 0.41 …) */
+/* Version: Alpha 0.40 – mit jeder Änderung hochzählen (Alpha 0.41, 0.42 …) */
 function loadSave(){
   var fallback=null;
   try{fallback=JSON.parse(document.getElementById('saveSlot').textContent);}catch(e){}
@@ -2604,6 +2632,7 @@ function loadSave(){
   if(!s.settings.theme)s.settings.theme='orig';
   if(!s.settings.skin)s.settings.skin='apfel';
   if(!s.settings.mode)s.settings.mode='std';
+  if([10,30,60,120,300].indexOf(s.settings.talk)<0)s.settings.talk=30;
   if(typeof s.active!=='number')s.active=0;
   s.active=Math.max(0,Math.min(s.slots.length-1,s.active));
   for(var i=0;i<s.slots.length;i++)normalizeSlot(s.slots[i]);
@@ -2622,7 +2651,7 @@ function normalizeSlot(sl){
 }
 function makeDefaultSave(){
   var sl=normalizeSlot({id:1,name:trf('slotName',{n:1}),updated:''});
-  return{v:2,active:0,settings:{snd:true,scan:true,vol:100,light:false,musVol:100,theme:'orig',skin:'apfel',mode:'std'},slots:[sl]};
+  return{v:2,active:0,settings:{snd:true,scan:true,vol:100,light:false,musVol:100,theme:'orig',skin:'apfel',mode:'std',talk:30},slots:[sl]};
 }
 function slot(){return SAVE.slots[SAVE.active];}
 function persistSave(){
@@ -4019,7 +4048,7 @@ function update(dt){
       openLevelModal();
     }
   }
-  /* Smalltalk-Timer: alle 30 Sekunden spricht Numerino von selbst einen
+  /* Smalltalk-Timer: im eingestellten Takt (Einstellungen, Standard 30 Sekunden) spricht Numerino von selbst einen
      zufälligen Runde-Spruch – nur während eines laufenden Runs und nur,
      wenn gerade kein Menü oder Dialog offen ist. Der Zähler steht still,
      solange gesperrt ist, und startet nach dem Schließen neu; ohne Run
@@ -4028,7 +4057,7 @@ function update(dt){
   if(!S.running||S.over||S.done||uiBlocked()){S.masqT=0;}
   else{
     S.masqT+=dt;
-    if(S.masqT>=30){
+    if(S.masqT>=SAVE.settings.talk){
       S.masqT=0;
       if(S.boss)masqSay('masqMid'+({dieb:'Dieb',riss:'Riss',wirbler:'Wirbler',sani:'Sani',lobbyist:'Lobbyist'})[S.boss.kind]+(1+rnd(MASQMIDN[S.boss.kind]||3)),{b:S.boss.name});
       else masqSay('masq'+(1+rnd(50)));
@@ -4217,6 +4246,7 @@ function renderSettings(){
   $('setMus').classList.toggle('selOpt',musOn);
   $('setVol').value=SAVE.settings.vol;
   $('setMusVol').value=SAVE.settings.musVol;
+  $('setTalk').value=SAVE.settings.talk;
 }
 function applyLight(){
   document.documentElement.classList.toggle('light',!!SAVE.settings.light);
@@ -4235,6 +4265,11 @@ $('setLight').addEventListener('click',function(){
 });
 $('setVol').addEventListener('input',function(){
   SAVE.settings.vol=parseInt(this.value,10);persistSave();
+});
+$('setTalk').addEventListener('change',function(){
+  SAVE.settings.talk=parseInt(this.value,10);persistSave();
+  S.masqT=0; /* neuen Takt sofort anwenden */
+  sfx(520,0.06);
 });
 $('setFs').addEventListener('click',function(){
   try{
