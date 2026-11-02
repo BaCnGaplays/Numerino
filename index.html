@@ -169,7 +169,7 @@
   .setTheme{display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 4px}
   .thmPrev{width:40px;height:40px;image-rendering:pixelated;border:1px solid #000;background:#000}
   .thmName{font-size:9px;letter-spacing:1px}
-  .setTheme.locked{opacity:.45;filter:grayscale(.6)}
+  .setTheme.locked,.setSkin.locked{opacity:.45;filter:grayscale(.6)}
   /* Numerino-Skins: gleicher Knopfaufbau wie bei den Welten (Tetromino-Vorbild),
      Vorschau zeigt das Maskottchen im jeweiligen Skin */
   .setSkin{display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 4px}
@@ -332,7 +332,7 @@
 <div id="wrap">
   <header>
     <h1>Numerino</h1>
-    <div class="sub"><span class="verTag">Alpha 0.35</span> <span id="headMode">Sudoku-Roguelike</span></div>
+    <div class="sub"><span class="verTag">Alpha 0.36</span> <span id="headMode">Sudoku-Roguelike</span></div>
   </header>
   <div id="main">
     <div id="left">
@@ -406,7 +406,7 @@
     <div id="euFlag" title="In der Europäischen Union entwickelt – einmal anklicken!"><canvas id="euCv" width="24" height="16"></canvas></div>
     <div id="euTag"><span class="euBanner">MADE IN EUROPE</span></div>
     <h1>Numerino</h1>
-    <div class="sub"><span class="verTag">Alpha 0.35</span></div>
+    <div class="sub"><span class="verTag">Alpha 0.36</span></div>
     <h3 id="modeH">Spielmodus</h3>
     <button id="stdBtn" class="btn menuBtn">Standard</button>
     <button id="contBtn" class="btn menuBtn hidden">Fortsetzen</button>
@@ -564,7 +564,7 @@
     </ul>
     </div>
     <h3 id="verH">Version</h3>
-    <ul><li>Alpha 0.35</li></ul>
+    <ul><li>Alpha 0.36</li></ul>
     <div class="btnRow"><button id="infoSrc" class="btn small">Quellcode anzeigen</button></div>
     <div class="btnRow"><button id="infoClose" class="btn">Schließen</button></div>
   </div>
@@ -572,7 +572,7 @@
 
 <div id="srcModal" class="modal hidden">
   <div class="modalBox" style="max-width:860px">
-    <h2><span id="srcH2t">Quellcode</span> <span class="verTag">Alpha 0.35</span></h2>
+    <h2><span id="srcH2t">Quellcode</span> <span class="verTag">Alpha 0.36</span></h2>
     <p class="mSub" id="srcHint">Vollständiger Quellcode dieser Datei. Nach dem Markieren kann er mit Strg+C (bzw. Cmd+C) kopiert werden.</p>
     <textarea id="srcArea" readonly spellcheck="false"></textarea>
     <div class="btnRow">
@@ -622,6 +622,15 @@
       <button class="btn small setSkin" data-skin="apfel"><canvas class="sknPrev" width="14" height="14"></canvas><span class="sknName">Apfel</span></button>
       <button class="btn small setSkin" data-skin="birne"><canvas class="sknPrev" width="14" height="14"></canvas><span class="sknName">Birne</span></button>
       <button class="btn small setSkin" data-skin="mafia"><canvas class="sknPrev" width="14" height="14"></canvas><span class="sknName">Arbeitermafia</span></button>
+      <button class="btn small setSkin" data-skin="lehrling"><canvas class="sknPrev" width="14" height="14"></canvas><span class="sknName">Lehrling</span></button>
+      <button class="btn small setSkin" data-skin="facharbeiter"><canvas class="sknPrev" width="14" height="14"></canvas><span class="sknName">Facharbeiter</span></button>
+      <button class="btn small setSkin" data-skin="springer"><canvas class="sknPrev" width="14" height="14"></canvas><span class="sknName">Springer</span></button>
+      <button class="btn small setSkin" data-skin="allrounder"><canvas class="sknPrev" width="14" height="14"></canvas><span class="sknName">Allrounder</span></button>
+      <button class="btn small setSkin" data-skin="betriebsrat"><canvas class="sknPrev" width="14" height="14"></canvas><span class="sknName">Betriebsrat</span></button>
+      <button class="btn small setSkin" data-skin="gewerkschafter"><canvas class="sknPrev" width="14" height="14"></canvas><span class="sknName">Gewerkschafter</span></button>
+      <button class="btn small setSkin" data-skin="schichtmeister"><canvas class="sknPrev" width="14" height="14"></canvas><span class="sknName">Schichtmeister</span></button>
+      <button class="btn small setSkin" data-skin="akkordkoenig"><canvas class="sknPrev" width="14" height="14"></canvas><span class="sknName">Akkordkönig</span></button>
+      <button class="btn small setSkin" data-skin="streikorganisator"><canvas class="sknPrev" width="14" height="14"></canvas><span class="sknName">Streikorganisator</span></button>
     </div>
     <div class="btnRow"><button id="worldBack" class="btn small">Zurück</button></div>
   </div>
@@ -742,14 +751,207 @@ var MASQROWS_MAFIA=[
 '..............'
 ];
 var MASQPAL_MAFIA={M:'#4a4a58',F:'#f2c9a0',S:'#34344a',P:'#6a6a84',W:'#ffffff',R:'#c03030',C:'#8a5a2a',K:'#101018',B:'#f0a0a0',D:'#232328'};
+/* Lehrling-Skin (Erfolg: zehn Aufgaben): blaue Schiebermütze (C), Gesicht
+   (F), Augen (W/K), Wangen (B), blaue Latzhose (O), Füße (D) – der schlichte
+   Berufsanfänger-Look */
+var MASQROWS_LEHRLING=[
+'....CCCCCC....',
+'..CCCCCCCCCC..',
+'.CCCCCCCCCCCC.',
+'..FFFFFFFFFF..',
+'.FFWWFFFFWWFF.',
+'.FFWKFFFFKWFF.',
+'.FFBBFFFFBBFF.',
+'..FFFFFFFFFF..',
+'..OOOOOOOOOO..',
+'.OOOOOOOOOOOO.',
+'.OOOOOOOOOOOO.',
+'..OOOOOOOOOO..',
+'..DDDD..DDDD..',
+'..............'
+];
+var MASQPAL_LEHRLING={C:'#3a5ab0',F:'#f2c9a0',W:'#ffffff',K:'#101018',B:'#f0a0a0',O:'#2a3a78',D:'#1a2450'};
+/* Facharbeiter-Skin (Erfolg: fünf Verzauberungen): dunkle Mütze (C), Gesicht
+   (F), Augen (W/K), Wangen (B), orange Warnweste (V) mit Silber-Streifen (S),
+   Füße (D) – der profihaft sichtbare Profi */
+var MASQROWS_FACHARBEITER=[
+'....CCCCCC....',
+'..CCCCCCCCCC..',
+'.CCCCCCCCCCCC.',
+'..FFFFFFFFFF..',
+'.FFWWFFFFWWFF.',
+'.FFWKFFFFKWFF.',
+'.FFBBFFFFBBFF.',
+'..FFFFFFFFFF..',
+'.VVSSVVVVSSVV.',
+'.VVSSVVVVSSVV.',
+'.VVSSVVVVSSVV.',
+'..VVVVVVVVVV..',
+'..DDDD..DDDD..',
+'..............'
+];
+var MASQPAL_FACHARBEITER={C:'#3a3a42',V:'#f07818',S:'#d8d8e0',F:'#f2c9a0',W:'#ffffff',K:'#101018',B:'#f0a0a0',D:'#2a2a30'};
+/* Springer-Skin (Erfolg: zehn Wildkarten): roter Helmbusch (P), grauer
+   Ritterhelm (H), Gesicht (F), Augen (W/K), Wangen (B), grauer Harnisch (O)
+   mit rotem Wappen (R), Füße (D) – der Springer als Schachspringer */
+var MASQROWS_SPRINGER=[
+'......PP......',
+'.....PPPP.....',
+'....HHHHHH....',
+'..HHHHHHHHHH..',
+'.HFFWWFFWWFFH.',
+'.HFFWKFFKWFFH.',
+'.HFFBBFFBBFFH.',
+'..HFFFFFFFFH..',
+'..OOOOROOOOO..',
+'.OOOORROOROOO.',
+'.OOOOORROOOOO.',
+'..OOOOOOOOOO..',
+'..DDDD..DDDD..',
+'..............'
+];
+var MASQPAL_SPRINGER={P:'#d03030',H:'#787a8a',F:'#f2c9a0',W:'#ffffff',K:'#101018',B:'#f0a0a0',O:'#5a5c68',R:'#d03030',D:'#2a2a30'};
+/* Allrounder-Skin (Erfolg: fünf Joker): zweizipfelige Narrenkappe rot/gelb
+   (R/Y) mit goldenen Glöckchen (L), Gesicht (F), Augen (W/K), Wangen (B),
+   buntes Motto-Gewand (R/Y), Füße (D) */
+var MASQROWS_ALLROUNDER=[
+'..RL......LY..',
+'..RR......YY..',
+'..RRR....YYY..',
+'...RRR..YYY...',
+'..RRRRRRRRRR..',
+'..FFFFFFFFFF..',
+'.FFWWFFFFWWFF.',
+'.FFWKFFFFKWFF.',
+'.FFBBFFFFBBFF.',
+'..RRRRRYYYYY..',
+'.RRRRRRYYYYYY.',
+'..RRRRRYYYYY..',
+'..DDDD..DDDD..',
+'..............'
+];
+var MASQPAL_ALLROUNDER={R:'#d03030',Y:'#f0c020',L:'#ffd23f',F:'#f2c9a0',W:'#ffffff',K:'#101018',B:'#f0a0a0',D:'#3a2a2a'};
+/* Betriebsrat-Skin (Erfolg: drei Boss-Level): braunes Haar (G), Gesicht (F),
+   Brille (E), Augen (W/K), Wangen (B), grauer Anzug (S) mit weißem Hemd (W)
+   und roter Fliege (R), Füße (D) – der verhandlungsstarke Vertreter */
+var MASQROWS_BETRIEBSRAT=[
+'....GGGGGG....',
+'..GGGGGGGGGG..',
+'..FFFFFFFFFF..',
+'.FEWWFFFFWWEF.',
+'.FEWKFFFFKWEF.',
+'.FFBBFFFFBBFF.',
+'..FFFFFFFFFF..',
+'.SSSSWWWWSSSS.',
+'.SSSSWRRWSSSS.',
+'.SSSSSSSSSSSS.',
+'..SSSSSSSSSS..',
+'..SSSSSSSSSS..',
+'..DDDD..DDDD..',
+'..............'
+];
+var MASQPAL_BETRIEBSRAT={G:'#5a3a28',E:'#9a9aa8',F:'#f2c9a0',W:'#ffffff',K:'#101018',B:'#f0a0a0',S:'#5a5a68',R:'#c03030',D:'#2a2a30'};
+/* Gewerkschafter-Skin (Erfolg: alle vier Boss-Arten): rote Mütze (C), Gesicht
+   (F), Augen (W/K), Wangen (B), rotes Hemd (R) mit gelbem Abzeichen (Y),
+   Füße (D) – der organisierte Kollege */
+var MASQROWS_GEWERKSCHAFTER=[
+'....CCCCCC....',
+'..CCCCCCCCCC..',
+'.CCCCCCCCCCCC.',
+'..FFFFFFFFFF..',
+'.FFWWFFFFWWFF.',
+'.FFWKFFFFKWFF.',
+'.FFBBFFFFBBFF.',
+'..FFFFFFFFFF..',
+'..RRRRRRRRRR..',
+'.RRRRYYRRRRRR.',
+'.RRRRYYRRRRRR.',
+'..RRRRRRRRRR..',
+'..DDDD..DDDD..',
+'..............'
+];
+var MASQPAL_GEWERKSCHAFTER={C:'#b82828',R:'#d04040',Y:'#ffd23f',F:'#f2c9a0',W:'#ffffff',K:'#101018',B:'#f0a0a0',D:'#26262c'};
+/* Schichtmeister-Skin (Erfolg: zwei komplette Bretter): gelber Schutzhelm
+   (Y), Gesicht (F), Augen (W/K), Wangen (B), grauer Arbeitsanzug (O) mit
+   weißer Stoppuhr (W/K) auf der Brust, Füße (D) */
+var MASQROWS_SCHICHTMEISTER=[
+'.....YYYY.....',
+'...YYYYYYYY...',
+'.YYYYYYYYYYYY.',
+'..FFFFFFFFFF..',
+'.FFWWFFFFWWFF.',
+'.FFWKFFFFKWFF.',
+'.FFBBFFFFBBFF.',
+'..FFFFFFFFFF..',
+'..OOOOOOOOOO..',
+'.OOOOOWWWOOOO.',
+'.OOOOWWKWWOOO.',
+'..OOOOOOOOOO..',
+'..DDDD..DDDD..',
+'..............'
+];
+var MASQPAL_SCHICHTMEISTER={Y:'#f0b820',O:'#5a5c66',F:'#f2c9a0',W:'#ffffff',K:'#101018',B:'#f0a0a0',D:'#2a2a30'};
+/* Akkordkönig-Skin (Erfolg: 10000 Punkte): goldene Krone (Y), Gesicht (F),
+   Augen (W/K), Wangen (B), purpurne Robe (P) mit goldenem Wappen (Y),
+   Füße (D) – gekrönt für Tempo und Punkte */
+var MASQROWS_AKKORDKOEING=[
+'..Y..Y..Y..Y..',
+'..YYYYYYYYYY..',
+'..YYYYYYYYYY..',
+'..FFFFFFFFFF..',
+'.FFWWFFFFWWFF.',
+'.FFWKFFFFKWFF.',
+'.FFBBFFFFBBFF.',
+'..FFFFFFFFFF..',
+'..PPPPPPPPPP..',
+'.PPPPYYPPPPPP.',
+'.PPPPPYYPPPPP.',
+'..PPPPPPPPPP..',
+'..DDDD..DDDD..',
+'..............'
+];
+var MASQPAL_AKKORDKOEING={Y:'#ffd23f',P:'#6a3aa0',F:'#f2c9a0',W:'#ffffff',K:'#101018',B:'#f0a0a0',D:'#3a2a50'};
+/* Streikorganisator-Skin (Erfolg: Level 20 im Death Run): rote Mütze (C),
+   Gesicht (F), Augen (W/K), Wangen (B), graues Megaphon (T), dunkelrotes
+   Hemd (R), Füße (D) – die Stimme der Belegschaft */
+var MASQROWS_STREIKORGANISATOR=[
+'....CCCCCC....',
+'..CCCCCCCCCC..',
+'.CCCCCCCCCCCC.',
+'..FFFFFFFFTT..',
+'.FFWWFFFFTTTT.',
+'.FFWKFFFFTTTT.',
+'.FFBBFFFFTTT..',
+'..FFFFFFFFFF..',
+'..RRRRRRRRRR..',
+'.RRRRRRRRRRRR.',
+'.RRRRRRRRRRRR.',
+'..RRRRRRRRRR..',
+'..DDDD..DDDD..',
+'..............'
+];
+var MASQPAL_STREIKORGANISATOR={C:'#c03030',T:'#c8c8d0',F:'#f2c9a0',W:'#ffffff',K:'#101018',B:'#f0a0a0',R:'#a02828',D:'#26262c'};
 /* Skins des Maskottchens: Der gewählte Skin wird dauerhaft in
-   SAVE.settings.skin gespeichert; die Auswahl liegt im Menü Skins und Welten */
+   SAVE.settings.skin gespeichert; die Auswahl liegt im Menü Skins und Welten.
+   Neun Erfolgs-Skins sind an den gleichnamigen Erfolg gebunden (req), sie
+   folgen thematisch dem jeweiligen Erfolg und tragen dessen lokalisierten
+   Namen (achXxxN). Gesperrte Skins lassen sich nicht wählen und fallen in
+   der Darstellung auf den Apfel zurück. */
 var MASQSKINS={
   apfel:{rows:MASQROWS,pal:MASQPAL,name:'skinApfel'},
   birne:{rows:MASQROWS_BIRNE,pal:MASQPAL_BIRNE,name:'skinBirne'},
-  mafia:{rows:MASQROWS_MAFIA,pal:MASQPAL_MAFIA,name:'skinMafia'}
+  mafia:{rows:MASQROWS_MAFIA,pal:MASQPAL_MAFIA,name:'skinMafia'},
+  lehrling:{rows:MASQROWS_LEHRLING,pal:MASQPAL_LEHRLING,name:'achLineN',req:'line'},
+  facharbeiter:{rows:MASQROWS_FACHARBEITER,pal:MASQPAL_FACHARBEITER,name:'achZauberN',req:'zauber'},
+  springer:{rows:MASQROWS_SPRINGER,pal:MASQPAL_SPRINGER,name:'achWildN',req:'wild'},
+  allrounder:{rows:MASQROWS_ALLROUNDER,pal:MASQPAL_ALLROUNDER,name:'achJokerN',req:'joker'},
+  betriebsrat:{rows:MASQROWS_BETRIEBSRAT,pal:MASQPAL_BETRIEBSRAT,name:'achBossN',req:'boss'},
+  gewerkschafter:{rows:MASQROWS_GEWERKSCHAFTER,pal:MASQPAL_GEWERKSCHAFTER,name:'achJaegerN',req:'jaeger'},
+  schichtmeister:{rows:MASQROWS_SCHICHTMEISTER,pal:MASQPAL_SCHICHTMEISTER,name:'achSudokuN',req:'sudoku'},
+  akkordkoenig:{rows:MASQROWS_AKKORDKOEING,pal:MASQPAL_AKKORDKOEING,name:'achHochN',req:'hoch'},
+  streikorganisator:{rows:MASQROWS_STREIKORGANISATOR,pal:MASQPAL_STREIKORGANISATOR,name:'achMarathonN',req:'marathon'}
 };
-function masqSkin(){return MASQSKINS[SAVE.settings.skin]||MASQSKINS.apfel;}
+function masqSkin(){var s=SAVE.settings.skin;return(MASQSKINS[s]&&!skinLock(s))?MASQSKINS[s]:MASQSKINS.apfel;}
 function drawMasq(){drawSprite($('masqCv').getContext('2d'),masqSkin().rows,masqSkin().pal,0,0,1);}
 function drawSprite(g,rows,pal,x,y,sc){
   for(var r=0;r<rows.length;r++){
@@ -2183,7 +2385,7 @@ function setLang(l){
   if(!$('saveOverlay').classList.contains('hidden'))renderSaveMenu();
 }
 /* ================= Spielstand ================= */
-/* Version: Alpha 0.35 – mit jeder Änderung hochzählen (Alpha 0.36, 0.37 …) */
+/* Version: Alpha 0.36 – mit jeder Änderung hochzählen (Alpha 0.37, 0.38 …) */
 function loadSave(){
   var fallback=null;
   try{fallback=JSON.parse(document.getElementById('saveSlot').textContent);}catch(e){}
@@ -2266,6 +2468,7 @@ function unlock(id){
   showToast(ACHS[id].sig,tr('toastAch'),tr(ACHS[id].n));
   sfx(880,0.12);setTimeout(function(){sfx(1170,0.18);},120);
   updateThemeBtns();
+  updateSkinBtns();
 }
 /* ================= Zustand ================= */
 var W=320,H=340,GX=73,GY=82,CELL=18,GSZ=173;
@@ -2320,6 +2523,8 @@ function applyTheme(){
    stehen von Beginn an offen. */
 var THEME_LOCK={edel:'zauber',winter:'boss',himmel:'hoch',herbst:'jaeger',kirsch:'sudoku',weltraum:'marathon'};
 function themeLock(t){var a=THEME_LOCK[t];return(a&&!slot().ach[a])?a:null;}
+/* Erfolgs-Skins sind analog zu den gesperrten Welten an Erfolge gebunden */
+function skinLock(s){var a=(MASQSKINS[s]&&MASQSKINS[s].req);return(a&&!slot().ach[a])?a:null;}
 function updateThemeBtns(){
   qsa('.setTheme').forEach(function(b){
     var a=themeLock(b.getAttribute('data-theme'));
@@ -3763,6 +3968,8 @@ qsa('.setTheme').forEach(function(btn){
    Maskottchen im jeweiligen Skin, die Auswahl gelb markiert. */
 qsa('.setSkin').forEach(function(btn){
   btn.addEventListener('click',function(){
+    var lk=skinLock(btn.getAttribute('data-skin'));
+    if(lk){showToast(ACHS[lk].sig,tr('toastLock'),tr(ACHS[lk].n));sfx(160,0.12,'sawtooth',0.15);return;}
     SAVE.settings.skin=btn.getAttribute('data-skin');
     persistSave();
     drawMasq();
@@ -3773,7 +3980,10 @@ qsa('.setSkin').forEach(function(btn){
 function updateSkinBtns(){
   qsa('.setSkin').forEach(function(b){
     var id=b.getAttribute('data-skin'),sk=MASQSKINS[id]||MASQSKINS.apfel;
-    b.classList.toggle('selOpt',id===SAVE.settings.skin);
+    var a=skinLock(id);
+    b.classList.toggle('selOpt',id===SAVE.settings.skin&&!a);
+    b.classList.toggle('locked',!!a);
+    b.title=a?trf('ttThemeLock',{a:tr(ACHS[a].n)}):'';
     var nm=b.querySelector('.sknName');
     if(nm)nm.textContent=tr(sk.name);
   });
