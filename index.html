@@ -335,7 +335,7 @@
 <div id="wrap">
   <header>
     <h1>Numerino</h1>
-    <div class="sub"><span class="verTag">Alpha 0.44</span> <span id="headMode">Sudoku-Roguelike</span></div>
+    <div class="sub"><span class="verTag">Alpha 0.45</span> <span id="headMode">Sudoku-Roguelike</span></div>
   </header>
   <div id="main">
     <div id="left">
@@ -409,7 +409,7 @@
     <div id="euFlag" title="In der Europäischen Union entwickelt – einmal anklicken!"><canvas id="euCv" width="24" height="16"></canvas></div>
     <div id="euTag"><span class="euBanner">MADE IN EUROPE</span></div>
     <h1>Numerino</h1>
-    <div class="sub"><span class="verTag">Alpha 0.44</span></div>
+    <div class="sub"><span class="verTag">Alpha 0.45</span></div>
     <h3 id="modeH">Spielmodus</h3>
     <button id="stdBtn" class="btn menuBtn">Standard</button>
     <button id="matrixBtn" class="btn menuBtn">Matrix</button>
@@ -491,6 +491,7 @@
     <ul>
       <li>Wildkarte 6|9: gilt wahlweise als 6 oder als 9 (Ziffer beim Platzieren wählen).</li>
       <li>Wildkarte 1|7: gilt wahlweise als 1 oder als 7.</li>
+      <li>Wildkarte 9|B (nur Matrix-Modus): gilt wahlweise als 9 oder als B (elf).</li>
       <li>Joker: gilt einmal als jede beliebige Ziffer 1–9.</li>
       <li>Quantenjoker: verwandelt ein freies Feld in ein ?-Feld im Quantenzustand – auch tote schwarze Felder werden so wieder spielbar.</li>
       <li>Nachschub: drei weitere Ziffernkarten sofort.</li>
@@ -581,7 +582,7 @@
     </ul>
     </div>
     <h3 id="verH">Version</h3>
-    <ul><li>Alpha 0.44</li></ul>
+    <ul><li>Alpha 0.45</li></ul>
     <div class="btnRow"><button id="infoSrc" class="btn small">Quellcode anzeigen</button></div>
     <div class="btnRow"><button id="infoClose" class="btn">Schließen</button></div>
   </div>
@@ -589,7 +590,7 @@
 
 <div id="srcModal" class="modal hidden">
   <div class="modalBox" style="max-width:860px">
-    <h2><span id="srcH2t">Quellcode</span> <span class="verTag">Alpha 0.44</span></h2>
+    <h2><span id="srcH2t">Quellcode</span> <span class="verTag">Alpha 0.45</span></h2>
     <p class="mSub" id="srcHint">Vollständiger Quellcode dieser Datei. Nach dem Markieren kann er mit Strg+C (bzw. Cmd+C) kopiert werden.</p>
     <textarea id="srcArea" readonly spellcheck="false"></textarea>
     <div class="btnRow">
@@ -633,6 +634,13 @@
       <button class="btn small setTheme" data-theme="herbst"><canvas class="thmPrev" width="10" height="10"></canvas><span class="thmName">Herbst</span></button>
       <button class="btn small setTheme" data-theme="kirsch"><canvas class="thmPrev" width="10" height="10"></canvas><span class="thmName">Kirschbl&uuml;te</span></button>
       <button class="btn small setTheme" data-theme="weltraum"><canvas class="thmPrev" width="10" height="10"></canvas><span class="thmName">Weltraum</span></button>
+      <button class="btn small setTheme" data-theme="halloween"><canvas class="thmPrev" width="10" height="10"></canvas><span class="thmName">Halloween</span></button>
+      <button class="btn small setTheme" data-theme="weihnachten"><canvas class="thmPrev" width="10" height="10"></canvas><span class="thmName">Weihnachten</span></button>
+      <button class="btn small setTheme" data-theme="ostern"><canvas class="thmPrev" width="10" height="10"></canvas><span class="thmName">Ostern</span></button>
+      <button class="btn small setTheme" data-theme="kreide"><canvas class="thmPrev" width="10" height="10"></canvas><span class="thmName">Kreidetafel</span></button>
+      <button class="btn small setTheme" data-theme="cafe"><canvas class="thmPrev" width="10" height="10"></canvas><span class="thmName">Caf&eacute;</span></button>
+      <button class="btn small setTheme" data-theme="vulkan"><canvas class="thmPrev" width="10" height="10"></canvas><span class="thmName">Vulkan</span></button>
+      <button class="btn small setTheme" data-theme="blocks"><canvas class="thmPrev" width="10" height="10"></canvas><span class="thmName">Blocks</span></button>
     </div>
     <h3 id="skinH3">Numerino-Skins</h3>
     <div id="skinOpts" class="setOpts full">
@@ -1156,7 +1164,7 @@ de:{
   swapUsed:'Tausch: benutzt',swapLeft:'Tausch ({n}×)',
   achLineN:'Lehrling',achLineD:'Erfülle zehn Aufgaben in einem Run.',
   achZauberN:'Facharbeiter',achZauberD:'Wähle fünf Verzauberungen in einem Run.',
-  achWildN:'Springer',achWildD:'Platziere zehn Wildkarten (6|9 oder 1|7) in einem Run.',
+  achWildN:'Springer',achWildD:'Platziere zehn Wildkarten (6|9, 1|7 oder 9|B) in einem Run.',
   achJokerN:'Allrounder',achJokerD:'Platziere fünf Joker als beliebige Ziffer in einem Run.',
   achBossN:'Betriebsrat',achBossD:'Beende drei Boss-Level in einem Run.',
   achJaegerN:'Gewerkschafter',achJaegerD:'Beende alle fünf Boss-Arten in einem Run.',
@@ -1165,6 +1173,7 @@ de:{
   achMarathonN:'Streikorganisator',achMarathonD:'Erreiche Level 20 im Death Run.',achBirnenN:'Äpfel mit Birnen verglichen',achBirnenD:'Wähle den Birnen-Skin für Numerino.',
   upW69n:'WILDKARTE 6|9',upW69d:'Gilt als 6 oder als 9',
   upW17n:'WILDKARTE 1|7',upW17d:'Gilt als 1 oder als 7',
+  upW9Bn:'WILDKARTE 9|B',upW9Bd:'Gilt als 9 oder als B (nur Matrix-Modus)',
   upJokern:'JOKER',upJokerd:'Einmal jede Ziffer',
   upQuantn:'QUANTENJOKER',upQuantd:'Macht ein freies Feld zum ?-Feld',
   upSchubn:'NACHSCHUB',upSchubd:'Drei Karten sofort',
@@ -1263,6 +1272,7 @@ de:{
   masq73:'Ein ohne Tausch bezwungenes Boss-Level belohnt dich mit 300 Punkten und zwei Bonuskarten.',
   masq74:'Der Quantenjoker verwandelt ein freies Feld in ein ?-Feld im Quantenzustand – auch tote schwarze Felder werden so wieder spielbar.',
   masq75:'Per Tastatur bewegen die Pfeiltasten einen Cursor, die Zifferntasten 1–9 wählen eine passende Karte, Enter oder Leertaste platziert am Cursor.',
+  masq76:'Der Entwickler meinte zu mir, dass Studierende der Exzellenz-Universität Dresden, die Zahl e bis auf 9 Nachkommastellen auswendig können müssen. Er verriet mir aber nie, warum.',
   masqBoss1:'{b} naht! Bleib ruhig – ich glaube an dich!',
   masqBoss2:'Psst: Der Boss verflucht gleich eine Ziffer. Plane klug!',
   masqBoss3:'Gegen {b} hilft frisches Nachziehen. Du schaffst das!',
@@ -1319,6 +1329,8 @@ de:{
   worldH3:'Brettthemen',themeOrig:'Original',themeMono:'Monochrom',themePapier:'Papier',
   themeEdel:'Edel',themeWinter:'Winter',themeHimmel:'Himmel',themeHerbst:'Herbst',
   themeKirsch:'Kirschblüte',themeWeltraum:'Weltraum',
+  themeHalloween:'Halloween',themeWeihnachten:'Weihnachten',themeOstern:'Ostern',themeKreide:'Kreidetafel',
+  themeCafe:'Café',themeVulkan:'Vulkan',themeBlocks:'Blocks',
   btnCont:'Fortsetzen',logCont:'Run fortgesetzt – Level {n}',
   logBox:'Quadrat voll! +150 Punkte',
   flCombo:'COMBO x{c}',logCombo:'Combo x{c} – +{p} Punkte',
@@ -1365,7 +1377,7 @@ en:{
   swapUsed:'Swap: used',swapLeft:'Swap ({n}×)',
   achLineN:'Apprentice',achLineD:'Complete ten tasks in one run.',
   achZauberN:'Skilled worker',achZauberD:'Choose five enchantments in one run.',
-  achWildN:'Stand-in',achWildD:'Place ten wildcards (6|9 or 1|7) in one run.',
+  achWildN:'Stand-in',achWildD:'Place ten wildcards (6|9, 1|7 or 9|B) in one run.',
   achJokerN:'All-rounder',achJokerD:'Place five jokers as any digit in one run.',
   achBossN:'Works council',achBossD:'Finish three boss levels in one run.',
   achJaegerN:'Unionist',achJaegerD:'Finish all five boss types in one run.',
@@ -1374,6 +1386,7 @@ en:{
   achMarathonN:'Strike organizer',achMarathonD:'Reach level 20 in a Death Run.',achBirnenN:'Compared apples with pears',achBirnenD:'Select the pear skin for Numerino.',
   upW69n:'WILDCARD 6|9',upW69d:'Counts as 6 or as 9',
   upW17n:'WILDCARD 1|7',upW17d:'Counts as 1 or as 7',
+  upW9Bn:'WILDCARD 9|B',upW9Bd:'Counts as 9 or as B (matrix mode only)',
   upJokern:'JOKER',upJokerd:'Any digit, once',
   upQuantn:'QUANTUM JOKER',upQuantd:'Turns a free cell into a ? cell',
   upSchubn:'SUPPLY',upSchubd:'Three cards instantly',
@@ -1472,6 +1485,7 @@ en:{
   masq73:'A boss level beaten without swapping rewards you with 300 points and two bonus cards.',
   masq74:'The quantum joker turns a free field into a ? field in a quantum state – even dead black fields become playable again this way.',
   masq75:'With the keyboard, the arrow keys move a cursor, the number keys 1–9 select a matching card, and Enter or the space bar places at the cursor.',
+  masq76:'The developer told me that students at Dresden’s University of Excellence have to know the number e to nine decimal places by heart. But he never told me why.',
   masqBoss1:'{b} approaches! Stay calm – I believe in you!',
   masqBoss2:'Psst: the boss is about to curse a digit. Plan wisely!',
   masqBoss3:'Fresh draws help against {b}. You can do this!',
@@ -1527,6 +1541,8 @@ en:{
   worldH3:'Board themes',themeOrig:'Original',themeMono:'Monochrome',themePapier:'Paper',
   themeEdel:'Noble',themeWinter:'Winter',themeHimmel:'Sky',themeHerbst:'Autumn',
   themeKirsch:'Cherry blossom',themeWeltraum:'Space',
+  themeHalloween:'Halloween',themeWeihnachten:'Christmas',themeOstern:'Easter',themeKreide:'Chalkboard',
+  themeCafe:'Café',themeVulkan:'Volcano',themeBlocks:'Blocks',
   btnCont:'Continue',logCont:'Run resumed – level {n}',
   logBox:'Box complete! +150 points',
   flCombo:'COMBO x{c}',logCombo:'Combo x{c} – +{p} points',
@@ -1570,6 +1586,7 @@ en:{
     '<details><summary>Enchantments</summary><ul>'+
     '<li>Wildcard 6|9: counts as either 6 or 9 (choose the digit when placing).</li>'+
     '<li>Wildcard 1|7: counts as either 1 or 7.</li>'+
+    '<li>Wildcard 9|B (matrix mode only): counts as either 9 or as B (eleven).</li>'+
     '<li>Joker: counts once as any digit 1–9.</li>'+
     '<li>Quantum joker: turns a free cell into a ? cell in a quantum state – even dead black cells become playable again.</li>'+
     '<li>Supply: three more digit cards immediately.</li>'+
@@ -1638,7 +1655,7 @@ fr:{
   swapUsed:'Échange : utilisé',swapLeft:'Échange ({n}×)',
   achLineN:'Apprenti',achLineD:'Accomplissez dix missions en une seule partie.',
   achZauberN:'Ouvrier qualifié',achZauberD:'Choisissez cinq enchantements en une seule partie.',
-  achWildN:'Remplaçant',achWildD:'Posez dix cartes magiques (6|9 ou 1|7) en une seule partie.',
+  achWildN:'Remplaçant',achWildD:'Posez dix cartes magiques (6|9, 1|7 ou 9|B) en une seule partie.',
   achJokerN:'Factotum',achJokerD:'Posez cinq jokers comme n’importe quel chiffre en une seule partie.',
   achBossN:'Comité d’entreprise',achBossD:'Terminez trois niveaux de boss en une seule partie.',
   achJaegerN:'Syndicaliste',achJaegerD:'Terminez les cinq types de boss en une seule partie.',
@@ -1647,6 +1664,7 @@ fr:{
   achMarathonN:'Organisateur de grève',achMarathonD:'Atteignez le niveau 20 dans un Death Run.',achBirnenN:'Des pommes comparées aux poires',achBirnenD:'Choisissez l’apparence poire de Numerino.',
   upW69n:'CARTE MAGIQUE 6|9',upW69d:'Vaut comme un 6 ou un 9',
   upW17n:'CARTE MAGIQUE 1|7',upW17d:'Vaut comme un 1 ou un 7',
+  upW9Bn:'CARTE MAGIQUE 9|B',upW9Bd:'Vaut comme un 9 ou un B (mode Matrix uniquement)',
   upJokern:'JOKER',upJokerd:'N’importe quel chiffre, une fois',
   upQuantn:'JOKER QUANTIQUE',upQuantd:'Change une case libre en case ?',
   upSchubn:'APPROVISIONNEMENT',upSchubd:'Trois cartes immédiatement',
@@ -1745,6 +1763,7 @@ fr:{
   masq73:'Un niveau de boss vaincu sans échange te récompense par 300 points et deux cartes bonus.',
   masq74:'Le joker quantique transforme un champ libre en champ ? en état quantique – même les champs noirs morts redeviennent ainsi jouables.',
   masq75:'Au clavier, les flèches déplacent un curseur, les touches 1 à 9 choisissent une carte correspondante, Entrée ou la barre d’espace place sur le curseur.',
+  masq76:'Le développeur m’a dit que les étudiants de l’université d’excellence de Dresde doivent connaître le nombre e jusqu’à neuf décimales par cœur. Mais il ne m’a jamais dit pourquoi.',
   masqBoss1:'{b} approche ! Reste calme – je crois en toi !',
   masqBoss2:'Psst : le boss va maudire un chiffre. Planifie bien !',
   masqBoss3:'Contre {b}, un bon approvisionnement aide. Tu vas y arriver !',
@@ -1800,6 +1819,8 @@ fr:{
   worldH3:'Thèmes de plateau',themeOrig:'Original',themeMono:'Monochrome',themePapier:'Papier',
   themeEdel:'Noble',themeWinter:'Hiver',themeHimmel:'Ciel',themeHerbst:'Automne',
   themeKirsch:'Fleur de cerisier',themeWeltraum:'Espace',
+  themeHalloween:'Halloween',themeWeihnachten:'Noël',themeOstern:'Pâques',themeKreide:'Tableau noir',
+  themeCafe:'Café',themeVulkan:'Volcan',themeBlocks:'Blocs',
   btnCont:'Continuer',logCont:'Partie reprise – niveau {n}',
   logBox:'Carré complet ! +150 points',
   flCombo:'COMBO x{c}',logCombo:'Combo x{c} – +{p} points',
@@ -1843,6 +1864,7 @@ fr:{
     '<details><summary>Enchantements</summary><ul>'+
     '<li>Carte magique 6|9 : vaut comme un 6 ou comme un 9 (choisissez le chiffre à la pose).</li>'+
     '<li>Carte magique 1|7 : vaut comme un 1 ou comme un 7.</li>'+
+    '<li>Carte magique 9|B (mode Matrix uniquement) : vaut comme un 9 ou comme un B (onze).</li>'+
     '<li>Joker : vaut une fois comme n’importe quel chiffre 1–9.</li>'+
     '<li>Joker quantique : change une case libre en case ? en état quantique – même les cases noires mortes redeviennent jouables.</li>'+
     '<li>Approvisionnement : trois cartes de chiffres supplémentaires immédiatement.</li>'+
@@ -1911,7 +1933,7 @@ cs:{
   swapUsed:'Výměna: použita',swapLeft:'Výměna ({n}×)',
   achLineN:'Učeň',achLineD:'Splň deset úkolů v jednom běhu.',
   achZauberN:'Kvalifikovaný dělník',achZauberD:'Vyber pět očarování v jednom běhu.',
-  achWildN:'Náhradník',achWildD:'Umísti deset divokých karet (6|9 nebo 1|7) v jednom běhu.',
+  achWildN:'Náhradník',achWildD:'Umísti deset divokých karet (6|9, 1|7 nebo 9|B) v jednom běhu.',
   achJokerN:'Univerzál',achJokerD:'Umísti pět žolíků jako libovolnou číslici v jednom běhu.',
   achBossN:'Podniková rada',achBossD:'Dokonči tři úrovně s bossem v jednom běhu.',
   achJaegerN:'Odborář',achJaegerD:'Dokonči všech pět druhů bossů v jednom běhu.',
@@ -1920,6 +1942,7 @@ cs:{
   achMarathonN:'Organizátor stávky',achMarathonD:'Dosáhni 20. úrovně v Death Runu.',achBirnenN:'Srovnal jablka s hruškami',achBirnenD:'Vyber skin hrušky pro Numerina.',
   upW69n:'DIVOKÁ KARTA 6|9',upW69d:'Platí jako 6 nebo 9',
   upW17n:'DIVOKÁ KARTA 1|7',upW17d:'Platí jako 1 nebo 7',
+  upW9Bn:'DIVOKÁ KARTA 9|B',upW9Bd:'Platí jako 9 nebo B (jen režim Matrix)',
   upJokern:'ŽOLÍK',upJokerd:'Jednou libovolná číslice',
   upQuantn:'KVANTOVÝ ŽOLÍK',upQuantd:'Převede volné pole na pole ?',
   upSchubn:'ZÁSOBA',upSchubd:'Tři karty okamžitě',
@@ -2018,6 +2041,7 @@ cs:{
   masq73:'Úroveň bosse zdolaná bez výměny tě odmění 300 body a dvěma bonusovými kartami.',
   masq74:'Kvantový žolík promění volné pole v pole ? v kvantovém stavu – i mrtvá černá pole se tak stanou znovu hratelnými.',
   masq75:'Na klávesnici šipky pohybují kurzorem, číslicové klávesy 1–9 vybírají odpovídající kartu, Enter nebo mezerník umístí kartu na pozici kurzoru.',
+  masq76:'Vývojář mi řekl, že studenti drážďanské univerzity excelence musí umět číslo e zpaměti na devět desetinných míst. Nikdy mi ale neřekl proč.',
   masqBoss1:'{b} se blíží! Zůstaň klidný – věřím v tebe!',
   masqBoss2:'Ššš: boss právě prokleje číslici. Plánuj chytře!',
   masqBoss3:'Proti {b} pomůže čerstvá zásoba. Zvládneš to!',
@@ -2073,6 +2097,8 @@ cs:{
   worldH3:'Témata desky',themeOrig:'Originál',themeMono:'Monochrom',themePapier:'Papír',
   themeEdel:'Elegantní',themeWinter:'Zima',themeHimmel:'Nebe',themeHerbst:'Podzim',
   themeKirsch:'Sakura',themeWeltraum:'Vesmír',
+  themeHalloween:'Halloween',themeWeihnachten:'Vánoce',themeOstern:'Velikonoce',themeKreide:'Křídová tabule',
+  themeCafe:'Kavárna',themeVulkan:'Sopka',themeBlocks:'Bloky',
   btnCont:'Pokračovat',logCont:'Hra obnovena – úroveň {n}',
   logBox:'Čtverec kompletní! +150 bodů',
   flCombo:'COMBO x{c}',logCombo:'Combo x{c} – +{p} bodů',
@@ -2116,6 +2142,7 @@ cs:{
     '<details><summary>Očarování</summary><ul>'+
     '<li>Divoká karta 6|9: platí jako 6 nebo jako 9 (číslici vybereš při umístění).</li>'+
     '<li>Divoká karta 1|7: platí jako 1 nebo jako 7.</li>'+
+    '<li>Divoká karta 9|B (jen režim Matrix): platí jako 9 nebo jako B (jedenáct).</li>'+
     '<li>Žolík: platí jednou jako libovolná číslice 1–9.</li>'+
     '<li>Kvantový žolík: převede volné pole na pole ? v kvantovém stavu – i mrtvá černá pole se znovu stanou hratelnými.</li>'+
     '<li>Zásoba: hned tři další karty s číslicemi.</li>'+
@@ -2184,7 +2211,7 @@ pl:{
   swapUsed:'Wymiana: użyta',swapLeft:'Wymiana ({n}×)',
   achLineN:'Praktykant',achLineD:'Wykonaj dziesięć zadań w jednym podejściu.',
   achZauberN:'Fachowiec',achZauberD:'Wybierz pięć zaklęć w jednym podejściu.',
-  achWildN:'Zmiennik',achWildD:'Umieść dziesięć dzikich kart (6|9 lub 1|7) w jednym podejściu.',
+  achWildN:'Zmiennik',achWildD:'Umieść dziesięć dzikich kart (6|9, 1|7 lub 9|B) w jednym podejściu.',
   achJokerN:'Złota rączka',achJokerD:'Umieść pięć jokerów jako dowolną cyfrę w jednym podejściu.',
   achBossN:'Rada zakładowa',achBossD:'Ukończ trzy poziomy z bossem w jednym podejściu.',
   achJaegerN:'Związkowiec',achJaegerD:'Ukończ wszystkie pięć rodzajów bossów w jednym podejściu.',
@@ -2193,6 +2220,7 @@ pl:{
   achMarathonN:'Organizator strajku',achMarathonD:'Osiągnij poziom 20 w Death Runie.',achBirnenN:'Porównanie jabłek z gruszkami',achBirnenD:'Wybierz wygląd gruszki dla Numerina.',
   upW69n:'DZIKA KARTA 6|9',upW69d:'Liczy się jako 6 lub 9',
   upW17n:'DZIKA KARTA 1|7',upW17d:'Liczy się jako 1 lub 7',
+  upW9Bn:'DZIKA KARTA 9|B',upW9Bd:'Liczy się jako 9 lub B (tylko tryb Matrix)',
   upJokern:'JOKER',upJokerd:'Raz dowolna cyfra',
   upQuantn:'JOKER KWANTOWY',upQuantd:'Zmienia wolne pole w pole ?',
   upSchubn:'ZAPAS',upSchubd:'Trzy karty natychmiast',
@@ -2291,6 +2319,7 @@ pl:{
   masq73:'Pokonany bez wymiany poziom bossa nagradza cię 300 punktami i dwiema kartami bonusowymi.',
   masq74:'Kwantowy dżoker zamienia wolne pole w pole ? w stanie kwantowym – nawet martwe czarne pola stają się tak znów grywalne.',
   masq75:'Na klawiaturze strzałki poruszają kursorem, klawisze cyfr 1–9 wybierają pasującą kartę, Enter lub spacja umieszcza ją w miejscu kursora.',
+  masq76:'Programista powiedział mi, że studenci Uniwersytetu Doskonałości w Dreźnie muszą znać liczbę e do dziewięciu miejsc po przecinku na pamięć. Nigdy mi jednak nie powiedział dlaczego.',
   masqBoss1:'{b} nadchodzi! Zachowaj spokój – wierzę w ciebie!',
   masqBoss2:'Pst: boss właśnie przeklnie cyfrę. Planuj mądrze!',
   masqBoss3:'Na {b} pomaga świeży zapas. Dasz radę!',
@@ -2346,6 +2375,8 @@ pl:{
   worldH3:'Motywy planszy',themeOrig:'Oryginał',themeMono:'Monochromatyczny',themePapier:'Papier',
   themeEdel:'Szlachetny',themeWinter:'Zima',themeHimmel:'Niebo',themeHerbst:'Jesień',
   themeKirsch:'Kwiat wiśni',themeWeltraum:'Kosmos',
+  themeHalloween:'Halloween',themeWeihnachten:'Święta',themeOstern:'Wielkanoc',themeKreide:'Tablica',
+  themeCafe:'Kawiarnia',themeVulkan:'Wulkan',themeBlocks:'Bloki',
   btnCont:'Kontynuuj',logCont:'Run wznowiony – poziom {n}',
   logBox:'Kwadrat pełny! +150 punktów',
   flCombo:'COMBO x{c}',logCombo:'Combo x{c} – +{p} punktów',
@@ -2389,6 +2420,7 @@ pl:{
     '<details><summary>Zaklęcia</summary><ul>'+
     '<li>Dzika karta 6|9: liczy się jako 6 albo jako 9 (cyfrę wybierasz przy umieszczaniu).</li>'+
     '<li>Dzika karta 1|7: liczy się jako 1 albo jako 7.</li>'+
+    '<li>Dzika karta 9|B (tylko tryb Matrix): liczy się jako 9 albo jako B (jedenaście).</li>'+
     '<li>Joker: liczy się raz jako dowolna cyfra 1–9.</li>'+
     '<li>Joker kwantowy: zmienia wolne pole w pole ? w stanie kwantowym – nawet martwe czarne pola znów stają się grywalne.</li>'+
     '<li>Zapas: natychmiast trzy dodatkowe karty cyfr.</li>'+
@@ -2457,7 +2489,7 @@ es:{
   swapUsed:'Cambio: usado',swapLeft:'Cambio ({n}×)',
   achLineN:'Aprendiz',achLineD:'Completa diez tareas en una sola partida.',
   achZauberN:'Obrero cualificado',achZauberD:'Elige cinco encantamientos en una sola partida.',
-  achWildN:'Suplente',achWildD:'Coloca diez cartas comodín (6|9 o 1|7) en una sola partida.',
+  achWildN:'Suplente',achWildD:'Coloca diez cartas comodín (6|9, 1|7 o 9|B) en una sola partida.',
   achJokerN:'Hombre orquesta',achJokerD:'Coloca cinco jókers como cualquier dígito en una sola partida.',
   achBossN:'Comité de empresa',achBossD:'Completa tres niveles de jefe en una sola partida.',
   achJaegerN:'Sindicalista',achJaegerD:'Completa los cinco tipos de jefe en una sola partida.',
@@ -2466,6 +2498,7 @@ es:{
   achMarathonN:'Organizador de huelga',achMarathonD:'Alcanza el nivel 20 en un Death Run.',achBirnenN:'Manzanas comparadas con peras',achBirnenD:'Selecciona el aspecto de pera para Numerino.',
   upW69n:'CARTA COMODÍN 6|9',upW69d:'Cuenta como 6 o 9',
   upW17n:'CARTA COMODÍN 1|7',upW17d:'Cuenta como 1 o 7',
+  upW9Bn:'CARTA COMODÍN 9|B',upW9Bd:'Cuenta como 9 o B (solo modo Matrix)',
   upJokern:'JÓKER',upJokerd:'Un dígito cualquiera, una vez',
   upQuantn:'JÓKER CUÁNTICO',upQuantd:'Convierte una casilla libre en casilla ?',
   upSchubn:'REPOSICIÓN',upSchubd:'Tres cartas al instante',
@@ -2564,6 +2597,7 @@ es:{
   masq73:'Un nivel de jefe vencido sin el botón de cambio te recompensa con 300 puntos y dos cartas de bonificación.',
   masq74:'El comodín cuántico convierte un campo libre en un campo ? en estado cuántico – así vuelven a ser jugables incluso los campos negros muertos.',
   masq75:'Con el teclado, las flechas mueven un cursor, las teclas numéricas 1–9 eligen una carta adecuada, Intro o la barra espaciadora coloca en el cursor.',
+  masq76:'El desarrollador me dijo que los estudiantes de la Universidad de Excelencia de Dresde tienen que saber de memoria el número e hasta nueve decimales. Pero nunca me dijo por qué.',
   masqBoss1:'¡{b} se acerca! Mantén la calma – ¡creo en ti!',
   masqBoss2:'Pst: el jefe está a punto de maldecir un dígito. ¡Planifica bien!',
   masqBoss3:'Contra {b} ayuda una reposición fresca. ¡Puedes lograrlo!',
@@ -2619,6 +2653,8 @@ es:{
   worldH3:'Temas de tablero',themeOrig:'Original',themeMono:'Monocromo',themePapier:'Papel',
   themeEdel:'Noble',themeWinter:'Invierno',themeHimmel:'Cielo',themeHerbst:'Otoño',
   themeKirsch:'Flor de cerezo',themeWeltraum:'Espacio',
+  themeHalloween:'Halloween',themeWeihnachten:'Navidad',themeOstern:'Pascua',themeKreide:'Pizarra',
+  themeCafe:'Café',themeVulkan:'Volcán',themeBlocks:'Bloques',
   btnCont:'Continuar',logCont:'Partida reanudada – nivel {n}',
   logBox:'¡Cuadrante completo! +150 puntos',
   flCombo:'COMBO x{c}',logCombo:'Combo x{c} – +{p} puntos',
@@ -2662,6 +2698,7 @@ es:{
     '<details><summary>Encantamientos</summary><ul>'+
     '<li>Carta comodín 6|9: cuenta como 6 o como 9 (elige el dígito al colocar).</li>'+
     '<li>Carta comodín 1|7: cuenta como 1 o como 7.</li>'+
+    '<li>Carta comodín 9|B (solo modo Matrix): cuenta como 9 o como B (once).</li>'+
     '<li>Jóker: cuenta una vez como cualquier dígito 1–9.</li>'+
     '<li>Jóker cuántico: convierte una casilla libre en una casilla ? en estado cuántico – incluso las casillas negras muertas vuelven a ser jugables.</li>'+
     '<li>Reposición: tres cartas de dígitos más al instante.</li>'+
@@ -2763,7 +2800,7 @@ function setLang(l){
   if(!$('saveOverlay').classList.contains('hidden'))renderSaveMenu();
 }
 /* ================= Spielstand ================= */
-/* Version: Alpha 0.44 – mit jeder Änderung hochzählen (Alpha 0.45, 0.46 …) */
+/* Version: Alpha 0.45 – mit jeder Änderung hochzählen (Alpha 0.46, 0.47 …) */
 function loadSave(){
   var fallback=null;
   try{fallback=JSON.parse(document.getElementById('saveSlot').textContent);}catch(e){}
@@ -2896,7 +2933,28 @@ var THEMES={
     jokerIn:'#c89ab0',jokerQ:'#a86a08',dim:'#9a6a84',white:'#7a3a58'},
   weltraum:{name:'themeWeltraum',gridbg:'#080818',board:'#050510',cell:'#181838',cellAlt:'#202048',
     sep:'#5a5a9a',bright:'#9a9adc',digit:'#e8e8ff',magic:'#6ac8f0',blockbg:'#100c22',
-    jokerIn:'#241c44',jokerQ:'#ffd23f',dim:'#6a6a9a',white:'#ffffff'}
+    jokerIn:'#241c44',jokerQ:'#ffd23f',dim:'#6a6a9a',white:'#ffffff'},
+  halloween:{name:'themeHalloween',gridbg:'#180e1e',board:'#120a18',cell:'#2c1a34',cellAlt:'#34223e',
+    sep:'#7a4a2c',bright:'#e8932c',digit:'#f4ead8',magic:'#ff9a2a',blockbg:'#1e1024',
+    jokerIn:'#382044',jokerQ:'#ff8420',dim:'#8a7098',white:'#ffffff'},
+  weihnachten:{name:'themeWeihnachten',gridbg:'#0f2018',board:'#0a1a12',cell:'#1e3626',cellAlt:'#244030',
+    sep:'#b03a3a',bright:'#e05a5a',digit:'#f2f6ec',magic:'#f0c840',blockbg:'#122614',
+    jokerIn:'#2a1c22',jokerQ:'#e04848',dim:'#6a8a70',white:'#ffffff'},
+  ostern:{name:'themeOstern',gridbg:'#eef4da',board:'#dfecc4',cell:'#fafceb',cellAlt:'#f0f6da',
+    sep:'#a4c47c',bright:'#6a8a3a',digit:'#44522a',magic:'#e07ab2',blockbg:'#d4e4b0',
+    jokerIn:'#c2d89c',jokerQ:'#a86a08',dim:'#8a9a74',white:'#4e5c34'},
+  kreide:{name:'themeKreide',gridbg:'#1c2622',board:'#161f1c',cell:'#263630',cellAlt:'#2c3e36',
+    sep:'#5a7a6c',bright:'#d4ecdc',digit:'#f2f8f0',magic:'#f0d870',blockbg:'#1a2622',
+    jokerIn:'#2a3a32',jokerQ:'#efe478',dim:'#7a9a8a',white:'#ffffff'},
+  cafe:{name:'themeCafe',gridbg:'#282018',board:'#201a14',cell:'#3c3228',cellAlt:'#443a2e',
+    sep:'#9a8870',bright:'#dccfb8',digit:'#f6f0e4',magic:'#c89a6a',blockbg:'#241e18',
+    jokerIn:'#342c22',jokerQ:'#e8b84c',dim:'#807460',white:'#ffffff'},
+  vulkan:{name:'themeVulkan',gridbg:'#1c1210',board:'#160d0c',cell:'#32221c',cellAlt:'#3a2820',
+    sep:'#8a4420',bright:'#ec6c22',digit:'#faeee2',magic:'#ff5a1a',blockbg:'#201410',
+    jokerIn:'#3c261c',jokerQ:'#ff7c26',dim:'#8a6a5a',white:'#ffffff'},
+  blocks:{name:'themeBlocks',gridbg:'#4a8a3c',board:'#3a6a2e',cell:'#8a8a8a',cellAlt:'#79553a',
+    sep:'#4a4a4a',bright:'#f2f2e2',digit:'#20221e',magic:'#3ad0a0',blockbg:'#6a4a2a',
+    jokerIn:'#8a7a5a',jokerQ:'#ffd23f',dim:'#f0f2dc',white:'#ffffff'}
 };
 function applyTheme(){
   var T=THEMES[SAVE.settings.theme]||THEMES.orig,k;
@@ -2929,6 +2987,7 @@ var DIFF={
 var UP={
   w69:{icon:'6|9',cls:'drCatSpell',nk:'upW69n',dk:['upW69d']},
   w17:{icon:'1|7',cls:'drCatSpell',nk:'upW17n',dk:['upW17d']},
+  w9B:{icon:'9|B',cls:'drCatSpell',nk:'upW9Bn',dk:['upW9Bd']},
   joker:{icon:'*',cls:'drCatSpell',nk:'upJokern',dk:['upJokerd']},
   quant:{icon:'Q',cls:'drCatSpell',nk:'upQuantn',dk:['upQuantd']},
   schub:{icon:'+',cls:'drCatSlot',nk:'upSchubn',dk:['upSchubd']},
@@ -3529,10 +3588,12 @@ function startLevel(l){
   /* Consigliere: kündigt jeden Boss mit einer Erscheinungs-Ansage an,
      streut sonst einen Fun-Fact in die Runde */
   if(S.boss)masqSay('masqApp'+({dieb:'Dieb',riss:'Riss',wirbler:'Wirbler',sani:'Sani',lobbyist:'Lobbyist'})[S.boss.kind]+(1+rnd(MASQAPPN[S.boss.kind]||3)),{b:S.boss.name});
-  else masqSay('masq'+(1+rnd(75)));
+  else masqSay('masq'+(1+rnd(76)));
 }
 function pick3(){
-  var keys=Object.keys(UP),out=[];
+  /* Die Wildkarte 9|B gibt es nur im Matrix-Modus (B = 11); im Standard-
+     modus bleibt sie aus der Auswahl herausgefiltert. */
+  var keys=Object.keys(UP).filter(function(k){return k!=='w9B'||S.mode==='matrix';}),out=[];
   while(out.length<3&&keys.length){
     var i=rnd(keys.length);
     out.push(keys.splice(i,1)[0]);
@@ -3601,6 +3662,7 @@ function applyUpgrade(key){
   if(S.upCount>=5)unlock('zauber');
   if(key==='w69')S.inv.push({kind:'w',a:6,b:9});
   if(key==='w17')S.inv.push({kind:'w',a:1,b:7});
+  if(key==='w9B')S.inv.push({kind:'w',a:9,b:11});
   if(key==='joker')S.inv.push({kind:'j'});
   if(key==='quant')S.inv.push({kind:'q'});
   if(key==='schub')addCards(3);
@@ -4215,7 +4277,7 @@ function update(dt){
     if(S.masqT>=SAVE.settings.talk){
       S.masqT=0;
       if(S.boss)masqSay('masqMid'+({dieb:'Dieb',riss:'Riss',wirbler:'Wirbler',sani:'Sani',lobbyist:'Lobbyist'})[S.boss.kind]+(1+rnd(MASQMIDN[S.boss.kind]||3)),{b:S.boss.name});
-      else masqSay('masq'+(1+rnd(75)));
+      else masqSay('masq'+(1+rnd(76)));
     }
   }
 }
