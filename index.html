@@ -335,7 +335,7 @@
 <div id="wrap">
   <header>
     <h1>Numerino</h1>
-    <div class="sub"><span class="verTag">Alpha 0.47</span> <span id="headMode">Sudoku-Roguelike</span></div>
+    <div class="sub"><span class="verTag">Alpha 0.48</span> <span id="headMode">Sudoku-Roguelike</span></div>
   </header>
   <div id="main">
     <div id="left">
@@ -409,7 +409,7 @@
     <div id="euFlag" title="In der Europäischen Union entwickelt – einmal anklicken!"><canvas id="euCv" width="24" height="16"></canvas></div>
     <div id="euTag"><span class="euBanner">MADE IN EUROPE</span></div>
     <h1>Numerino</h1>
-    <div class="sub"><span class="verTag">Alpha 0.47</span></div>
+    <div class="sub"><span class="verTag">Alpha 0.48</span></div>
     <h3 id="modeH">Spielmodus</h3>
     <button id="minimusBtn" class="btn menuBtn">Minimus</button>
     <button id="stdBtn" class="btn menuBtn">Standard</button>
@@ -457,7 +457,7 @@
       <li>Farbige Punkte zeigen, wie viele Hand-Karten auf ein freies Feld passen: Gelb heißt wenige (drei oder weniger), Rot genau eine, Schwarz keine – nur der Quantenjoker kann schwarze Felder noch retten.</li>
       <li>Sudoku-Konfliktregel: Eine Ziffer darf nie doppelt in derselben Reihe, Spalte oder demselben 3×3-Block liegen. Ungültige Felder werden beim Überfahren rot markiert.</li>
       <li>Matrix-Modus: ein 16×16-Brett mit den Ziffern 1–9 und A–G in 4×4-Blöcken – gleiche Regeln, gleiche Bosse, größeres Sudoku. Der Modus wird im Hauptmenü gewählt und wirkt auf den nächsten Run.</li>
-      <li>Minimus-Modus: ein 4×4-Brett mit den Ziffern 1–4 in 2×2-Blöcken – die Brettgrößen folgen den Quadratzahlen 4, 9 und 16. Jede Aufgabe verlangt genau ein neues vollständiges Quadrat, der Kartentisch hält höchstens sechs Karten, und der Modus kennt nur eine Schwierigkeit (Mittel) – schnelle Runden mit knapper Hand. Der Modus wird im Hauptmenü gewählt und wirkt auf den nächsten Run.</li>
+      <li>Minimus-Modus: ein 4×4-Brett mit den Ziffern 1–4 in 2×2-Blöcken – die Brettgrößen folgen den Quadratzahlen 4, 9 und 16. Jede Aufgabe verlangt genau ein neues vollständiges Quadrat, der Kartentisch hält höchstens sechs Karten, der Modus kennt nur eine Schwierigkeit (Mittel) und bietet keinen Quantenjoker – schnelle Runden mit knapper Hand. Der Modus wird im Hauptmenü gewählt und wirkt auf den nächsten Run.</li>
       <li>Platzierte Ziffern bleiben liegen – nichts wird gelöscht. Jede Aufgabe baut auf dem bereits gefüllten Brett auf.</li>
       <li>Jede Aufgabe verlangt eine Anzahl voller Linien, etwa zwei Reihen oder zwei Quadrate (Ziel in der Statusleiste).</li>
       <li>Nach jeder Aufgabe folgt die Verzauberungswahl; der Nachschub an neuen Karten wird dir dabei bereits angezeigt.</li>
@@ -495,7 +495,7 @@
       <li>Wildkarte 1|7: gilt wahlweise als 1 oder als 7.</li>
       <li>Wildkarte 9|B (nur Matrix-Modus): gilt wahlweise als 9 oder als B (elf).</li>
       <li>Joker: gilt einmal als jede beliebige Ziffer 1–9.</li>
-      <li>Quantenjoker: verwandelt ein freies Feld in ein ?-Feld im Quantenzustand – auch tote schwarze Felder werden so wieder spielbar.</li>
+      <li>Quantenjoker: verwandelt ein freies Feld in ein ?-Feld im Quantenzustand – auch tote schwarze Felder werden so wieder spielbar (im Minimus-Modus nicht verfügbar).</li>
       <li>Nachschub: drei weitere Ziffernkarten sofort.</li>
       <li>Klon: eine zufällige Karte deines Tisches wird verdoppelt – auch Wildkarten.</li>
       <li>Tausch+: ab sofort ein zweiter Tausch je Level.</li>
@@ -584,7 +584,7 @@
     </ul>
     </div>
     <h3 id="verH">Version</h3>
-    <ul><li>Alpha 0.47</li></ul>
+    <ul><li>Alpha 0.48</li></ul>
     <div class="btnRow"><button id="infoSrc" class="btn small">Quellcode anzeigen</button></div>
     <div class="btnRow"><button id="infoClose" class="btn">Schließen</button></div>
   </div>
@@ -592,7 +592,7 @@
 
 <div id="srcModal" class="modal hidden">
   <div class="modalBox" style="max-width:860px">
-    <h2><span id="srcH2t">Quellcode</span> <span class="verTag">Alpha 0.47</span></h2>
+    <h2><span id="srcH2t">Quellcode</span> <span class="verTag">Alpha 0.48</span></h2>
     <p class="mSub" id="srcHint">Vollständiger Quellcode dieser Datei. Nach dem Markieren kann er mit Strg+C (bzw. Cmd+C) kopiert werden.</p>
     <textarea id="srcArea" readonly spellcheck="false"></textarea>
     <div class="btnRow">
@@ -1186,7 +1186,7 @@ de:{
   bossRissD:'Reißt nach je {n} Platzierungen {k} Ziffer(n) heraus',
   bossWirblerD:'Verwandelt nach je {n} Platzierungen {k} Karten (auch Wildkarten)',
   bossSaniD:'Baut nach je {n} Platzierungen {k} ?-Feld(er) ab',
-  bossLobbyistD:'Riegelt {k} Felder ab und verschiebt die Sperren alle {n} Platzierungen',
+  bossLobbyistD:'Riegelt bis zu {k} Felder ab und verschiebt die Sperren alle {n} Platzierungen',
   bossWarn:'ACHTUNG: BEI DER NÄCHSTEN PLATZIERUNG!',
   flCard:'-1 KARTE!',flCardN:'-{k} KARTEN!',flGap:'LUECKE!',flConfuse:'VERWIRRT!',flConflict:'KONFLIKT!',flCards:'+{n} KARTEN',
   logDieb:'Der Aktionär klaut {k} Karte(n)!',logRiss:'Der Monopolist reißt eine Ziffer heraus!',
@@ -1399,7 +1399,7 @@ en:{
   bossRissD:'Rips out {k} digit(s) after every {n} placements',
   bossWirblerD:'Transforms {k} cards (wildcards included) after every {n} placements',
   bossSaniD:'Removes {k} ? cell(s) after every {n} placements',
-  bossLobbyistD:'Cordons off {k} cells and moves the cordons every {n} placements',
+  bossLobbyistD:'Cordons off up to {k} cells and moves the cordons every {n} placements',
   bossWarn:'WARNING: ON THE NEXT PLACEMENT!',
   flCard:'-1 CARD!',flCardN:'-{k} CARDS!',flGap:'GAP!',flConfuse:'SHUFFLED!',flConflict:'CONFLICT!',flCards:'+{n} CARDS',
   logDieb:'The shareholder steals {k} card(s)!',logRiss:'The monopolist tears out a digit!',
@@ -1559,7 +1559,7 @@ en:{
     '<li>Coloured dots show how many of your hand cards fit a free cell: yellow means few (three or fewer), red exactly one, black none – only the quantum joker can still save black cells.</li>'+
     '<li>Sudoku conflict rule: a digit must never appear twice in the same row, column or 3×3 box. Invalid cells are marked red when you hover over them.</li>'+
     '<li>Matrix mode: a 16×16 board with the digits 1–9 and A–G in 4×4 boxes – same rules, same bosses, a larger Sudoku. The mode is chosen in the main menu and applies to the next run.</li>'+
-    '<li>Minimus mode: a 4×4 board with the digits 1–4 in 2×2 boxes – the board sizes follow the square numbers 4, 9 and 16. Every task demands exactly one new complete box, the card table holds at most six cards, and the mode has only one difficulty (Medium) – fast rounds with a tight hand. The mode is chosen in the main menu and applies to the next run.</li>'+
+    '<li>Minimus mode: a 4×4 board with the digits 1–4 in 2×2 boxes – the board sizes follow the square numbers 4, 9 and 16. Every task demands exactly one new complete box, the card table holds at most six cards, the mode has only one difficulty (Medium) and offers no quantum joker – fast rounds with a tight hand. The mode is chosen in the main menu and applies to the next run.</li>'+
     '<li>Placed digits stay in place – nothing is ever removed. Every task builds on the already filled board.</li>'+
     '<li>Each task asks for a number of completed lines, for example two rows or two boxes (the goal is shown in the status bar).</li>'+
     '<li>After each task follows the enchantment choice; the supply of new cards is already shown there.</li>'+
@@ -1591,7 +1591,7 @@ en:{
     '<li>Wildcard 1|7: counts as either 1 or 7.</li>'+
     '<li>Wildcard 9|B (matrix mode only): counts as either 9 or as B (eleven).</li>'+
     '<li>Joker: counts once as any digit 1–9.</li>'+
-    '<li>Quantum joker: turns a free cell into a ? cell in a quantum state – even dead black cells become playable again.</li>'+
+    '<li>Quantum joker: turns a free cell into a ? cell in a quantum state – even dead black cells become playable again (not available in Minimus mode).</li>'+
     '<li>Supply: three more digit cards immediately.</li>'+
     '<li>Clone: a random card on your table is doubled – wildcards included.</li>'+
     '<li>Swap+: a second swap every level from now on.</li>'+
@@ -1678,7 +1678,7 @@ fr:{
   bossRissD:'Arrache {k} chiffre(s) toutes les {n} poses',
   bossWirblerD:'Transforme {k} cartes (cartes magiques incluses) toutes les {n} poses',
   bossSaniD:'Retire {k} case(s) ? toutes les {n} poses',
-  bossLobbyistD:'Boucle {k} cases et déplace le barrage toutes les {n} poses',
+  bossLobbyistD:'Boucle jusqu’à {k} cases et déplace le barrage toutes les {n} poses',
   bossWarn:'ATTENTION : À LA PROCHAINE POSE !',
   flCard:'-1 CARTE !',flCardN:'-{k} CARTES !',flGap:'TROU !',flConfuse:'MÉLANGÉ !',flConflict:'CONFLIT !',flCards:'+{n} CARTES',
   logDieb:'L’actionnaire vole {k} carte(s) !',logRiss:'Le monopoliste arrache un chiffre !',
@@ -1838,7 +1838,7 @@ fr:{
     '<li>Les points colorés indiquent combien de cartes de votre main s’adaptent à une case libre : jaune signifie peu (trois ou moins), rouge exactement une, noir aucune – seul le joker quantique peut encore sauver les cases noires.</li>'+
     '<li>Règle de conflit du Sudoku : un chiffre ne doit jamais apparaître deux fois dans la même rangée, colonne ou le même bloc 3×3. Les cases invalides se marquent en rouge au survol.</li>'+
     '<li>Mode Matrix : une grille 16×16 avec les chiffres 1–9 et A–G en blocs 4×4 – mêmes règles, mêmes boss, un Sudoku plus grand. Le mode se choisit dans le menu principal et s’applique à la prochaine partie.</li>'+
-    '<li>Mode Minimus : une grille 4×4 avec les chiffres 1–4 en blocs 2×2 – les tailles de grille suivent les nombres carrés 4, 9 et 16. Chaque tâche exige exactement un nouveau bloc complet, la table tient au maximum six cartes, et le mode n’a qu’une seule difficulté (Moyen) – des manches rapides avec une main serrée. Le mode se choisit dans le menu principal et s’applique à la prochaine partie.</li>'+
+    '<li>Mode Minimus : une grille 4×4 avec les chiffres 1–4 en blocs 2×2 – les tailles de grille suivent les nombres carrés 4, 9 et 16. Chaque tâche exige exactement un nouveau bloc complet, la table tient au maximum six cartes, le mode n’a qu’une seule difficulté (Moyen) et n’offre pas de joker quantique – des manches rapides avec une main serrée. Le mode se choisit dans le menu principal et s’applique à la prochaine partie.</li>'+
     '<li>Les chiffres posés restent en place – rien n’est jamais effacé. Chaque mission s’appuie sur la grille déjà remplie.</li>'+
     '<li>Chaque mission demande un certain nombre de lignes complètes, par exemple deux rangées ou deux carrés (l’objectif figure dans la barre d’état).</li>'+
     '<li>Après chaque mission vient le choix d’un enchantement ; la réserve de nouvelles cartes y est déjà affichée.</li>'+
@@ -1870,7 +1870,7 @@ fr:{
     '<li>Carte magique 1|7 : vaut comme un 1 ou comme un 7.</li>'+
     '<li>Carte magique 9|B (mode Matrix uniquement) : vaut comme un 9 ou comme un B (onze).</li>'+
     '<li>Joker : vaut une fois comme n’importe quel chiffre 1–9.</li>'+
-    '<li>Joker quantique : change une case libre en case ? en état quantique – même les cases noires mortes redeviennent jouables.</li>'+
+    '<li>Joker quantique : change une case libre en case ? en état quantique – même les cases noires mortes redeviennent jouables (indisponible en mode Minimus).</li>'+
     '<li>Approvisionnement : trois cartes de chiffres supplémentaires immédiatement.</li>'+
     '<li>Clone : une carte au hasard de votre table est doublée – cartes magiques comprises.</li>'+
     '<li>Échange+ : un second échange à chaque niveau à partir de maintenant.</li>'+
@@ -1957,7 +1957,7 @@ cs:{
   bossRissD:'Vytrhne {k} číslici(e) po každých {n} umístěních',
   bossWirblerD:'Promění {k} karet (i divoké karty) po každých {n} umístěních',
   bossSaniD:'Odstraní {k} polí ? po každých {n} umístěních',
-  bossLobbyistD:'Uzamkne {k} polí a přesune zámky po každých {n} umístěních',
+  bossLobbyistD:'Uzamkne až {k} polí a přesune zámky po každých {n} umístěních',
   bossWarn:'POZOR: PŘI PŘÍŠTÍM UMÍSTĚNÍ!',
   flCard:'-1 KARTA!',flCardN:'-{k} KARET!',flGap:'DÍRA!',flConfuse:'ZAMÍCHÁNO!',flConflict:'KONFLIKT!',flCards:'+{n} KART',
   logDieb:'Akcionář kradne {k} karet!',logRiss:'Monopolista vytrhává číslici!',
@@ -2117,7 +2117,7 @@ cs:{
     '<li>Barevné tečky ukazují, kolik karet z ruky se vejde na volné pole: žlutá znamená málo (tři nebo méně), červená přesně jednu, černá žádnou – černá pole může zachránit jen kvantový žolík.</li>'+
     '<li>Pravidlo konfliktů v sudoku: číslice se nesmí vyskytovat dvakrát ve stejné řadě, sloupci ani 3×3 bloku. Neplatná pole se při přejezdu zčervenají.</li>'+
     '<li>Režim Matrix: deska 16×16 s číslicemi 1–9 a A–G ve blocích 4×4 – stejná pravidla, stejní bossové, větší sudoku. Režim se volí v hlavním menu a platí pro další běh.</li>'+
-    '<li>Režim Minimus: deska 4×4 s číslicemi 1–4 ve blocích 2×2 – velikosti desky sledují druhé mocniny 4, 9 a 16. Každý úkol vyžaduje přesně jeden nový úplný blok, stůl drží nejvýš šest karet a režim má jen jednu obtížnost (Střední) – rychlá kola s napjatou rukou. Režim se volí v hlavním menu a platí pro další běh.</li>'+
+    '<li>Režim Minimus: deska 4×4 s číslicemi 1–4 ve blocích 2×2 – velikosti desky sledují druhé mocniny 4, 9 a 16. Každý úkol vyžaduje přesně jeden nový úplný blok, stůl drží nejvýš šest karet, režim má jen jednu obtížnost (Střední) a nenabízí kvantového žolíka – rychlá kola s napjatou rukou. Režim se volí v hlavním menu a platí pro další běh.</li>'+
     '<li>Položené číslice zůstávají – nic se nemaže. Každý úkol staví na už vyplněné desce.</li>'+
     '<li>Každý úkol vyžaduje určitý počet plných linií, například dvě řady nebo dva čtverce (cíl je ve stavovém pruhu).</li>'+
     '<li>Po každém úkolu následuje volba očarování; zásobení novými kartami se už ukazuje.</li>'+
@@ -2149,7 +2149,7 @@ cs:{
     '<li>Divoká karta 1|7: platí jako 1 nebo jako 7.</li>'+
     '<li>Divoká karta 9|B (jen režim Matrix): platí jako 9 nebo jako B (jedenáct).</li>'+
     '<li>Žolík: platí jednou jako libovolná číslice 1–9.</li>'+
-    '<li>Kvantový žolík: převede volné pole na pole ? v kvantovém stavu – i mrtvá černá pole se znovu stanou hratelnými.</li>'+
+    '<li>Kvantový žolík: převede volné pole na pole ? v kvantovém stavu – i mrtvá černá pole se znovu stanou hratelnými (není k dispozici v režimu Minimus).</li>'+
     '<li>Zásoba: hned tři další karty s číslicemi.</li>'+
     '<li>Klon: náhodná karta z tvého stolu se zdvojnásobí – i divoké karty.</li>'+
     '<li>Výměna+: odteď druhá výměna v každé úrovni.</li>'+
@@ -2236,7 +2236,7 @@ pl:{
   bossRissD:'Wyrwia {k} cyfrę/cyfry po każdych {n} umieszczeniach',
   bossWirblerD:'Przekształca {k} kart (także dzikie karty) po każdych {n} umieszczeniach',
   bossSaniD:'Usuwa {k} pola ? po każdych {n} umieszczeniach',
-  bossLobbyistD:'Zamyka {k} pól i przesuwa blokady po każdych {n} umieszczeniach',
+  bossLobbyistD:'Zamyka do {k} pól i przesuwa blokady po każdych {n} umieszczeniach',
   bossWarn:'UWAGA: PRZY NASTĘPNYM UMIESZCZENIU!',
   flCard:'-1 KARTA!',flCardN:'-{k} KART!',flGap:'LUKA!',flConfuse:'POMIESZANE!',flConflict:'KONFLIKT!',flCards:'+{n} KART',
   logDieb:'Akcjonariusz kradnie {k} kart!',logRiss:'Monopolista wyrwia cyfrę!',
@@ -2396,7 +2396,7 @@ pl:{
     '<li>Kolorowe kropki pokazują, ile kart z ręki pasuje do wolnego pola: żółta znaczy niewiele (trzy lub mniej), czerwona dokładnie jedną, czarna żadną – czarne pola może uratować tylko joker kwantowy.</li>'+
     '<li>Zasada konfliktu sudoku: cyfra nigdy nie może wystąpić dwa razy w tym samym wierszu, kolumnie ani bloku 3×3. Nieprawidłowe pola przy najechaniu zaznaczają się na czerwono.</li>'+
     '<li>Tryb Matrix: plansza 16×16 z cyframi 1–9 i A–G w blokach 4×4 – te same zasady, ci sami bossowie, większe sudoku. Tryb wybiera się w menu głównym i obowiązuje w kolejnym podejściu.</li>'+
-    '<li>Tryb Minimus: plansza 4×4 z cyframi 1–4 w blokach 2×2 – rozmiary planszy podążają za kwadratami liczb 4, 9 i 16. Każde zadanie wymaga dokładnie jednego nowego pełnego bloku, stół mieści najwyżej sześć kart, a tryb ma tylko jedną trudność (Średnią) – szybkie rundy z ciasną ręką. Tryb wybiera się w menu głównym i obowiązuje w kolejnym podejściu.</li>'+
+    '<li>Tryb Minimus: plansza 4×4 z cyframi 1–4 w blokach 2×2 – rozmiary planszy podążają za kwadratami liczb 4, 9 i 16. Każde zadanie wymaga dokładnie jednego nowego pełnego bloku, stół mieści najwyżej sześć kart, tryb ma tylko jedną trudność (Średnią) i nie oferuje kwantowego dżokera – szybkie rundy z ciasną ręką. Tryb wybiera się w menu głównym i obowiązuje w kolejnym podejściu.</li>'+
     '<li>Umieszczone cyfry zostają na miejscu – nic nie jest usuwane. Każde zadanie buduje na już wypełnionej planszy.</li>'+
     '<li>Każde zadanie wymaga pewnej liczby pełnych linii, na przykład dwóch wierszy albo dwóch kwadratów (cel widnieje na pasku statusu).</li>'+
     '<li>Po każdym zadaniu następuje wybór zaklęcia; zapas nowych kart jest już wtedy pokazany.</li>'+
@@ -2428,7 +2428,7 @@ pl:{
     '<li>Dzika karta 1|7: liczy się jako 1 albo jako 7.</li>'+
     '<li>Dzika karta 9|B (tylko tryb Matrix): liczy się jako 9 albo jako B (jedenaście).</li>'+
     '<li>Joker: liczy się raz jako dowolna cyfra 1–9.</li>'+
-    '<li>Joker kwantowy: zmienia wolne pole w pole ? w stanie kwantowym – nawet martwe czarne pola znów stają się grywalne.</li>'+
+    '<li>Joker kwantowy: zmienia wolne pole w pole ? w stanie kwantowym – nawet martwe czarne pola znów stają się grywalne (niedostępny w trybie Minimus).</li>'+
     '<li>Zapas: natychmiast trzy dodatkowe karty cyfr.</li>'+
     '<li>Klon: losowa karta z twojego stołu zostaje podwojona – również dzikie karty.</li>'+
     '<li>Wymiana+: od teraz druga wymiana na każdym poziomie.</li>'+
@@ -2515,7 +2515,7 @@ es:{
   bossRissD:'Arranca {k} dígito(s) cada {n} colocaciones',
   bossWirblerD:'Transforma {k} cartas (comodines incluidos) cada {n} colocaciones',
   bossSaniD:'Elimina {k} casilla(s) ? cada {n} colocaciones',
-  bossLobbyistD:'Bloquea {k} casillas y mueve el cerco cada {n} colocaciones',
+  bossLobbyistD:'Bloquea hasta {k} casillas y mueve el cerco cada {n} colocaciones',
   bossWarn:'¡CUIDADO: EN LA PRÓXIMA COLOCACIÓN!',
   flCard:'¡-1 CARTA!',flCardN:'¡-{k} CARTAS!',flGap:'¡HUECO!',flConfuse:'¡CONFUNDIDO!',flConflict:'¡CONFLICTO!',flCards:'+{n} CARTAS',
   logDieb:'¡El accionista roba {k} carta(s)!',logRiss:'¡El monopolista arranca un dígito!',
@@ -2675,7 +2675,7 @@ es:{
     '<li>Los puntos de color muestran cuántas cartas de tu mano encajan en una casilla libre: amarillo significa pocas (tres o menos), rojo exactamente una, negro ninguna – las casillas negras solo puede salvarlas el jóker cuántico.</li>'+
     '<li>Regla de conflicto del Sudoku: un dígito no debe aparecer nunca dos veces en la misma fila, columna o bloque 3×3. Las casillas inválidas se marcan en rojo al pasar por encima.</li>'+
     '<li>Modo Matrix: un tablero de 16×16 con los dígitos 1–9 y A–G en bloques de 4×4 – mismas reglas, mismos jefes, un Sudoku más grande. El modo se elige en el menú principal y se aplica a la siguiente partida.</li>'+
-    '<li>Modo Minimus: un tablero de 4×4 con los dígitos 1–4 en bloques de 2×2 – los tamaños de tablero siguen los cuadrados 4, 9 y 16. Cada tarea exige exactamente un bloque nuevo completo, la mesa mantiene como máximo seis cartas, y el modo tiene una sola dificultad (Media) – rondas rápidas con una mano ajustada. El modo se elige en el menú principal y se aplica a la siguiente partida.</li>'+
+    '<li>Modo Minimus: un tablero de 4×4 con los dígitos 1–4 en bloques de 2×2 – los tamaños de tablero siguen los cuadrados 4, 9 y 16. Cada tarea exige exactamente un bloque nuevo completo, la mesa mantiene como máximo seis cartas, el modo tiene una sola dificultad (Media) y no ofrece ningún comodín cuántico – rondas rápidas con una mano ajustada. El modo se elige en el menú principal y se aplica a la siguiente partida.</li>'+
     '<li>Los dígitos colocados permanecen – no se borra nada. Cada tarea se construye sobre el tablero ya rellenado.</li>'+
     '<li>Cada tarea exige un número de líneas completas, por ejemplo dos filas o dos cuadrantes (el objetivo aparece en la barra de estado).</li>'+
     '<li>Tras cada tarea sigue la elección de un encantamiento; la reposición de cartas nuevas ya se muestra entonces.</li>'+
@@ -2707,7 +2707,7 @@ es:{
     '<li>Carta comodín 1|7: cuenta como 1 o como 7.</li>'+
     '<li>Carta comodín 9|B (solo modo Matrix): cuenta como 9 o como B (once).</li>'+
     '<li>Jóker: cuenta una vez como cualquier dígito 1–9.</li>'+
-    '<li>Jóker cuántico: convierte una casilla libre en una casilla ? en estado cuántico – incluso las casillas negras muertas vuelven a ser jugables.</li>'+
+    '<li>Jóker cuántico: convierte una casilla libre en una casilla ? en estado cuántico – incluso las casillas negras muertas vuelven a ser jugables (no disponible en el modo Minimus).</li>'+
     '<li>Reposición: tres cartas de dígitos más al instante.</li>'+
     '<li>Clon: una carta aleatoria de tu mesa se duplica – comodines incluidos.</li>'+
     '<li>Cambio+: a partir de ahora, un segundo cambio en cada nivel.</li>'+
@@ -2807,7 +2807,7 @@ function setLang(l){
   if(!$('saveOverlay').classList.contains('hidden'))renderSaveMenu();
 }
 /* ================= Spielstand ================= */
-/* Version: Alpha 0.47 – mit jeder Änderung hochzählen (Alpha 0.48, 0.49 …) */
+/* Version: Alpha 0.48 – mit jeder Änderung hochzählen (Alpha 0.49, 0.50 …) */
 function loadSave(){
   var fallback=null;
   try{fallback=JSON.parse(document.getElementById('saveSlot').textContent);}catch(e){}
@@ -3308,19 +3308,42 @@ function boardFull(){
 }
 /* Lobbyist: riegelt k offene Felder ab (l-Merker) und hebt alle bisherigen
    Sperren auf. Gesperrte Felder gelten als unbesetzbar; beim Level-Ende
-   werden sämtliche Sperren aufgehoben. */
+   werden sämtliche Sperren aufgehoben.
+   Zielwahrung: Eine Sperre wird nur gesetzt, solange die Aufgabe danach
+   noch erfüllbar bleibt – keine noch offene Linie des Aufgabentyps darf
+   vollständig zugesperrt werden, und mindestens ein freies Feld bleibt
+   übrig. So entsteht nie eine Patt-Stellung; der Boss verlegt den Spieler
+   weiterhin vom einfachsten Weg, weil der Vorrat an noch vollendbaren
+   Linien auf das nötige Maß schrumpft. */
+function lobbyLockCount(){return S.mode==='minimus'?2:5;}
 function bossLockCells(k){
-  var i,open=[];
-  for(i=0;i<S.grid.length;i++){
-    if(S.grid[i].l)S.grid[i].l=false;
-    if(!S.grid[i].b&&!S.grid[i].d)open.push(i);
+  var i,q;
+  for(i=0;i<S.grid.length;i++)S.grid[i].l=false;
+  var open=[];
+  for(i=0;i<S.grid.length;i++)if(!S.grid[i].b&&!S.grid[i].d)open.push(i);
+  var lines=[];
+  for(i=0;i<N;i++)lines.push(S.task&&S.task.type==='rows'?rowCells(i):(S.task&&S.task.type==='cols'?colCells(i):boxIdx(i)));
+  var need=(S.task&&S.task.count)||1;
+  var locked=0;
+  while(open.length>1&&locked<k){
+    var idx=rnd(open.length),cell=open[idx];
+    S.grid[cell].l=true;
+    var done=0,compl=0;
+    for(i=0;i<N;i++){
+      var cells=lines[i],lockIn=false,full=true;
+      for(q=0;q<cells.length;q++){
+        var g=S.grid[cells[q]];
+        if(g.b)continue;
+        if(g.l){lockIn=true;full=false;}
+        else if(!g.d)full=false;
+      }
+      if(full)done++;else if(!lockIn)compl++;
+    }
+    if(done+compl>=need)locked++;
+    else S.grid[cell].l=false;
+    open.splice(idx,1);
   }
-  var n=Math.min(k,open.length);
-  for(i=0;i<n;i++){
-    var j=open.splice(rnd(open.length),1)[0];
-    S.grid[j].l=true;
-  }
-  return n;
+  return locked;
 }
 function bossAct(){
   S.boss.timer=0;
@@ -3378,10 +3401,11 @@ function bossAct(){
       addLog(tr('logSani'),'#9a6af0');
     }
   }else if(k==='lobbyist'){
-    /* Lobbyist: verschiebt die Sperren – alte Felder werden frei, fünf
-       andere offene Felder abgeriegelt. Gesperrte Felder bleiben unbesetzbar,
-       bis er sie wieder verschiebt oder die Boss-Runde endet */
-    var nl=bossLockCells(5);
+    /* Lobbyist: verschiebt die Sperren – alte Felder werden frei, bis zu
+       fünf (im Minimus bis zu zwei) andere offene Felder abgeriegelt.
+       Gesperrte Felder bleiben unbesetzbar, bis er sie wieder verschiebt
+       oder die Boss-Runde endet */
+    var nl=bossLockCells(lobbyLockCount());
     if(nl){
       S.shake=4;
       sfx(200,0.25,'triangle',0.2,-80);
@@ -3601,13 +3625,13 @@ function startLevel(l){
     S.boss={kind:bs.kind,pal:bs.pal,every:ev,timer:0,cursed:1+rnd(N),curseCount:0,
       name:tr(bs.nk)+(big===1?' II':big===2?' III':big>=3?' IV':''),
       desc:trf(bs.kind==='dieb'?'bossDiebD':bs.kind==='riss'?'bossRissD':bs.kind==='sani'?'bossSaniD':bs.kind==='lobbyist'?'bossLobbyistD':'bossWirblerD',
-        {n:ev,k:bs.kind==='dieb'?1+Math.floor(l/6):bs.kind==='riss'?1+Math.floor(l/12):bs.kind==='sani'?1+Math.floor(l/15):bs.kind==='lobbyist'?(S.mode==='minimus'?2:5):2+Math.floor(l/6)})};
+        {n:ev,k:bs.kind==='dieb'?1+Math.floor(l/6):bs.kind==='riss'?1+Math.floor(l/12):bs.kind==='sani'?1+Math.floor(l/15):bs.kind==='lobbyist'?lobbyLockCount():2+Math.floor(l/6)})};
     sfx(180,0.3,'sawtooth',0.2,-60);
     addLog(trf('logBoss',{b:S.boss.name,d:S.boss.desc}),'#ff9a6a');
     /* Der Boss verflucht eine Ziffer: sie bleibt in dieser Runde unlegbar */
     addLog(trf('logCurse',{d:b2s(S.boss.cursed)}),'#9a6af0');
     /* Lobbyist: riegelt bei seinem Erscheinen fünf Felder ab */
-    if(bs.kind==='lobbyist'){var nl2=bossLockCells(S.mode==='minimus'?2:5);addLog(trf('logLobby',{k:nl2}),'#c8a44a');}
+    if(bs.kind==='lobbyist'){var nl2=bossLockCells(lobbyLockCount());addLog(trf('logLobby',{k:nl2}),'#c8a44a');}
   }
   addLog(trf('logLevel',{n:l,t:taskLabel(S.task)}),'#ffd23f');
   var cap=deckLim();
@@ -3624,15 +3648,25 @@ function startLevel(l){
 }
 function pick3(){
   /* Die Wildkarte 9|B gibt es nur im Matrix-Modus (B = 11); die Wildkarten
-     6|9 und 1|7 brauchen Ziffern bis 9 und entfallen im Minimus-Modus. */
+     6|9 und 1|7 brauchen Ziffern bis 9 und entfallen im Minimus-Modus.
+     Der Quantenjoker fehlt im Minimus-Modus – auf dem winzigen Brett
+     wäre er eine Dauer-Rettung und nähme dem Modus seine Schärfe. Im
+     Matrix-Modus spawnt er dafür deutlich häufiger: Er liegt dreifach
+     gewichtet im Ziehungspool der Verzauberungswahl. */
   var keys=Object.keys(UP).filter(function(k){
     if(k==='w9B')return S.mode==='matrix';
     if((k==='w69'||k==='w17')&&N<9)return false;
+    if(k==='quant'&&S.mode==='minimus')return false;
     return true;
-  }),out=[];
-  while(out.length<3&&keys.length){
-    var i=rnd(keys.length);
-    out.push(keys.splice(i,1)[0]);
+  }),pool=[],out=[],i,j;
+  for(i=0;i<keys.length;i++){
+    var w=(S.mode==='matrix'&&keys[i]==='quant')?3:1;
+    for(j=0;j<w;j++)pool.push(keys[i]);
+  }
+  while(out.length<3&&pool.length){
+    var key=pool[rnd(pool.length)];
+    if(out.indexOf(key)<0)out.push(key);
+    pool=pool.filter(function(x){return x!==key;});
   }
   return out;
 }
@@ -3801,7 +3835,7 @@ function loadRun(){
       S.boss={kind:bs.kind,pal:bs.pal,every:r.boss.every,timer:r.boss.timer||0,cursed:r.boss.cursed||0,curseCount:r.boss.curseCount||0,
         name:tr(bs.nk)+(big===1?' II':big===2?' III':big>=3?' IV':''),
         desc:trf(bs.kind==='dieb'?'bossDiebD':bs.kind==='riss'?'bossRissD':bs.kind==='sani'?'bossSaniD':bs.kind==='lobbyist'?'bossLobbyistD':'bossWirblerD',
-          {n:r.boss.every,k:bs.kind==='dieb'?1+Math.floor(S.level/6):bs.kind==='riss'?1+Math.floor(S.level/12):bs.kind==='sani'?1+Math.floor(S.level/15):bs.kind==='lobbyist'?(S.mode==='minimus'?2:5):2+Math.floor(S.level/6)})};
+          {n:r.boss.every,k:bs.kind==='dieb'?1+Math.floor(S.level/6):bs.kind==='riss'?1+Math.floor(S.level/12):bs.kind==='sani'?1+Math.floor(S.level/15):bs.kind==='lobbyist'?lobbyLockCount():2+Math.floor(S.level/6)})};
     }else{S.boss=null;}
   }else{S.boss=null;}
   $('overOverlay').classList.add('hidden');
